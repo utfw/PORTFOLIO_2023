@@ -1,0 +1,63 @@
+.title_box{
+  position: absolute;
+  height: 232px;
+  width: 1455px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.h1{
+  display: block;
+  margin-bottom: 16px;
+  font-family: Montserrat;
+  font-size: 120px;
+  font-weight: 602;
+  line-height: 168px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #393939;
+}
+.title1{
+  font-family: Montserrat;
+  font-size: 120px;
+  font-weight: 602;
+  line-height: 168px;
+  letter-spacing: 0em;
+  text-align: left;
+  }
+.gray2{
+  color: #393939;
+}
+.title_sub{
+  display: block;
+  font-family: Montserrat;
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 48px;
+  letter-spacing: -0.005em;
+  text-align: justify;
+  word-break: break-all;
+}
+
+.menu{
+  position: fixed;
+  left: 1776px;
+  top: 16px;
+}
+
+.menu_icon{
+  height: 64px;
+  width: 64px;
+}
+
+.menu_page{
+  height: 240px;
+  width: 8px;
+  left: 28px;
+  top: 98px;
+}
+
+.menu_indicator{
+
+}
