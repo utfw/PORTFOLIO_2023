@@ -12,7 +12,7 @@
   margin-bottom: 16px;
   font-family: Montserrat;
   font-size: 120px;
-  font-weight: 602;
+  font-weight: 600;
   line-height: 168px;
   letter-spacing: 0em;
   text-align: left;
@@ -21,17 +21,16 @@
 .title1{
   font-family: Montserrat;
   font-size: 120px;
-  font-weight: 602;
+  font-weight: 600;
   line-height: 168px;
   letter-spacing: 0em;
   text-align: left;
   }
-.gray2{
-  color: #393939;
-}
+
+
+
 .title_sub{
   display: block;
-  font-family: Montserrat;
   font-size: 36px;
   font-weight: 300;
   line-height: 48px;
@@ -39,16 +38,71 @@
   text-align: justify;
   word-break: break-all;
 }
+.title_sub2{
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 38px;
+  letter-spacing: -0.005em;
+  text-align: justify;
+}
+.title_sub3{
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.01em;
+  text-align: justify;
+}
 
+.body1{
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 36px;
+  letter-spacing: -0.015em;
+  text-align: justify;  
+}
+.body2{
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.02em;
+  text-align: justify;
+}
+
+.index_title{
+  font-size: 120px;
+  font-weight: 600;
+  line-height: 120px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+.index_name{
+  font-family: Montserrat;
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 41px;
+  letter-spacing: 0em;
+  text-align: left;
+}
+
+/* menu */
 .menu{
   position: fixed;
   left: 1776px;
   top: 16px;
 }
 
-.menu_icon{
+.menu_box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 8px;
   height: 64px;
   width: 64px;
+}
+
+.menu_icon{
+  width: 42px;
+  height: 28px;
 }
 
 .menu_page{
@@ -60,4 +114,14 @@
 
 .menu_indicator{
 
+}
+
+/* section_sizing */
+.section__inner{
+  display: flex;
+  height: 791px;
+}
+/* section1 */
+.left{
+  width: 880px;
 }
