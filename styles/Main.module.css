@@ -23,7 +23,6 @@
   font-size: 120px;
   font-weight: 600;
   line-height: 168px;
-  letter-spacing: 0em;
   text-align: left;
   }
 
@@ -125,3 +124,24 @@
 .left{
   width: 880px;
 }
+/* font transition */
+.title{
+  overflow: hidden;
+}
+.title>span{
+  display: inline-block;
+  opacity: 0;
+  transform: translatey(100%);
+  animation: up_text 0.5s ease-in-out forwards;
+  animation-play-state: paused;
+}
+
+.play>span{
+  animation-play-state: running !important;
+}
+@keyframes up_text {
+  0%{transform: translateY(100%);opacity: 0;}
+  100%{transform: translateY(0);opacity: 1;}
+}
+
+/* [&>span]:transition-all duration-500 ease-in-out [&>span]:translate-y-full */
