@@ -7,27 +7,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faGithub, faJsSquare, faReact, faHtml5, faCss3, faSass, faJava, faFigma } from '@fortawesome/free-brands-svg-icons';
 import { faPhone, faRocket, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
-import Menu from '@/components/Menu';
 import Index from '@/components/Index';
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, toggleIndex } from '@/store/store';
+import Shark from '@/components/Shark';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
-const notoSansKR = Noto_Sans_KR({ // 이거 못받음.
+const notoSansKR = Noto_Sans_KR({ // 다운이 정상적으로 안됨.
   preload:false, 
   weight:["100","300","400","500","700","900"]
 }) //구글 폰트에 요청할 필요가 없다함. 
 
-
 export default function Home() {
+  const dispatch = useDispatch();
+  const isIndexToggle = useSelector((state:RootState) => state.index);
+
+  console.log(`메뉴 ${isIndexToggle}`); //메뉴 토글 확인용
+
   return (
     <>
     <Head>
       <title>PORTFOLIO | 2023</title>
     </Head>
-    {/* <Menu /> */}
-    <Index />
+    {/* Index Component */}
+    <Index /> 
     <main className={`min-h-screen ${montserrat.className}
     [&>div>section]:w-full [&>div>section]:h-screen [&>div>section]:px-20
-    [&>div>section>h2]:mt-[41px]`} id='container'>
+    [&>div>section>h2]:mt-[41px] [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
     <div id='content1'>
       {/* section1 */}
       <section className={`w-full h-screen border border-red-600`}>
@@ -126,7 +132,7 @@ export default function Home() {
       {/* section3 */}
       <section className={`border border-red-600`}>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>FESCARO</h2>
-        <div className={`flex`}>
+        <div className={`flex w-full pr-[144px] justify-between`}>
           <dl className={`text-[var(--gray2)] 
           [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-[50px]`}>
@@ -155,18 +161,27 @@ export default function Home() {
             <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
             <dd className={`${mainstyle.body1} text-[var(--gray1)]`}>HTML / CSS / JavaScript</dd>
           </dl>
-          <div className='right'>
-            목업이 들어가야함
-            <div>
-              pc용 프레임
+          {/* 목업 */}
+          <div className={`relative flex justify-end items-end`}>
+            <div className={`w-[737px] h-[570px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
+              </div>
             </div>
             <div>
-              태블릿용 프레임
+            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
+              </div>
             </div>
-            <div>
-              모바일용 프레임
+            </div>
+            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
+              </div>
             </div>
           </div>
+          {/* //목업 */}
         </div>
       </section>
       {/* //section3 */}
@@ -175,6 +190,7 @@ export default function Home() {
       {/* section4 */}
       <section className={`border border-red-600`}>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>삼성전기</h2>
+        <div className={`flex w-full pr-[144px] justify-between`}>
         <dl className={`text-[var(--gray2)] 
         [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
         [&>dd]:mb-[50px]`} style={{width:`600px`}}>
@@ -200,11 +216,15 @@ export default function Home() {
           <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
           <dd className={`${mainstyle.body1} text-[var(--gray1)]`}>HTML / CSS / JavaScript</dd>
         </dl>
-        <div>
-          목업이 들어가야함
-          <div>
-            pc용 프레임
+          {/* 목업 */}
+          <div className={`relative flex justify-end items-end`}>
+            <div className={`w-[737px] h-[570px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
           </div>
+          {/* //목업 */}
         </div>
       </section>
       {/* //section4 */}
@@ -213,43 +233,54 @@ export default function Home() {
       {/* section5 */}
       <section className={`border border-red-600`}>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>CJ ONE</h2>
-        <dl className={`text-[var(--gray2)] 
-        [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
-        [&>dd]:mb-[50px]`}>
-          <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-          <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)]`}>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다. </dd>
-          <dt className={`${mainstyle.title_sub2}`}>Description</dt>
-          <dd>
-            <ul className={`${mainstyle.body1} ${notoSansKR.className}
-            [&>li]:text-[var(--gray1)]`}>
-            <li>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</li>
-            <li>2. HTML / CSS w3c 검사 통과</li>
-            <li>3. CSS와 JavaScript로 인터랙션 적용</li>
-            <li>4. 반응형 페이지 제작</li>
-            </ul>
-            <ul className={`flex mt-3 
-            [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
-            [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-            [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
-            <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
-            <li><a href='https://utfw.github.io/clone_CJONE/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-            <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
-            </ul>
-          </dd>
-          <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-          <dd className={`${mainstyle.body1} text-[var(--gray1)]`}>HTML / CSS / JavaScript</dd>
-        </dl>
-        <div>
-          목업이 들어가야함
-          <div>
-            pc용 프레임
+        <div className={`flex w-full pr-[144px] justify-between`}>
+          <dl className={`text-[var(--gray2)] 
+          [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
+          [&>dd]:mb-[50px]`}>
+            <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
+            <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)]`}>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다. </dd>
+            <dt className={`${mainstyle.title_sub2}`}>Description</dt>
+            <dd>
+              <ul className={`${mainstyle.body1} ${notoSansKR.className}
+              [&>li]:text-[var(--gray1)]`}>
+              <li>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</li>
+              <li>2. HTML / CSS w3c 검사 통과</li>
+              <li>3. CSS와 JavaScript로 인터랙션 적용</li>
+              <li>4. 반응형 페이지 제작</li>
+              </ul>
+              <ul className={`flex mt-3 
+              [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
+              [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
+              [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
+              <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
+              <li><a href='https://utfw.github.io/clone_CJONE/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
+              <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
+              </ul>
+            </dd>
+            <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
+            <dd className={`${mainstyle.body1} text-[var(--gray1)]`}>HTML / CSS / JavaScript</dd>
+          </dl>
+          {/* 목업 */}
+          <div className={`relative flex justify-end items-end`}>
+            <div className={`w-[737px] h-[570px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
+            <div>
+            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
+            </div>
+            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
           </div>
-          <div>
-            태블릿용 프레임
-          </div>
-          <div>
-            모바일용 프레임
-          </div>
+          {/* //목업 */}
         </div>
       </section>
       {/* //section5 */}
@@ -258,41 +289,58 @@ export default function Home() {
       {/* section6 */}
       <section className={`border border-red-600`}>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>REACT TALK APP</h2>
-        <dl className={`text-[var(--gray2)] 
-        [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
-        [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}
-        >
-          <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-          <dd className={`${mainstyle.body1} ${notoSansKR.className}`}>React로 제작한 메신저 앱입니다.<br /> google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</dd>
-          <dt className={`${mainstyle.title_sub2}`}>Description</dt>
-          <dd>
-            <ul className={`${mainstyle.body1} ${notoSansKR.className}
-            `}>
-            <li>1. Firebase 인증서비스로 사용자 관리</li>
-            <li>2. Firebase Database로 채팅 내역 송수신</li>
-            <li>3. 사용자 정보를 문서로 Database에 저장</li>
-            <li>4. Storage로 이미지 파일 업로드</li>
-            <li>5. 프로필 업데이트 시 기존 파일을 Storage에서 제거</li>
-            <li>6. Axios 비동기 라이브러리 사용</li>
-            </ul>
-            <ul className={`flex mt-3 
-            [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
-            [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-            [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
-            <li><a href='https://github.com/utfw/react_chat_firebase_2023' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
-            <li><a href='https://utfw.github.io/react_chat_firebase_2023/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-            </ul>
-          </dd>
-          <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-          <dd className={`${mainstyle.body1}`}>HTML / CSS / SCSS / JavaScript</dd>
-          <dt className={`${mainstyle.title_sub2}`}>Used</dt>
-          <dd className={`${mainstyle.body1}`}>React / Firebase / Axios</dd>
-        </dl>
-        <div>
-          목업이 들어가야함
-          <div>
-            모바일용 프레임
+        <div className={`flex w-full pr-[144px] justify-between`}>
+          <dl className={`text-[var(--gray2)] 
+          [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
+          [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}
+          >
+            <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
+            <dd className={`${mainstyle.body1} ${notoSansKR.className}`}>React로 제작한 메신저 앱입니다.<br /> google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</dd>
+            <dt className={`${mainstyle.title_sub2}`}>Description</dt>
+            <dd>
+              <ul className={`${mainstyle.body1} ${notoSansKR.className}
+              `}>
+              <li>1. Firebase 인증서비스로 사용자 관리</li>
+              <li>2. Firebase Database로 채팅 내역 송수신</li>
+              <li>3. 사용자 정보를 문서로 Database에 저장</li>
+              <li>4. Storage로 이미지 파일 업로드</li>
+              <li>5. 프로필 업데이트 시 기존 파일을 Storage에서 제거</li>
+              <li>6. Axios 비동기 라이브러리 사용</li>
+              </ul>
+              <ul className={`flex mt-3 
+              [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
+              [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
+              [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
+              <li><a href='https://github.com/utfw/react_chat_firebase_2023' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
+              <li><a href='https://utfw.github.io/react_chat_firebase_2023/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
+              </ul>
+            </dd>
+            <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
+            <dd className={`${mainstyle.body1}`}>HTML / CSS / SCSS / JavaScript</dd>
+            <dt className={`${mainstyle.title_sub2}`}>Used</dt>
+            <dd className={`${mainstyle.body1}`}>React / Firebase / Axios</dd>
+          </dl>
+          {/* 목업 */}
+          <div className={`relative flex bottom-[148px] justify-end items-end`}>
+            <div className={`w-[737px] h-[570px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
+            <div>
+            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
+            </div>
+            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
           </div>
+          {/* //목업 */}
         </div>
       </section>
       {/* //section6 */}
@@ -301,6 +349,7 @@ export default function Home() {
       {/* section7 */}
       <section className={`border border-red-600`}>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>REACT NETFLIX APP</h2>
+        <div className={`flex w-full pr-[144px] justify-between`}>
         <dl className={`text-[var(--gray2)] 
         [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
         [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}>
@@ -330,25 +379,36 @@ export default function Home() {
           <dt className={`${mainstyle.title_sub2}`}>Used</dt>
           <dd className={`${mainstyle.body1}`}>React / TMDB / Firebase / Axios / styled-components</dd>
         </dl>
-        <div>
-          목업이 들어가야함
-          <div>
-            모바일용 프레임
+        {/* 목업 */}
+        <div className={`relative flex bottom-[148px] justify-end items-end`}>
+          <div className={`w-[737px] h-[570px]`}>
+            <div className={`w-full h-full
+            bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
+            </div>
           </div>
           <div>
-            pc용 프레임
+            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
           </div>
+            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
+              <div className={`w-full h-full
+              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
+              </div>
+            </div>
+          </div>
+          {/* //목업 */}
         </div>
       </section>
       {/* //section7 */}
     </div>
     <div id='content8'>
       {/* section8 */}
-      <section className={`w-full h-screen border border-red-600`}>
-        <h2 className={`${mainstyle.title1} ${mainstyle.gray2}`}>PURE CSS</h2>
-        <div>
-          css 들어갈 공간
-        </div>
+      <section className={`w-full h-screen border border-red-600 relative`}>
+        <h2 className={`${mainstyle.title1}`}>PURE CSS</h2>
+          <Shark></Shark>
       </section>
       {/* //section8 */}
     </div>

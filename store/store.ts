@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface toggleState {
   index:boolean
@@ -12,8 +12,13 @@ const indexSlice = createSlice({
   initialState,
   reducers:{
     toggleIndex:(state, action:PayloadAction<boolean>) =>{
-      const toggle = !state.index;
-       
+     state.index = action.payload;
     }
   }
 })
+export const {toggleIndex} = indexSlice.actions;
+export const store = configureStore({
+  reducer:indexSlice.reducer,
+})
+
+export type RootState = ReturnType<typeof store.getState>;
