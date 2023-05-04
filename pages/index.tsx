@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { GetStaticProps } from 'next';
 import { Montserrat, Noto_Sans_KR } from 'next/font/google'
 import Head from 'next/head';
 import mainstyle from '../styles/Main.module.css'
@@ -37,7 +38,7 @@ export default function Home() {
   
     const heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
-    const texts = document.querySelectorAll(".animate_text");
+    const texts = Array.from(document.querySelectorAll(".animate_text"));
 
 
     // 부모요소에 ${mainstyle.title} animate_text ${i===1 && (`${mainstyle.play}`)} 클래스를 넣으면 자식 span에 적용
@@ -49,18 +50,19 @@ export default function Home() {
     }
   },[]);
 
-  const handleWheel = async(event: React.WheelEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    console.log('scrolling', event.deltaY);
-    if(event.deltaY > 0 && i < sectionsTop.length-1){
-      console.log(1)
-      await setI(i+1); 
-    } else if(event.deltaY < 0 && i > 0){
-      console.log(2)
-      await setI(i-1);
-    }
-    // console.log(`스크롤이동 ${i}`)
-  };
+const handleWheel = (event: WheelEvent) => {
+  event.preventDefault();
+  console.log(event)
+  console.log('scrolling', event.deltaY);
+  if(event.deltaY > 0 && i < sectionsTop.length-1){
+    console.log(1)
+    setI(i+1); 
+  } else if(event.deltaY < 0 && i > 0){
+    console.log(2)
+    setI(i-1);
+  }
+  console.log(`스크롤이동 ${i}`)
+};
 
   useEffect(() => {
     window.addEventListener('wheel', handleWheel, {passive: false});
