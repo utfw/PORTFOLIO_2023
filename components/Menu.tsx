@@ -7,7 +7,7 @@ import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 function Menu() {
   const dispatch = useDispatch();
-  const isIndexOn = useSelector((state:RootState) => state.index);
+  const isIndexOn = useSelector((state:RootState) => state.index.Index);
 
   return (
     <div className={`${mainstyle.menu} z-20`}>

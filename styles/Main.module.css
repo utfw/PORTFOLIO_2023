@@ -66,23 +66,6 @@
   letter-spacing: -0.02em;
   text-align: justify;
 }
-
-.index_title{
-  font-size: 120px;
-  font-weight: 600;
-  line-height: 120px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-.index_name{
-  font-family: Montserrat;
-  font-size: 34px;
-  font-weight: 800;
-  line-height: 41px;
-  letter-spacing: 0em;
-  text-align: left;
-}
-
 /* menu */
 .menu{
   position: fixed;
@@ -136,9 +119,6 @@
   animation-play-state: paused;
 }
 
-.play>span{
-  animation-play-state: running !important;
-}
 @keyframes up_text {
   0%{transform: translateY(100%);opacity: 0;}
   100%{transform: translateY(0);opacity: 1;}

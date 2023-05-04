@@ -10,27 +10,33 @@ import { faGithub, faJsSquare, faReact, faHtml5, faCss3, faSass, faJava, faFigma
 import { faPhone, faRocket, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import Index from '@/components/Index';
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, toggleIndex } from '@/store/store';
+import { RootState, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
 import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
 import { test } from 'node:test';
+import Validation from '@/components/Validation';
 
-const montserrat = Montserrat({ subsets: ['latin'] });
+const montserrat = Montserrat({ 
+  subsets: ['latin'],
+  weight:["100","300","400","500","700","900"], 
+});
 const notoSansKR = Noto_Sans_KR({ // 다운이 정상적으로 안됨.
+  weight:["100","300","400","500","700","900"],
   preload:false, 
-  weight:["100","300","400","500","700","900"]
 }) //구글 폰트에 요청할 필요가 없다함. 
 
 export default function Home() {
   const dispatch = useDispatch();
-  const isIndexToggle = useSelector((state:RootState) => state.index);
+  const isIndexToggle = useSelector((state:RootState) => state.index.Index);
+  const index = useSelector((state:RootState)=> state.scrollPosition.Scroll);
+  const docOpen = true;
   const [sections, setSections] = useState<NodeListOf<HTMLElement>>();
   const [sectionsTop, setSectionsTop] = useState<number[]>([]);
   const [i, setI] = useState<number>(0);
   const [animationWrap, setAnimationWrap] = useState<NodeListOf<HTMLElement>>();
   const animationDelayed = 300;
   
-  //console.log(`메뉴 ${isIndexToggle}`); //메뉴 토글 확인용
+  // console.log(`메뉴 ${isIndexToggle}`); //메뉴 토글 확인용
   useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
     setI(0);
     const sections = document.querySelectorAll("section");
@@ -40,8 +46,7 @@ export default function Home() {
     setSectionsTop(heights);
     const texts = Array.from(document.querySelectorAll(".animate_text"));
 
-
-    // 부모요소에 ${mainstyle.title} animate_text ${i===1 && (`${mainstyle.play}`)} 클래스를 넣으면 자식 span에 적용
+    // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
     for(let el of texts){
       const children = Array.from(el.children) as HTMLElement[];
       children.forEach((text: HTMLElement, i: number) => {
@@ -52,32 +57,35 @@ export default function Home() {
 
 const handleWheel = (event: WheelEvent) => {
   event.preventDefault();
-  console.log(event)
-  console.log('scrolling', event.deltaY);
-  if(event.deltaY > 0 && i < sectionsTop.length-1){
-    console.log(1)
-    setI(i+1); 
-  } else if(event.deltaY < 0 && i > 0){
-    console.log(2)
-    setI(i-1);
+  // console.log('scrolling', event.deltaY);
+  if(!isIndexToggle){
+    if(event.deltaY > 0 && i < sectionsTop.length-1){
+      console.log(1)
+      setI(i+1); 
+      dispatch(updateIndex(index+1));
+    } else if(event.deltaY < 0 && i > 0){
+      console.log(2)
+      setI(i-1);
+      dispatch(updateIndex(index-1));
+    }
+  console.log(`스크롤이동 ${index}`);
   }
-  console.log(`스크롤이동 ${i}`)
 };
 
   useEffect(() => {
     window.addEventListener('wheel', handleWheel, {passive: false});
     return () => window.removeEventListener('wheel', handleWheel);
-  }, [i, sections]);
+  }, [index, sections]);
 
   useEffect(() =>{
     // console.log(`스크롤이동`)
     window.scroll({
-      top:sectionsTop[i],
+      top:sectionsTop[index],
       behavior:'smooth'
       })
 
       if(sections){active(sections,i);}
-  },[i, sections])
+  },[index, sections])
 
   const active = (el:NodeListOf<HTMLElement>,i:number) =>{
     el.forEach((item:HTMLElement) => {
@@ -92,18 +100,19 @@ const handleWheel = (event: WheelEvent) => {
       <title>PORTFOLIO | 2023</title>
     </Head>
     {/* Index Component */}
-    <Index /> 
+    <Index />
+    {docOpen && (<Validation></Validation>)}
     <main className={`min-h-screen ${montserrat.className}
     [&>div>section]:w-full [&>div>section]:h-screen [&>div>section]:px-20
     [&>div>section>h2]:mt-[41px] [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
     <div id='content1'>
       {/* section1 */}
-      <section className={`w-full h-screen border border-red-600 ${i===0 && (`${mainstyle.play}`)}`}>
+      <section className={`w-full h-screen border border-red-600`}>
         <div className={mainstyle.title_box}>
-          <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text ${i===0 && (`${mainstyle.play}`)}`}>
+          <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`}>
             {/* 효과를 우선 마우스 오버로 함 자동적으로 되게 해야함 */}
             <span>2023&nbsp;</span><span>P</span><span>O</span><span>R</span><span >T</span><span>F</span><span>O</span><span>L</span><span >I</span><span>O</span></h1>
-          <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em]`}>Logical thinking skills and research techniques, with interests as well as AI and UX/UI design</p>
+          <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)]`}>Logical thinking skills and research techniques, with interests as well as AI and UX/UI design</p>
         </div>
       </section>
       {/* //section1 */}
@@ -114,7 +123,7 @@ const handleWheel = (event: WheelEvent) => {
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} `}>HELLO</h2>
         <div className={`${mainstyle.section__inner}`}>
           <div className={`${mainstyle.left}`}>
-            <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text ${i===1 && (`${mainstyle.play}`)}`} style={{color:`var(--gray1)`}}><span>심리학 전공으로 학습한 논리적 사고 능력과 조사 연구 기술을 바탕으로, 인지와 생물 심리학, 그리고 AI와 UX/UI 디자인 분야에 관심이 있으며 지속적인 자기개발을 추구하는 사람입니다.</span></p>
+            <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>심리학 전공으로 학습한 논리적 사고 능력과 조사 연구 기술을 바탕으로, 인지와 생물 심리학, 그리고 AI와 UX/UI 디자인 분야에 관심이 있으며 지속적인 자기개발을 추구하는 사람입니다.</span></p>
             <ul className={`my-11 ${mainstyle.body} [&>li]:mb-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8  [&>li>svg]:h-8 [&>li>svg]:mr-2.5 [&>li>svg]:text-[var(--gray2)]`} style={{color:`var(--gray1)`}}>
             <li className={`${mainstyle.body2}`} ><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon><span>+82 10.4415.9901</span></li>
             <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon><Link href={'mailto:hwan.c.0330@gmail.com'} className={`${mainstyle.body}`}>hwan.c.0330@gmail.com</Link></li>
@@ -201,17 +210,17 @@ const handleWheel = (event: WheelEvent) => {
           [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-[50px]`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-            <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text ${i===2 && (`${mainstyle.play}`)}`}><span>미디어쿼리를 사용하여 반응형으로 제작한 기업사이트입니다.<br />
+            <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형으로 제작한 기업사이트입니다.<br />
             스크롤 위치에 따라 메뉴 색상이 변경됩니다.</span></dd>
             <dt className={`${mainstyle.title_sub2}`}>Description</dt>
             <dd>
               <ul className={`${mainstyle.body1} ${notoSansKR.className}
               [&>li]:text-[var(--gray1)]`}>
-              <li>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</li>
-              <li>2. HTML / CSS w3c 검사 통과</li>
-              <li>3. CSS와 JavaScript로 인터랙션 적용</li>
-              <li>4. 반응형 페이지 제작</li>
-              <li>5. Swiper.js 사용하여 오토배너를 구현</li>
+              <li className={`${mainstyle.title} animate_text`}><span>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</span></li>
+              <li className={`${mainstyle.title} animate_text`}><span>2. HTML / CSS w3c 검사 통과</span></li>
+              <li className={`${mainstyle.title} animate_text`}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
+              <li className={`${mainstyle.title} animate_text`}><span>4. 반응형 페이지 제작</span></li>
+              <li className={`${mainstyle.title} animate_text`}><span>5. Swiper.js 사용하여 오토배너를 구현</span></li>
               </ul>
               <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
@@ -222,8 +231,8 @@ const handleWheel = (event: WheelEvent) => {
               <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
               </ul>
             </dd>
-            <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-            <dd className={`${mainstyle.body1} text-[var(--gray1)]`}>HTML / CSS / JavaScript</dd>
+            <dt className={`${mainstyle.title_sub2}`}><span>Languages</span></dt>
+            <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
           </dl>
           {/* 목업 */}
           <div className={`relative flex justify-end items-end`}>
@@ -259,14 +268,14 @@ const handleWheel = (event: WheelEvent) => {
         [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
         [&>dd]:mb-[50px]`} style={{width:`600px`}}>
           <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-          <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text ${i===3 && (`${mainstyle.play}`)}`}><span>웹 컨텐츠 접근성 지침과 웹표준을 준수하여<br />삼성전기 기업 웹 사이트를 제작 하였습니다.</span></dd>
+          <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 컨텐츠 접근성 지침과 웹표준을 준수하여<br />삼성전기 기업 웹 사이트를 제작 하였습니다.</span></dd>
           <dt className={`${mainstyle.title_sub2}`}>Description</dt>
           <dd>
             <ul className={`${mainstyle.body1} ${notoSansKR.className}
             [&>li]:text-[var(--gray1)]`}>
-            <li>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</li>
-            <li>2. HTML / CSS w3c 검사 통과</li>
-            <li>3. CSS와 JavaScript로 인터랙션 적용</li>
+            <li className={`${mainstyle.title} animate_text`}><span>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</span></li>
+            <li className={`${mainstyle.title} animate_text`}><span>2. HTML / CSS w3c 검사 통과</span></li>
+            <li className={`${mainstyle.title} animate_text`}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
             </ul>
             <ul className={`flex mt-3 
             [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
@@ -281,8 +290,7 @@ const handleWheel = (event: WheelEvent) => {
             <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
             </ul>
           </dd>
-          <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-          <dd className={`${mainstyle.body1} text-[var(--gray1)]`}>HTML / CSS / JavaScript</dd>
+          <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
         </dl>
           {/* 목업 */}
           <div className={`relative flex justify-end items-end`}>
@@ -306,15 +314,15 @@ const handleWheel = (event: WheelEvent) => {
           [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-[50px]`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-            <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text ${i===4 && (`${mainstyle.play}`)}`}><span>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다.</span></dd>
+            <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다.</span></dd>
             <dt className={`${mainstyle.title_sub2}`}>Description</dt>
             <dd>
               <ul className={`${mainstyle.body1} ${notoSansKR.className}
               [&>li]:text-[var(--gray1)]`}>
-              <li>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</li>
-              <li>2. HTML / CSS w3c 검사 통과</li>
-              <li>3. CSS와 JavaScript로 인터랙션 적용</li>
-              <li>4. 반응형 페이지 제작</li>
+              <li className={`${mainstyle.title} animate_text`}><span>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</span></li>
+              <li className={`${mainstyle.title} animate_text `}><span>2. HTML / CSS w3c 검사 통과</span></li>
+              <li className={`${mainstyle.title} animate_text `}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
+              <li className={`${mainstyle.title} animate_text `}><span>4. 반응형 페이지 제작</span></li>
               </ul>
               <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
@@ -326,7 +334,7 @@ const handleWheel = (event: WheelEvent) => {
               </ul>
             </dd>
             <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-            <dd className={`${mainstyle.body1} text-[var(--gray1)]`}>HTML / CSS / JavaScript</dd>
+            <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
           </dl>
           {/* 목업 */}
           <div className={`relative flex justify-end items-end`}>
@@ -363,17 +371,17 @@ const handleWheel = (event: WheelEvent) => {
           [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}
           >
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-            <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text ${i===5 && (`${mainstyle.play}`)}`}><span>React로 제작한 메신저 앱입니다.<br />google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</span></dd>
+            <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>React로 제작한 메신저 앱입니다.<br />google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</span></dd>
             <dt className={`${mainstyle.title_sub2}`}>Description</dt>
             <dd>
               <ul className={`${mainstyle.body1} ${notoSansKR.className}
               `}>
-              <li>1. Firebase 인증서비스로 사용자 관리</li>
-              <li>2. Firebase Database로 채팅 내역 송수신</li>
-              <li>3. 사용자 정보를 문서로 Database에 저장</li>
-              <li>4. Storage로 이미지 파일 업로드</li>
-              <li>5. 프로필 업데이트 시 기존 파일을 Storage에서 제거</li>
-              <li>6. Axios 비동기 라이브러리 사용</li>
+              <li className={`${mainstyle.title} animate_text `}><span>1. Firebase 인증서비스로 사용자 관리</span></li>
+              <li className={`${mainstyle.title} animate_text `}><span>2. Firebase Database로 채팅 내역 송수신</span></li>
+              <li className={`${mainstyle.title} animate_text `}><span>3. 사용자 정보를 문서로 Database에 저장</span></li>
+              <li className={`${mainstyle.title} animate_text `}><span>4. Storage로 이미지 파일 업로드</span></li>
+              <li className={`${mainstyle.title} animate_text `}><span>5. 프로필 업데이트 시 기존 파일을 Storage에서 제거</span></li>
+              <li className={`${mainstyle.title} animate_text`}><span>6. Axios 비동기 라이브러리 사용</span></li>
               </ul>
               <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
@@ -384,9 +392,9 @@ const handleWheel = (event: WheelEvent) => {
               </ul>
             </dd>
             <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-            <dd className={`${mainstyle.body1}`}>HTML / CSS / SCSS / JavaScript</dd>
+            <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / SCSS / JavaScript</span></dd>
             <dt className={`${mainstyle.title_sub2}`}>Used</dt>
-            <dd className={`${mainstyle.body1}`}>React / Firebase / Axios</dd>
+            <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / Firebase / Axios</span></dd>
           </dl>
           {/* 목업 */}
           <div className={`relative flex bottom-[148px] justify-end items-end`}>
@@ -422,17 +430,17 @@ const handleWheel = (event: WheelEvent) => {
         [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
         [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}>
           <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-          <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text ${i===6 && (`${mainstyle.play}`)}`}><span>styled-componet를 사용하여 제작한 React Netflix App입니다.<br />The Movie DataBase API를 사용하여 영화 정보를 가져옵니다.</span></dd>
+          <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>styled-componet를 사용하여 제작한 React Netflix App입니다.<br />The Movie DataBase API를 사용하여 영화 정보를 가져옵니다.</span></dd>
           <dt className={`${mainstyle.title_sub2}`}>Description</dt>
           <dd>
           <ul className={`${mainstyle.body1} ${notoSansKR.className}
             `}>
-            <li>1. Firebase 인증서비스로 사용자 관리</li>
-            <li>2. 사용자 정보를 문서로 Database에 저장하여 관리</li>
-            <li>3. Storage로  프로필 이미지 파일 업로드</li>
-            <li>4. 문서 정보를 토대로 프로필 정보 갱신</li>
-            <li>5. Axios 비동기 라이브러리 사용</li>
-            <li>6. styled-components 사용하여 일부 컴포넌트 구현</li>
+            <li className={`${mainstyle.title} animate_text`}><span>1. Firebase 인증서비스로 사용자 관리</span></li>
+            <li className={`${mainstyle.title} animate_text`}><span>2. 사용자 정보를 문서로 Database에 저장하여 관리</span></li>
+            <li className={`${mainstyle.title} animate_text`}><span>3. Storage로  프로필 이미지 파일 업로드</span></li>
+            <li className={`${mainstyle.title} animate_text`}><span>4. 문서 정보를 토대로 프로필 정보 갱신</span></li>
+            <li className={`${mainstyle.title} animate_text`}><span>5. Axios 비동기 라이브러리 사용</span></li>
+            <li className={`${mainstyle.title} animate_text`}><span>6. styled-components 사용하여 일부 컴포넌트 구현</span></li>
             </ul>
             <ul className={`flex mt-3 
             [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
@@ -443,9 +451,9 @@ const handleWheel = (event: WheelEvent) => {
             </ul>
           </dd>
           <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-          <dd className={`${mainstyle.body1}`}>HTML / CSS / JavaScript</dd>
+          <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
           <dt className={`${mainstyle.title_sub2}`}>Used</dt>
-          <dd className={`${mainstyle.body1}`}>React / TMDB / Firebase / Axios / styled-components</dd>
+          <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / TMDB / Firebase / Axios / styled-components</span></dd>
         </dl>
         {/* 목업 */}
         <div className={`relative flex bottom-[148px] justify-end items-end`}>

@@ -1,24 +1,45 @@
-import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { combineReducers, configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-interface toggleState {
-  index:boolean
+interface State {
+  Index:boolean,
+  Scroll:number
 }
 
-const initialState:toggleState ={
-  index:false
+const initialState:State ={
+  Index:false,
+  Scroll:0
 }
+
 const indexSlice = createSlice({
   name:'index',
   initialState,
   reducers:{
     toggleIndex:(state, action:PayloadAction<boolean>) =>{
-     state.index = action.payload;
+     state.Index = action.payload;
     }
   }
 })
+
+const scrollPositionSlice = createSlice({
+  name:'scroll',
+  initialState,
+  reducers:{
+    updateIndex:(state, action:PayloadAction<number>) =>{
+      state.Scroll = action.payload;
+    }
+  }
+})
+
+const rootReducer = combineReducers({
+  index: indexSlice.reducer,
+  scrollPosition: scrollPositionSlice.reducer,
+});
+
 export const {toggleIndex} = indexSlice.actions;
+export const {updateIndex} = scrollPositionSlice.actions;
+
 export const store = configureStore({
-  reducer:indexSlice.reducer,
+  reducer:rootReducer
 })
 
 export type RootState = ReturnType<typeof store.getState>;
