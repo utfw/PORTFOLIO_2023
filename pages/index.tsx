@@ -14,7 +14,6 @@ import { RootState, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
 import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
 import Validation from '@/components/Validation';
-import Particles from '@/components/Particles';
 
 const montserrat = Montserrat({ 
   subsets: ['latin'],
