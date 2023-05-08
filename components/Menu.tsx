@@ -10,24 +10,24 @@ function Menu() {
   const isIndexOn = useSelector((state:RootState) => state.index.Index);
   const index = useSelector((state:RootState)=>state.scrollPosition.Scroll);
   const [on, setOn] = useState(false);
-  const [list, setList] = useState<NodeListOf<Element>>();
+  const [list, setList] = useState<NodeListOf<Element>| null>(null);
   
   useLayoutEffect(()=>{
-    const li = document.querySelectorAll(".menu_pages>li");
-    setList(li);
+    const list = document.querySelectorAll(".menu_pages>li");
+    setList(list);
   },[])
 
   useEffect(()=>{
     if (index > 1 && index < 9){
       setOn(true);
-      listOn(list,index);
+      if(list !==null) listOn(list,index);
     } else setOn(false);
-  },[index])
+  },[index, list])
 
   const listOn = (list:NodeListOf<Element>, index:number) =>{
-    for(let el of list){
+    list.forEach((el, i)=>{
       el.classList.remove("on")
-    }
+    })
     list[index-2].classList.add('on');
   }
 
