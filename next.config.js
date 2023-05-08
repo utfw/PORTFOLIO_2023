@@ -6,13 +6,10 @@ const nextConfig = {
   assetPrefix:!debug ? `/${name}/`:``,  
   basePath: `/${name}`, 
   trailingSlash: true,
-}
-
-module.exports = nextConfig
-
-module.exports = {
   images: {
     domains: ['firebasestorage.googleapis.com'],
     unoptimized: true,
   },
-};
+}
+
+module.exports = nextConfig
