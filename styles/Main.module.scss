@@ -1,3 +1,19 @@
+.container{
+  position: relative;
+  >div{
+    backface-visibility: hidden;
+    position: relative;
+    transform-style: preserve-3d;
+    transform-origin: 100% 100%;
+    transform: translateZ(0px) rotateY(0deg);
+    // border: 1px solid red;
+    transition: transform 0.5s linear;
+  }
+  .index-open{
+    transform: rotateY(90deg);
+  }
+}
+
 .title_box{
   position: absolute;
   height: 232px;
@@ -11,12 +27,13 @@
   display: block;
   margin-bottom: 16px;
   font-family: Montserrat;
-  font-size: 120px;
+  font-size: 7.5rem;
   font-weight: 600;
   line-height: 168px;
   letter-spacing: 0em;
-  text-align: left;
+  text-align: justify;
   color: #393939;
+  word-break: break-all;
 }
 .title1{
   font-family: Montserrat;
@@ -28,7 +45,7 @@
 
 .title_sub{
   display: block;
-  font-size: 36px;
+  font-size: 2.25rem;
   font-weight: 300;
   line-height: 48px;
   letter-spacing: -0.005em;
@@ -51,7 +68,7 @@
 }
 
 .body1{
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 400;
   line-height: 36px;
   letter-spacing: -0.015em;
@@ -64,13 +81,21 @@
   letter-spacing: -0.02em;
   text-align: justify;
 }
+
+
 /* menu */
 .menu{
+  // opacity: 0;
   position: fixed;
-  left: 1776px;
+  right: 80px;
   top: 16px;
+  // transform: translate3d(+250%,0,0);
+  transition: all 0.3s ease-in-out;
 }
-
+.menu_on{
+  opacity: 1;
+  transform: translate3d(0,0,0);
+}
 .menu_box{
   display: flex;
   justify-content: center;
@@ -92,19 +117,53 @@
   top: 98px;
 }
 
-.menu_indicator{
-
-}
-
 /* section_sizing */
 .section__inner{
   display: flex;
   height: 791px;
 }
-/* section1 */
 .left{
   width: 880px;
 }
+// section > mockup
+.mockup{
+  >div>div{
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: 0 0;
+  }
+  >div:nth-of-type(1){
+  width: 737px;
+  height: 570px;
+    >div{
+      background-image: url(../images/m_24.svg);
+    }
+  }
+  >div:nth-of-type(2){
+    position: absolute;
+    right: 20.4vw;
+    bottom: 14px;
+    width: 512px;
+    height: 310px;
+    >div{
+      background-image: url(../images/m_16.svg);
+    }
+  }
+  >div:nth-of-type(3){
+    position: absolute;
+    right: 48vw;
+    bottom: 12px;
+    width: 207px;
+    height: 207px;
+    >div{
+      background-image: url(../images/i_13.svg);
+    }
+  }
+}
+
+
 /* font transition */
 .title{
   overflow: hidden;
@@ -123,3 +182,25 @@
 }
 
 /* [&>span]:transition-all duration-500 ease-in-out [&>span]:translate-y-full */
+
+
+@media screen and (max-width:1440px) {
+  .title1{
+    font-size: 100px;
+    line-height: 150px;
+    margin-bottom: 32px !important;
+    padding-top: 20px;
+    }
+  
+  .title_sub{
+    font-size: 2rem;
+    line-height: 40px;
+  }
+  
+  .title_sub2{
+    padding-bottom: 1px !important;
+  }
+  .menu{
+    right: 32px;
+  }
+}

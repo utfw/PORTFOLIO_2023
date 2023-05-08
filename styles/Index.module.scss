@@ -1,7 +1,9 @@
 .index{
-  opacity: 1;
-  transition: all 0.5s linear;
-  transform: translate3d(-100%,0,0);
+  position: absolute;
+  top: 0;
+  left: -100%;
+  transform-origin: 100% 50%;
+  transform: rotateY(-90deg);
   .li{
     overflow: hidden;
     position: relative;
@@ -36,7 +38,6 @@
 }
 .index-on{
   opacity: 1;
-  transform: translate3d(0,0,0);
 }
 .li:hover{
   width: 696px;

@@ -23,9 +23,16 @@ body {
   color: rgb(var(--foreground-rgb));
   background: (var(--bg));
   font-family: (var(--font-family));
+  min-width: 780px;
 }
+
+@media screen and (max-width:1440px) {
+  body{font-size: 1.4vw;}
+}
+
 /* reset.css */
 html,body{width: 100%;height: 100%;}
+section{min-height: 100vh;}
 html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,strong,sub,sup,var,dl,dt,dd,il,ul,li,fieldset,form,label,legend,table,caption,tbody,thead,tr,th,td,summary,small,
 b,i,article,aside,canvas,details,figcaption,figure,footer,header,menu,nav,section,time,mark,audio,video{margin: 0;padding: 0;}
 
@@ -46,3 +53,8 @@ hr{display: none;}
 .active .animate_text>span{
   animation-play-state: running !important;
 }
+
+/* 레이아웃보기용 */
+section{
+  border: 1px solid red;
+} 

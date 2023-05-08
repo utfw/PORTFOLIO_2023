@@ -2,7 +2,7 @@ import Image from 'next/image'
 import { GetStaticProps } from 'next';
 import { Montserrat, Noto_Sans_KR } from 'next/font/google'
 import Head from 'next/head';
-import mainstyle from '../styles/Main.module.css'
+import mainstyle from '../styles/Main.module.scss'
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
@@ -14,6 +14,7 @@ import { RootState, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
 import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
 import Validation from '@/components/Validation';
+import Particles from '@/components/Particles';
 
 const montserrat = Montserrat({ 
   subsets: ['latin'],
@@ -30,66 +31,77 @@ export default function Home() {
   const index = useSelector((state:RootState)=> state.scrollPosition.Scroll);
   const [sections, setSections] = useState<NodeListOf<HTMLElement>>();
   const [sectionsTop, setSectionsTop] = useState<number[]>([]);
-  const [i, setI] = useState<number>(0);
   const [animationWrap, setAnimationWrap] = useState<NodeListOf<HTMLElement>>();
   const animationDelayed = 300;
   
   const docOpen = false; //테스트용 임시 true
 
   // console.log(`메뉴 ${isIndexToggle}`); //메뉴 토글 확인용
-  useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
-    setI(0);
-    const sections = document.querySelectorAll("section");
-    setSections(sections);
-  
-    const heights = Array.from(sections).map((section) => section.offsetTop);
-    setSectionsTop(heights);
-    const texts = Array.from(document.querySelectorAll(".animate_text"));
-    // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
-    for(let el of texts){
-      const children = Array.from(el.children) as HTMLElement[];
-      children.forEach((text: HTMLElement, i: number) => {
-        text.style.animationDelay = `${animationDelayed + (50 * i)}ms`;
-      })
-    }
-  },[]);
+useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
+  const sections = document.querySelectorAll("section");
+  setSections(sections);
+
+  let heights = Array.from(sections).map((section) => section.offsetTop);
+  setSectionsTop(heights);
+  const texts = Array.from(document.querySelectorAll(".animate_text"));
+  // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
+  for(let el of texts){
+    const children = Array.from(el.children) as HTMLElement[];
+    children.forEach((text: HTMLElement, i: number) => {
+      text.style.animationDelay = `${animationDelayed + (50 * i)}ms`;
+    })
+  }
+},[]);
 
 const handleWheel = (event: WheelEvent) => {
   event.preventDefault();
-  if(!isIndexToggle){
-    if(event.deltaY > 0 && i < sectionsTop.length-1){
+    if(event.deltaY > 0 && index < sectionsTop.length-1){
       console.log(1)
-      setI(i+1); 
       dispatch(updateIndex(index+1));
-    } else if(event.deltaY < 0 && i > 0){
+    } else if(event.deltaY < 0 && index > 0){
       console.log(2)
-      setI(i-1);
+      // setI(i-1);
       dispatch(updateIndex(index-1));
     }
-  console.log(`스크롤이동 ${index}`);
-  }
+  // console.log(`스크롤이동 ${index}`);
 };
 
-  useEffect(() => {
-    window.addEventListener('wheel', handleWheel, {passive: false});
-    return () => window.removeEventListener('wheel', handleWheel);
-  }, [index, sections]);
-
-  useEffect(() =>{
-    window.scroll({
-      top:sectionsTop[index],
-      behavior:'smooth'
-      })
-
-      if(sections){active(sections,i);}
-  },[index, sections])
-
-  const active = (el:NodeListOf<HTMLElement>,i:number) =>{
-    el.forEach((item:HTMLElement) => {
-      item.classList.remove("active");
-    });
-    el[i].classList.add("active");
+useEffect(() => {
+ 
+  window.addEventListener('wheel', handleWheel, {passive: false});
+  if(!isIndexToggle){
+  window.scroll({
+    top:sectionsTop[index],
+    behavior:'smooth'
+    })
   }
+    if(sections){active(sections,index);}
+  
+  return () => window.removeEventListener('wheel', handleWheel);
+
+}, [index, sections, sectionsTop]);
+
+const active = (el:NodeListOf<HTMLElement>,i:number) =>{
+  el.forEach((item:HTMLElement) => {
+    item.classList.remove("active");
+  });
+  el[i].classList.add("active");
+  console.log(`${i} active`);
+}
+
+function resize(){
+  const sections = document.querySelectorAll("section");
+  setSections(sections);
+    var heights = Array.from(sections).map((section) => section.offsetTop);
+    setSectionsTop(heights);
+}
+
+useEffect(()=>{
+  window.addEventListener('resize',resize);
+  return () => {
+    window.removeEventListener('resize', resize);
+  };
+}),[];
 
   return (
     <>
@@ -99,13 +111,13 @@ const handleWheel = (event: WheelEvent) => {
     {/* Index Component */}
     <Index />
     {docOpen && (<Validation></Validation>)}
-    <main className={`min-h-screen ${montserrat.className}
+    <main className={`min-h-screen overflow-hidden ${montserrat.className}
     [&>div>section]:w-full [&>div>section]:h-screen [&>div>section]:px-20
     [&>div>section>h2]:mt-[41px] [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
     <div id='content1'>
       {/* section1 */}
-      <section className={`w-full h-screen`}>
-        <div className={mainstyle.title_box}>
+      <section className={`flex w-full h-screen justify-center items-center`}>
+        <div className={`block`}>
           <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`}>
             {/* 효과를 우선 마우스 오버로 함 자동적으로 되게 해야함 */}
             <span>2023&nbsp;</span><span>P</span><span>O</span><span>R</span><span >T</span><span>F</span><span>O</span><span>L</span><span >I</span><span>O</span></h1>
@@ -117,14 +129,14 @@ const handleWheel = (event: WheelEvent) => {
     <div id='content2'>
       {/* section2 */}
       <section style={{boxSizing:`border-box`}}>
-        <h2 className={`${mainstyle.title1} ${mainstyle.gray2} `}>HELLO</h2>
+        <h2 className={`${mainstyle.title1}`}>HELLO</h2>
         <div className={`${mainstyle.section__inner}`}>
-          <div className={`${mainstyle.left}`}>
+          <div className={mainstyle.left}>
             <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>심리학 전공으로 학습한 논리적 사고 능력과 조사 연구 기술을 바탕으로, 인지와 생물 심리학, 그리고 AI와 UX/UI 디자인 분야에 관심이 있으며 지속적인 자기개발을 추구하는 사람입니다.</span></p>
             <ul className={`my-11 ${mainstyle.body} [&>li]:mb-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8  [&>li>svg]:h-8 [&>li>svg]:mr-2.5 [&>li>svg]:text-[var(--gray2)]`} style={{color:`var(--gray1)`}}>
             <li className={`${mainstyle.body2}`} ><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon><span>+82 10.4415.9901</span></li>
-            <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon><Link href={'mailto:hwan.c.0330@gmail.com'} className={`${mainstyle.body}`}>hwan.c.0330@gmail.com</Link></li>
-            <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon><span className={`${mainstyle.body}`}>github : https://github.com/utfw</span></li>
+            <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon><Link href={'mailto:hwan.c.0330@gmail.com'} className={`${mainstyle.body2}`}>hwan.c.0330@gmail.com</Link></li>
+            <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon><span className={`${mainstyle.body2}`}><a href='https://github.com/utfw'>github : https://github.com/utfw</a></span></li>
             </ul>
             <dl style={{color:`var(--gray1)`}}>
             <dt className={`${mainstyle.title_sub2} pb-6`} style={{color:`var(--gray2)`}}>SKILLS</dt>
@@ -148,7 +160,7 @@ const handleWheel = (event: WheelEvent) => {
           </div>
           <div className={`w-0.5 mx-10 mt-4`} style={{height:`775px`, background:`var(--gray1)`}}></div>
           <div className='right'>
-            <dl className={`text-[var(--gray2)] [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px]`}>
+            <dl className={`text-[var(--gray2)] [&>dt]:pb-6 [&>dt]:text-[var(--gray2)]`}>
             <dt className={`${mainstyle.title_sub2}`}>EDUCATION</dt>
             <dd>
               <ul className={`mb-11 [&>li]:mb-5 [& *]:text-[var(--gray2)]`}>
@@ -200,10 +212,11 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content3'>
       {/* section3 */}
-      <section>
+      <section className={`relative`}>
+        {/* <Particles></Particles> */}
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>FESCARO</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
-          <dl className={`text-[var(--gray2)] 
+          <dl className={`text-[var(--gray2)] min-w-[600px]
           [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-[50px]`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -220,9 +233,13 @@ const handleWheel = (event: WheelEvent) => {
               <li className={`${mainstyle.title} animate_text`}><span>5. Swiper.js 사용하여 오토배너를 구현</span></li>
               </ul>
               <ul className={`flex mt-3 
-              [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
-              [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-              [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
+            [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
+            [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
+            [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+            [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
+            [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
+            [&>li>a:hover>span>svg]:text-[var(--bg)]
+            `}>
               <li><a href='https://github.com/utfw/clone_fescaro' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
               <li><a href='https://utfw.github.io/clone_fescaro/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
               <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
@@ -232,25 +249,22 @@ const handleWheel = (event: WheelEvent) => {
             <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
           </dl>
           {/* 목업 */}
-          <div className={`relative flex justify-end items-end`}>
-            <div className={`w-[737px] h-[570px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
-              </div>
-            </div>
+          <div className={`relative flex bottom-[148px] justify-end items-end ${mainstyle.mockup}`}>
+          <div className='mockup__pc'>
             <div>
-            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
-              </div>
             </div>
-            </div>
-            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
+          </div>
+          <div>
+            <div className={`mockup__tablet`}>
+              <div>
               </div>
             </div>
           </div>
+          <div className={`mockup__mobile`}>
+            <div>
+            </div>
+          </div>
+        </div>
           {/* //목업 */}
         </div>
       </section>
@@ -261,7 +275,7 @@ const handleWheel = (event: WheelEvent) => {
       <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>삼성전기</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
-        <dl className={`text-[var(--gray2)] 
+        <dl className={`text-[var(--gray2)] min-w-[600px]
         [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
         [&>dd]:mb-[50px]`} style={{width:`600px`}}>
           <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -290,13 +304,12 @@ const handleWheel = (event: WheelEvent) => {
           <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
         </dl>
           {/* 목업 */}
-          <div className={`relative flex justify-end items-end`}>
-            <div className={`w-[737px] h-[570px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
-              </div>
+          <div className={`relative flex bottom-[148px] justify-end items-end ${mainstyle.mockup}`}>
+          <div className='mockup__pc'>
+            <div>
             </div>
           </div>
+        </div>
           {/* //목업 */}
         </div>
       </section>
@@ -305,9 +318,9 @@ const handleWheel = (event: WheelEvent) => {
     <div id='content5'>
       {/* section5 */}
       <section>
-        <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>CJ ONE</h2>
+        <h2 className={`${mainstyle.title1} mb-11`}>CJ ONE</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
-          <dl className={`text-[var(--gray2)] 
+          <dl className={`text-[var(--gray2)] min-w-[600px]
           [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-[50px]`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -322,9 +335,13 @@ const handleWheel = (event: WheelEvent) => {
               <li className={`${mainstyle.title} animate_text `}><span>4. 반응형 페이지 제작</span></li>
               </ul>
               <ul className={`flex mt-3 
-              [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
-              [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-              [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
+            [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
+            [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
+            [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+            [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
+            [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
+            [&>li>a:hover>span>svg]:text-[var(--bg)]
+            `}>
               <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
               <li><a href='https://utfw.github.io/clone_CJONE/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
               <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
@@ -334,25 +351,22 @@ const handleWheel = (event: WheelEvent) => {
             <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
           </dl>
           {/* 목업 */}
-          <div className={`relative flex justify-end items-end`}>
-            <div className={`w-[737px] h-[570px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
-              </div>
-            </div>
+          <div className={`relative flex bottom-[148px] justify-end items-end ${mainstyle.mockup}`}>
+          <div className='mockup__pc'>
             <div>
-            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
-              </div>
             </div>
-            </div>
-            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
+          </div>
+          <div>
+            <div className={`mockup__tablet`}>
+              <div>
               </div>
             </div>
           </div>
+          <div className={`mockup__mobile`}>
+            <div>
+            </div>
+          </div>
+        </div>
           {/* //목업 */}
         </div>
       </section>
@@ -363,7 +377,7 @@ const handleWheel = (event: WheelEvent) => {
       <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>REACT TALK APP</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
-          <dl className={`text-[var(--gray2)] 
+          <dl className={`text-[var(--gray2)] min-w-[600px]
           [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}
           >
@@ -381,9 +395,13 @@ const handleWheel = (event: WheelEvent) => {
               <li className={`${mainstyle.title} animate_text`}><span>6. Axios 비동기 라이브러리 사용</span></li>
               </ul>
               <ul className={`flex mt-3 
-              [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
-              [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-              [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
+            [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
+            [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
+            [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+            [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
+            [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
+            [&>li>a:hover>span>svg]:text-[var(--bg)]
+            `}>
               <li><a href='https://github.com/utfw/react_chat_firebase_2023' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
               <li><a href='https://utfw.github.io/react_chat_firebase_2023/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
               </ul>
@@ -394,25 +412,22 @@ const handleWheel = (event: WheelEvent) => {
             <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / Firebase / Axios</span></dd>
           </dl>
           {/* 목업 */}
-          <div className={`relative flex bottom-[148px] justify-end items-end`}>
-            <div className={`w-[737px] h-[570px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
-              </div>
-            </div>
+          <div className={`relative flex bottom-[148px] justify-end items-end ${mainstyle.mockup}`}>
+          <div className='mockup__pc'>
             <div>
-            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
-              </div>
             </div>
-            </div>
-            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
+          </div>
+          <div>
+            <div className={`mockup__tablet`}>
+              <div>
               </div>
             </div>
           </div>
+          <div className={`mockup__mobile`}>
+            <div>
+            </div>
+          </div>
+        </div>
           {/* //목업 */}
         </div>
       </section>
@@ -423,7 +438,7 @@ const handleWheel = (event: WheelEvent) => {
       <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>REACT NETFLIX APP</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
-        <dl className={`text-[var(--gray2)] 
+        <dl className={`text-[var(--gray2)] min-w-[600px]
         [&>dt]:pb-6 [&>dt]:text-[var(--gray2)] 
         [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}>
           <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -440,9 +455,13 @@ const handleWheel = (event: WheelEvent) => {
             <li className={`${mainstyle.title} animate_text`}><span>6. styled-components 사용하여 일부 컴포넌트 구현</span></li>
             </ul>
             <ul className={`flex mt-3 
-            [&>li>a]:flex [&>li>a]:mr-5 [&>li>a]:items-center
+            [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
+            [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
+            [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
             [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-            [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]`}>
+            [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
+            [&>li>a:hover>span>svg]:text-[var(--bg)]
+            `}>
              <li><a href='https://github.com/utfw/react_search_movie_2023' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
             <li><a href='https://utfw.github.io/react_search_movie_2023/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
             </ul>
@@ -453,26 +472,23 @@ const handleWheel = (event: WheelEvent) => {
           <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / TMDB / Firebase / Axios / styled-components</span></dd>
         </dl>
         {/* 목업 */}
-        <div className={`relative flex bottom-[148px] justify-end items-end`}>
-          <div className={`w-[737px] h-[570px]`}>
-            <div className={`w-full h-full
-            bg-[url('../images/m_24.svg')] bg-contain bg-no-repeat`}>
+        <div className={`relative flex bottom-[148px] justify-end items-end ${mainstyle.mockup}`}>
+          <div className='mockup__pc'>
+            <div>
             </div>
           </div>
           <div>
-            <div className={`absolute bottom-3.5 right-[404px] w-[512px] h-[310px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
+            <div className={`mockup__tablet`}>
+              <div>
               </div>
             </div>
           </div>
-            <div className={`absolute bottom-3 right-[940px] w-[207px] h-[207px]`}>
-              <div className={`w-full h-full
-              bg-[url('../images/i_13.svg')] bg-contain bg-no-repeat`}>
-              </div>
+          <div className={`mockup__mobile`}>
+            <div>
             </div>
           </div>
-          {/* //목업 */}
+        </div>
+        {/* //목업 */}
         </div>
       </section>
       {/* //section7 */}

@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import mainstyle from '../styles/Main.module.css'
+import mainstyle from '../styles/Main.module.scss'
 
 
 function Validation() {

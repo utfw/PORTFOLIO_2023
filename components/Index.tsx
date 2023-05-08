@@ -1,5 +1,5 @@
 import React from 'react'
-import mainstyle from '../styles/Main.module.css'
+import mainstyle from '../styles/Main.module.scss'
 import indexstyle from '../styles/Index.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
@@ -14,17 +14,12 @@ function Index() {
 
   function onClickScroll(number:number){
     console.log(index, number);
-    dispatch(updateIndex(number));
-    console.log(index)
-    window.scroll({
-      top: number*window.innerHeight,
-      behavior:'smooth'
-    })
+    dispatch(updateIndex(number+1));
     dispatch(toggleIndex(false));
   }
 
   return (
-    <div className={`z-[11] fixed w-full h-screen p-20 text-[var(--gray2)] bg-[var(--bg)] ${indexstyle.index} ${isIndexToggle ? indexstyle['index-on'] : ''}`}>
+    <div className={`z-[11] w-full h-screen p-20 text-[var(--gray2)] bg-[var(--bg)] ${indexstyle.index} ${isIndexToggle ? indexstyle['index-on'] : ''} `} style={{top:index*1080+'px'}}>
       <h2 className={`${mainstyle.title1} mb-11`}>INDEX</h2>
       <div>
         <ul className={`index
