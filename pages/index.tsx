@@ -13,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
 import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
-import { test } from 'node:test';
 import Validation from '@/components/Validation';
 
 const montserrat = Montserrat({ 
@@ -29,13 +28,14 @@ export default function Home() {
   const dispatch = useDispatch();
   const isIndexToggle = useSelector((state:RootState) => state.index.Index);
   const index = useSelector((state:RootState)=> state.scrollPosition.Scroll);
-  const docOpen = true;
   const [sections, setSections] = useState<NodeListOf<HTMLElement>>();
   const [sectionsTop, setSectionsTop] = useState<number[]>([]);
   const [i, setI] = useState<number>(0);
   const [animationWrap, setAnimationWrap] = useState<NodeListOf<HTMLElement>>();
   const animationDelayed = 300;
   
+  const docOpen = false; //테스트용 임시 true
+
   // console.log(`메뉴 ${isIndexToggle}`); //메뉴 토글 확인용
   useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
     setI(0);
@@ -45,7 +45,6 @@ export default function Home() {
     const heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
     const texts = Array.from(document.querySelectorAll(".animate_text"));
-
     // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
     for(let el of texts){
       const children = Array.from(el.children) as HTMLElement[];
@@ -57,7 +56,6 @@ export default function Home() {
 
 const handleWheel = (event: WheelEvent) => {
   event.preventDefault();
-  // console.log('scrolling', event.deltaY);
   if(!isIndexToggle){
     if(event.deltaY > 0 && i < sectionsTop.length-1){
       console.log(1)
@@ -78,7 +76,6 @@ const handleWheel = (event: WheelEvent) => {
   }, [index, sections]);
 
   useEffect(() =>{
-    // console.log(`스크롤이동`)
     window.scroll({
       top:sectionsTop[index],
       behavior:'smooth'
@@ -107,7 +104,7 @@ const handleWheel = (event: WheelEvent) => {
     [&>div>section>h2]:mt-[41px] [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
     <div id='content1'>
       {/* section1 */}
-      <section className={`w-full h-screen border border-red-600`}>
+      <section className={`w-full h-screen`}>
         <div className={mainstyle.title_box}>
           <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`}>
             {/* 효과를 우선 마우스 오버로 함 자동적으로 되게 해야함 */}
@@ -119,7 +116,7 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content2'>
       {/* section2 */}
-      <section className={`border border-red-600`} style={{boxSizing:`border-box`}}>
+      <section style={{boxSizing:`border-box`}}>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} `}>HELLO</h2>
         <div className={`${mainstyle.section__inner}`}>
           <div className={`${mainstyle.left}`}>
@@ -203,7 +200,7 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content3'>
       {/* section3 */}
-      <section className={`border border-red-600`}>
+      <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>FESCARO</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
           <dl className={`text-[var(--gray2)] 
@@ -261,7 +258,7 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content4'>
       {/* section4 */}
-      <section className={`border border-red-600`}>
+      <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>삼성전기</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
         <dl className={`text-[var(--gray2)] 
@@ -307,7 +304,7 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content5'>
       {/* section5 */}
-      <section className={`border border-red-600`}>
+      <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>CJ ONE</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
           <dl className={`text-[var(--gray2)] 
@@ -363,7 +360,7 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content6'>
       {/* section6 */}
-      <section className={`border border-red-600`}>
+      <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>REACT TALK APP</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
           <dl className={`text-[var(--gray2)] 
@@ -423,7 +420,7 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content7'>
       {/* section7 */}
-      <section className={`border border-red-600`}>
+      <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2} mb-11`}>REACT NETFLIX APP</h2>
         <div className={`flex w-full pr-[144px] justify-between`}>
         <dl className={`text-[var(--gray2)] 
@@ -482,7 +479,7 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content8'>
       {/* section8 */}
-      <section className={`w-full h-screen border border-red-600 relative`}>
+      <section className={`relative`}>
         <h2 className={`${mainstyle.title1}`}>PURE CSS</h2>
           <Shark></Shark>
       </section>
@@ -490,13 +487,13 @@ const handleWheel = (event: WheelEvent) => {
     </div>
     <div id='content9'>
       {/* section9 */}
-      <section className={`w-full h-screen border border-red-600`}>
+      <section>
         <h2 className={`${mainstyle.title1} ${mainstyle.gray2}`}>Extra Page</h2>
       </section>
       {/* //section9 */}
     </div>
     <div id='content10'>
-    <section className={`w-full h-screen border border-red-600 relative`}>
+    <section className={`relative`}>
       <div className={`absolute top-1/2 left-1/2 w-[518px] -translate-x-1/2 -translate-y-1/2 text-[var(--gray2)]`}>
         <p className={`w-full text-justify ${mainstyle.title1} leading-none tracking-[.054em]`}>THANKS</p>
         <p className={`text-[62px] text-justify tracking-[.013em]`}>FOR WATCHING</p>
