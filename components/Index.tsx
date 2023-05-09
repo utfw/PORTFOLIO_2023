@@ -11,7 +11,8 @@ function Index() {
   const dispatch = useDispatch();
   const isIndexToggle = useSelector((state: RootState) => state.index.Index);
   const index = useSelector((state:RootState)=>state.scrollPosition.Scroll);
-
+  const height = useSelector((state:RootState)=>state.sectionHeights.Height);
+  
   function onClickScroll(number:number){
     console.log(index, number);
     dispatch(updateIndex(number+1));
@@ -19,7 +20,7 @@ function Index() {
   }
 
   return (
-    <div className={`z-[11] w-full h-screen p-20 text-[var(--gray2)] bg-[var(--bg)] ${indexstyle.index} ${isIndexToggle ? indexstyle['index-on'] : ''} `} style={{top:index*1080+'px'}}>
+    <div className={`z-[11] w-full h-screen p-20 text-[var(--gray2)] bg-[var(--bg)] ${indexstyle.index} ${isIndexToggle ? indexstyle['index-on'] : ''} `} style={{top:index*height+'px'}}>
       <h2 className={`${mainstyle.title1} mb-11`}>INDEX</h2>
       <div>
         <ul className={`index
