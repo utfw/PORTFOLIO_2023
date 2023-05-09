@@ -4,28 +4,32 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 
 function Explosion() {
-  const scene = useRef();
+  const scene = useRef<HTMLDivElement>(null);
   const engine = useRef(Engine.create());
   const height = useSelector((state:RootState) => state.sectionHeights.Height);
 
   useEffect(()=>{
 
   },[height])
+
   useEffect(()=>{
     //mount 
     const cw = document.body.clientWidth;
     const ch = document.body.clientHeight;
 
-    const render = Render.create({
-      element: scene.current,
-      engine: engine.current,
-      options:{
-        width: cw,
-        height: ch,
-        wireframes: false,
-        background: 'transparent',
-      }
-    })
+    if (scene.current) {
+      var render = Render.create({
+        element: scene.current,
+        engine: engine.current,
+        options: {
+          width: cw,
+          height: ch,
+          wireframes: false,
+          background: 'transparent',
+        },
+      });
+      Render.run(render);
+    }
 
     World.add(engine.current.world,[
       Bodies.rectangle(cw/2, -10, cw, 20, {
@@ -52,15 +56,15 @@ function Explosion() {
     ])
 
     Engine.run(engine.current);
-    Render.run(render);
-    console.log(render.width)
+   
+
     return() =>{
       Render.stop(render)
-      World.clear(engine.current.world);
+      World.clear(engine.current.world,false);
       Engine.clear(engine.current);
       render.canvas.remove();
-      render.canvas = null;
-      render.context = null;
+      // render.canvas = null;
+      // render.context = null;
       render.textures = {}
     }
   },[])
@@ -75,7 +79,7 @@ function Explosion() {
     isPressed.current = false
   }
 
-  const handleAddCircle = (e) =>{
+  const handleAddCircle = (e:MouseEvent) =>{
     if(isPressed.current){
       const ball = Bodies.circle(
         e.clientX,
@@ -99,7 +103,7 @@ function Explosion() {
   // }
 
   return (
-    <div className={`absolute`} onMouseDown={handleDown} onMouseUp={handleUp} onMouseMove={handleAddCircle}>
+    <div className={`absolute`} onMouseDown={handleDown} onMouseUp={handleUp} onMouseMove={()=>handleAddCircle}>
     <div ref={scene} style={{width:`100%`, height:`100%`}}>
     </div>
     </div>

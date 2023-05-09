@@ -115,6 +115,7 @@ useEffect(()=>{
     {docOpen && (<Validation></Validation>)}
     <main className={`min-h-screen overflow-hidden ${montserrat.className}
     [&>div>section]:w-full [&>div>section]:h-screen
+    [&>div>section]:overflow-hidden
     [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
     <div id='content1' className={`relative`}>
       {/* section1 */}
@@ -131,9 +132,9 @@ useEffect(()=>{
     </div>
     <div id='content2'>
       {/* section2 */}
-      <section style={{boxSizing:`border-box`}}>
+      <section className={`flex flex-col pb-20`} style={{boxSizing:`border-box`}}>
         <h2 className={`${mainstyle.title1}`}>HELLO</h2>
-        <div className={`${mainstyle.section__inner}`}>
+        <div className={`${mainstyle.section__inner}`} style={{flex:`1`}}>
           <div className={mainstyle.left}>
             <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>심리학 전공으로 학습한 논리적 사고 능력과 조사 연구 기술을 바탕으로, 인지와 생물 심리학, 그리고 AI와 UX/UI 디자인 분야에 관심이 있으며 지속적인 자기개발을 추구하는 사람입니다.</span></p>
             <ul className={`my-10 ${mainstyle.body} [&>li]:mb-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8 [&>li>svg]:h-8 [&>li>svg]:mr-2.5 [&>li>svg]:text-[var(--gray2)]`} style={{color:`var(--gray1)`}}>
@@ -165,12 +166,12 @@ useEffect(()=>{
             </dd>
             </dl>
           </div>
-          <div className={`w-[2px] mx-10 mt-2`} style={{height:`77vh`, background:`var(--gray1)`}}></div>
+          <div className={`w-[2px] mx-10 mt-4`} style={{ background:`var(--gray1)`, flex:`1`, maxWidth:`2px`}}></div>
           <div className='right'>
-            <dl className={`text-[var(--gray2)] [&>dt]:text-[var(--gray2)]`}>
+            <dl className={`flex flex-col justify-between h-full text-[var(--gray2)] [&>dt]:text-[var(--gray2)]`}>
             <dt className={`${mainstyle.title_sub2}`}>EDUCATION</dt>
             <dd>
-              <ul className={`mb-10 [&>li]:mb-5 [& *]:text-[var(--gray2)]`}>
+              <ul className={`[&>li]:mb-5 [& *]:text-[var(--gray2)]`}>
               <li className={`[&>span:first-child]:mb-0.5 [&>span]:block [&>span:last-child:text-[var(--gray1)]`}>
                 <span className={`${mainstyle.body1} ${notoSansKR.className}`}>이젠아카데미 평생교육원</span>
                 <span className={`${mainstyle.body2} `}>UI/UX 웹&앱 디자인 & 프론트엔드 / 2022 - 2023</span>
@@ -256,22 +257,29 @@ useEffect(()=>{
             <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
           </dl>
           {/* 목업 */}
-          <div className={`relative flex  justify-end ${mainstyle.mockup}`}>
-          <div className='mockup__pc'>
-            <div>
+          <div className={`relative flex justify-end ${mainstyle.mockup}`}>
+            <div className={mainstyle.mockup__pc}>
+              <div className='video__wrap'>
+                <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/fescaro%2Fvideos%2Fpc.mp4?alt=media&token=f1fde85b-1396-4d1d-bca2-39df0312fd5b' type='video/mp4'/>
+                </video>
+              </div>
             </div>
-          </div>
-          <div>
-            <div className={`mockup__tablet`}>
+            <div className={mainstyle.mockup__tablet}>
               <div>
+                <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/fescaro%2Fvideos%2Ftablet.mp4?alt=media&token=8ff0bd15-abf9-4392-8d1c-961fc00b638e' type='video/mp4'/>
+                </video>
+              </div>
+            </div>
+            <div className={mainstyle.mockup__mobile}>
+              <div className='video__wrap'>
+              <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/fescaro%2Fvideos%2Fmobile.mp4?alt=media&token=a1b22632-bcd8-47c1-9765-f429017a7a36' type='video/mp4'/>
+                </video>
               </div>
             </div>
           </div>
-          <div className={`mockup__mobile`}>
-            <div>
-            </div>
-          </div>
-        </div>
           {/* //목업 */}
         </div>
       </section>
@@ -311,12 +319,15 @@ useEffect(()=>{
           <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
         </dl>
           {/* 목업 */}
-          <div className={`relative flex  justify-end ${mainstyle.mockup}`}>
-          <div className='mockup__pc'>
-            <div>
+          <div className={`relative flex justify-end ${mainstyle.mockup}`}>
+            <div className={mainstyle.mockup__pc}>
+              <div className='video__wrap'>
+                <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/samsung%2Fvideos%2Fpc.mp4?alt=media&token=bf9f1b1e-dc6a-468e-afdb-bd8d01aa33d4' type='video/mp4'/>
+                </video>
+              </div>
             </div>
           </div>
-        </div>
           {/* //목업 */}
         </div>
       </section>
@@ -358,22 +369,29 @@ useEffect(()=>{
             <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
           </dl>
           {/* 목업 */}
-          <div className={`relative flex  justify-end ${mainstyle.mockup}`}>
-          <div className='mockup__pc'>
-            <div>
+          <div className={`relative flex justify-end ${mainstyle.mockup}`}>
+            <div className={mainstyle.mockup__pc}>
+              <div className='video__wrap'>
+                <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/cjone%2Fvideos%2Fpc.mp4?alt=media&token=37ae2bfe-0dec-4458-be8f-bc66c811ef31' type='video/mp4'/>
+                </video>
+              </div>
             </div>
-          </div>
-          <div>
-            <div className={`mockup__tablet`}>
+            <div className={mainstyle.mockup__tablet}>
               <div>
+                <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/cjone%2Fvideos%2Ftablet.mp4?alt=media&token=cc71c645-4eb2-4674-a32a-a20ff8beac29' type='video/mp4'/>
+                </video>
+              </div>
+            </div>
+            <div className={mainstyle.mockup__mobile}>
+              <div className='video__wrap'>
+              <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/cjone%2Fvideos%2Fmobile.mp4?alt=media&token=9c8046ce-ae12-4210-91f3-cb263d60cbea' type='video/mp4'/>
+                </video>
               </div>
             </div>
           </div>
-          <div className={`mockup__mobile`}>
-            <div>
-            </div>
-          </div>
-        </div>
           {/* //목업 */}
         </div>
       </section>
@@ -419,21 +437,14 @@ useEffect(()=>{
             <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / Firebase / Axios</span></dd>
           </dl>
           {/* 목업 */}
-          <div className={`relative flex  justify-end ${mainstyle.mockup}`}>
-          <div className='mockup__pc'>
-            <div>
-            </div>
-          </div>
-          <div>
-            <div className={`mockup__tablet`}>
-              <div>
+          <div className={`relative flex justify-end ${mainstyle.mockup}`}>
+            <div className={`${mainstyle.mockup__mobile} ${mainstyle.kko}`}>
+              <div className='video__wrap'>
+                <video autoPlay muted loop>
+                  <source src='https://firebasestorage.googleapis.com/v0/b/portfolio-2023-f3390.appspot.com/o/kko%2Fvideos%2Fmobile.mp4?alt=media&token=cb4de3d5-7d08-410b-8bd9-64b3df006f22' type='video/mp4'/>
+                </video>
               </div>
             </div>
-          </div>
-          <div className={`mockup__mobile`}>
-            <div>
-            </div>
-          </div>
         </div>
           {/* //목업 */}
         </div>
@@ -480,17 +491,15 @@ useEffect(()=>{
         </dl>
         {/* 목업 */}
         <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-          <div className='mockup__pc'>
+          <div className={mainstyle.mockup__pc}>
             <div>
             </div>
           </div>
-          <div>
-            <div className={`mockup__tablet`}>
+            <div className={mainstyle.mockup__tablet}>
               <div>
               </div>
-            </div>
           </div>
-          <div className={`mockup__mobile`}>
+          <div className={mainstyle.mockup__mobile}>
             <div>
             </div>
           </div>
@@ -531,7 +540,7 @@ useEffect(()=>{
           <div className={`w-11 h-11 mb-[5px] bg-[var(--gray1)]`}></div>
         </div>
       </div>
-      <div className={`opacity-1 absolute left-0 bottom-0 w-full h-1/3 bg-white transition-all duration-1000 ease-linear delay-1000 ${index === 9 && (`bg-transparent opacity-0`)}`}></div>
+      <div className={`opacity-1 absolute left-0 top-[45%] w-full h-full bg-white transition-all duration-1000 ease-linear delay-500 ${index === 9 && (`translate-y-full`)}`}></div>
     </section>
     </div>
     </main>

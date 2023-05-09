@@ -37,6 +37,7 @@
 }
 .title1{
   // font-family: Montserrat;
+  margin-top: 40px;
   font-size: 120px;
   font-weight: 600;
   line-height: 168px;
@@ -135,20 +136,32 @@
 // section > mockup
 .mockup{
   >div>div{
+    position: relative;
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: 0 0;
+    >video{
+      position: absolute;
+      object-fit: fill;
+    }
   }
-  >div:nth-of-type(1){
+  >.mockup__pc{
   width: 737px;
   height: 570px;
     >div{
       background-image: url(../images/m_24.svg);
+      >video{
+        width: 625px;
+        height: 352px;
+        top: 15px;
+        left: 95px;
+        border-radius: 4px;
+      }
     }
   }
-  >div:nth-of-type(2){
+  >.mockup__tablet{
     position: absolute;
     right: 20.4vw;
     top: 244px;
@@ -156,9 +169,16 @@
     height: 310px;
     >div{
       background-image: url(../images/m_16.svg);
+      >video{
+        width: 426px;
+        height: 277px;
+        top: 5px;
+        left: 43px;
+        border-radius: 8px 8px 0 0;
+      }
     }
   }
-  >div:nth-of-type(3){
+  >.mockup__mobile{
     position: absolute;
     right: 48vw;
     top: 349px;
@@ -166,6 +186,28 @@
     height: 207px;
     >div{
       background-image: url(../images/i_13.svg);
+      >video{
+        top: 4px;
+        left: 96px;
+        width: 91px;
+        height: 196px;
+        border-radius: 10px;
+      }
+    }
+    &.kko{
+      width: 660px;
+      height: 698px;
+      position: relative;
+      top: 0;
+      left: 0;
+      >div>video{
+        top: 2.3%;
+        left: auto;
+        right: 4.4%;
+        width: 46.4%;
+        height: 94.4%;
+        border-radius: 36px;
+      }
     }
   }
 }
@@ -202,7 +244,7 @@
 }
 @keyframes up_box {
   0%{transform: translate(-50%,0%) rotate(30deg)}
-  80%{transform: translate(-51%,-55%) rotate(-2.5deg);}
+  80%{transform: translate(-51%,-70%) rotate(-2.5deg);}
   85%{transform: translate(-52%,-55%) rotate(-3deg);}
   100%{transform: translate(-50%,-50%) rotate(0deg);}
 }
