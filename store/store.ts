@@ -1,13 +1,16 @@
 import { combineReducers, configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Actor } from "next/font/google";
 
 interface State {
   Index:boolean,
-  Scroll:number
+  Scroll:number,
+  Height:number
 }
 
 const initialState:State ={
   Index:false,
-  Scroll:0
+  Scroll:0,
+  Height:0
 }
 
 const indexSlice = createSlice({
@@ -30,13 +33,25 @@ const scrollPositionSlice = createSlice({
   }
 })
 
+const sectionHeightSlice = createSlice({
+  name:'height',
+  initialState,
+  reducers:{
+    getSectionHeight:(state, action:PayloadAction<number>) =>{
+      state.Height = action.payload;
+    }
+  }
+})
+
 const rootReducer = combineReducers({
   index: indexSlice.reducer,
   scrollPosition: scrollPositionSlice.reducer,
+  sectionHeights: sectionHeightSlice.reducer
 });
 
 export const {toggleIndex} = indexSlice.actions;
 export const {updateIndex} = scrollPositionSlice.actions;
+export const {getSectionHeight} = sectionHeightSlice.actions;
 
 export const store = configureStore({
   reducer:rootReducer

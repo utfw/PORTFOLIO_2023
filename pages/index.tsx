@@ -10,7 +10,7 @@ import { faGithub, faJsSquare, faReact, faHtml5, faCss3, faSass, faJava, faFigma
 import { faPhone, faRocket, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import Index from '@/components/Index';
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, updateIndex,  } from '@/store/store';
+import { RootState, getSectionHeight, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
 import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
 import Validation from '@/components/Validation';
@@ -32,6 +32,7 @@ export default function Home() {
   const [sectionsTop, setSectionsTop] = useState<number[]>([]);
   const [animationWrap, setAnimationWrap] = useState<NodeListOf<HTMLElement>>();
   const animationDelayed = 300;
+  const sectionHeight = useSelector((state:RootState)=>state.sectionHeights.Height);
   
   const docOpen = false; //테스트용 임시 true
 
@@ -42,6 +43,7 @@ useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
 
   let heights = Array.from(sections).map((section) => section.offsetTop);
   setSectionsTop(heights);
+  dispatch(getSectionHeight(window.innerHeight));
   const texts = Array.from(document.querySelectorAll(".animate_text"));
   // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
   for(let el of texts){
@@ -70,7 +72,7 @@ useEffect(() => {
   window.addEventListener('wheel', handleWheel, {passive: false});
   if(!isIndexToggle){
   window.scroll({
-    top:sectionsTop[index],
+    top:sectionHeight*index,
     behavior:'smooth'
     })
   }
@@ -93,6 +95,7 @@ function resize(){
   setSections(sections);
     var heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
+    dispatch(getSectionHeight(window.innerHeight));
 }
 
 useEffect(()=>{
