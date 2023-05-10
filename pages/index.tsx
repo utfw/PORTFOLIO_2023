@@ -128,12 +128,12 @@ const [videos, setVideos] = useState([]);
 
 useEffect(() => {
   const getVideo = () => {
-    const promises = []; // Promise 객체를 담을 배열 생성
+    const promises:Promise<HTMLVideoElement>[] = []; // Promise 객체를 담을 배열 생성
 
     const videos = document.querySelectorAll('video');
 
     videos.forEach((video, i) => {
-      const promise = new Promise((resolve, reject) => {
+      const promise:Promise<HTMLVideoElement> = new Promise((resolve, reject) => {
         video.addEventListener('loadeddata', () => {
           resolve(video); // Promise 객체를 통해 비디오 요소 반환
         });

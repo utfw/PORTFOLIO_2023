@@ -69,11 +69,9 @@ function Explosion() {
     return() =>{
       clearInterval(intervalId);
       Render.stop(render);
-      World.clear(engine.current.world);
+      World.clear(engine.current.world, false);
       Engine.clear(engine.current);
       render.canvas.remove();
-      render.canvas = null;
-      render.context = null;
       render.textures = {};
     }
   },[]) // /useEffect
