@@ -20,14 +20,10 @@ function Index() {
   }
 
   return (
-    <div className={`z-[11] w-full h-screen p-20 text-[var(--gray2)] bg-[var(--bg)] ${indexstyle.index} ${isIndexToggle ? indexstyle['index-on'] : ''} `} style={{top:index*height+'px'}}>
-      <h2 className={`${mainstyle.title1} mb-11`}>INDEX</h2>
+    <div className={`z-[11] w-full h-screen px-20 pb-20 text-[var(--gray2)] ${indexstyle.index} ${isIndexToggle ? indexstyle['index-on'] : ''} `} style={{top:index*height+'px'}}>
+      <h2 className={`${mainstyle.title1} mb-10`}>INDEX</h2>
       <div>
-        <ul className={`index
-        flex w-full h-[708px] justify-end
-        [&>li]:flex [&>li]:flex-col [&>li]:items-center [&>li]:bg-white
-        [&>li]:relative [&>li]:w-[140px] [&>li]:mr-3 [&>li:last-child]:mr-0
-        [&>li]:transition-all ease-in-out duration-300`}>
+        <ul className={`index`}>
           <li className={indexstyle.li} onClick={()=>onClickScroll(1)}>
             <p>01</p>
             <div>            
@@ -95,7 +91,7 @@ function Index() {
             <h3>PURE CSS</h3>
             <div></div>
           </li>
-          <li className={indexstyle.li} onClick={()=>onClickScroll(7)}>
+          {/* <li className={indexstyle.li} onClick={()=>onClickScroll(7)}>
             <p>07</p>
             <div>            
                 <div className={`w-[496px] h-[383px]`}>
@@ -105,25 +101,9 @@ function Index() {
                 </div>
               </div>
             <h3>앱 기획</h3>
-          </li>
-          <li className={indexstyle.li} onClick={()=>onClickScroll(8)}>
-            <p>08</p>
-            <div>            
-                <div className={`w-[496px] h-[383px]`}>
-                  <div className={`w-full h-full
-                bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
-                  </div>
-                </div>
-              </div>
-            <h3>Extra Page</h3>
-          </li>
+          </li> */}
         </ul>
       </div>
-      {/* <div className={mainstyle.menu}>
-        <div className={`${mainstyle.menu_box} flex justify-center items-center mb-8`} onClick={()=>dispatch(toggleIndex(false))}>
-          <FontAwesomeIcon icon={faXmark} className={mainstyle.menu_icon} />
-        </div>
-      </div> */}
     </div>
   )
 }

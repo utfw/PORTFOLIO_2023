@@ -18,19 +18,18 @@ function Menu() {
   },[])
 
   useEffect(()=>{
-    console.log(11)
     if (index > 1 && index < 9){
       setOn(true);
-    if(list !==null) listOn(list,index);
+    if(list !== null) listOn(list,index);
     } else setOn(false);
   },[index, list])
 
   const listOn = (list:NodeListOf<Element>, index:number) =>{
     list.forEach((el, i)=>{
-      el.classList.remove("on");
+      el.classList .remove("on");
     })
     list[index-2].classList.add('on');
-    console.log(list[index-2])
+    // console.log(list[index-2])
   }
 
   return (
@@ -51,7 +50,7 @@ function Menu() {
         </>
       )}
       <ul className={`menu_pages flex justify-center items-center flex-col
-      [&>li]:w-[8px] [&>li]:h-[23px] [&>li]:mb-2 [&>li.on]:bg-[var(--gray2)] [&>li]:bg-[#BFBFBF]
+      [&>li]:w-[6px] [&>li]:h-[16px] [&>li]:mb-2 [&>li.on]:bg-[var(--gray2)] [&>li]:bg-[#BFBFBF]
       [&>li]:transition-all ease-linear duration-300
       ${isIndexOn ? `opacity-0` : `opacity-1`}`}>
       <li></li>
