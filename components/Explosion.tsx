@@ -10,7 +10,7 @@ function Explosion() {
   const Height = useSelector((state:RootState)=>state.sectionHeights.Height);
   const cw = document.body.clientWidth;
   const ch = document.body.clientHeight;
-  let render;
+  let render:Matter.Render;
   let walls;
 
   useEffect(() => {
@@ -19,16 +19,19 @@ function Explosion() {
     engine.current.world.gravity.y = 0.05;
 
     // 캔버스 생성
-    render = Render.create({
-      element: scene.current,
-      engine: engine.current,
-      options: {
-        wireframes: false,
-        background: 'transparent',
-        width: window.innerWidth,
-        height: Height,
-      },
-    });
+    if (scene.current) {
+      // 캔버스 생성
+      render = Render.create({
+        element: scene.current,
+        engine: engine.current,
+        options: {
+          wireframes: false,
+          background: 'transparent',
+          width: window.innerWidth,
+          height: Height,
+        },
+      });
+    }
     Render.run(render);
 
     // 테두리 생성
@@ -42,7 +45,7 @@ function Explosion() {
       Bodies.rectangle(cw / 2, ch, cw, 20, {
         isStatic: true,
         render: {
-          fillStyle: '#000',
+          fillStyle: 'transparent',
         },
       }),
     ];
