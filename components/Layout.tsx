@@ -8,10 +8,11 @@ type LayoutProps = {children:React.ReactNode};
 function Layout({children}:LayoutProps) {
   const index = useSelector((state:RootState)=>state.scrollPosition.Scroll);
   const isIndexToggle = useSelector((state:RootState) => state.index.Index);
+  const Height = useSelector((state:RootState)=>state.sectionHeights.Height);
   
   return (
     <>
-    <Menu></Menu>
+    {Height > 800 && <Menu />}
     <div id='container' className={mainstyle.container}>
       <div className={isIndexToggle? mainstyle[`index-open`]:""}>
       {children}

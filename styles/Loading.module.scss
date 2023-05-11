@@ -1,16 +1,33 @@
-.loader {
-	--size-square: 90px;	
-	display: block;
-	position: relative;
-	&::before{
-		top: calc(50% - var(--size-square));
-		left: calc(50% - var(--size-square));
-		animation: loader-6 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+.page {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	background: #333;
+	.loader {
+		--size-square: 80px;	
+		display: block;
+		position: relative;
+		width: calc(80 * 2px);
+		height: calc(80 * 2px);
+		transform: translateY(-40px);
+		&::before{
+			top: calc(50% - var(--size-square));
+			left: calc(50% - var(--size-square));
+			animation: loader-6 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+		}
+		&::after{
+			top: 50%;
+			left: 50%;
+			animation: loader-7 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+		}
 	}
-	&::after{
-		top: 50%;
-		left: 50%;
-		animation: loader-7 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+	.text{
+		margin-top: 16px;
+		color: #fff;
+		animation: blink 1s linear infinite alternate;
 	}
 }
 
@@ -39,13 +56,8 @@
 	75% {transform: translateY(-100%);opacity: 1;}
 }
 
-.page {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	height: 100%;
-	background: #333;
+@keyframes blink {
+	0%{opacity: .3;}
+	100%{opacity: 1;}
 }
-
 //background-image: linear-gradient(to top, #30cfd0 0%, #330867 100%);

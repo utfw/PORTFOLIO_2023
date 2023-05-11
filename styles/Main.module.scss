@@ -131,10 +131,15 @@
   height: 791px;
 }
 .left{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 880px;
+
 }
 // section > mockup
 .mockup{
+  margin-top: 40px;
   >div>div{
     position: relative;
     width: 100%;
@@ -200,6 +205,7 @@
       position: relative;
       top: auto;
       right: 8vw;
+      margin-left: 8vw;
       >div>video{
         top: 2%;
         left: 232px;

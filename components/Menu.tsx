@@ -11,7 +11,7 @@ function Menu() {
   const index = useSelector((state:RootState)=>state.scrollPosition.Scroll);
   const [on, setOn] = useState(false);
   const [list, setList] = useState<NodeListOf<Element>| null>(null);
-  
+  const Height = useSelector((state:RootState) => state.sectionHeights.Height)
   useLayoutEffect(()=>{
     const list = document.querySelectorAll(".menu_pages>li");
     setList(list);
