@@ -10,7 +10,7 @@ import { faGithub, faJsSquare, faReact, faHtml5, faCss3, faSass, faJava, faFigma
 import { faPhone, faRocket, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import Index from '@/components/Index';
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, getSectionHeight, updateIndex,  } from '@/store/store';
+import { RootState, getSectionHeight, openDoc, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
 import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
 import Validation from '@/components/Validation';
@@ -29,7 +29,8 @@ export default function Home() {
   const sectionHeight = useSelector((state:RootState)=>state.sectionHeights.Height);
   
   const [isVideoLoad, setIsVideoLoad] = useState(true);
-  const docOpen = false; //테스트용 임시 true
+  const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
+  //테스트용 임시 true
 
 useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
   const sections = document.querySelectorAll("section");
@@ -152,6 +153,12 @@ useEffect(() => {
     });
 }, []);
 
+const toggleDoc = (e:MouseEvent)=>{
+  console.log(1)
+  e.preventDefault();
+  dispatch(openDoc(true));
+}
+
   return (
     <>
     <Head>
@@ -159,13 +166,14 @@ useEffect(() => {
     </Head>
     {/* Index Component */}
     <Index />
-    {!docOpen && (<Validation></Validation>)}
+
     {isVideoLoad ? (
      <Loading></Loading>
     ):(
       <main className={`min-h-screen overflow-hidden ${montserrat.className} [&>div>section]:w-full
       ${sectionHeight > 800 && `[&>div>section]:h-screen`} 
       [&>div>section]:overflow-hidden [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
+      {docOpen && (<Validation top={index*sectionHeight}></Validation>)}
       <div id='content1' className={`relative`}>
         {/* section1 */}
         {index == 0 && <Explosion />}
@@ -351,7 +359,7 @@ useEffect(() => {
               `}>
                 <li><a href='https://github.com/utfw/clone_fescaro' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                 <li><a href='https://utfw.github.io/clone_fescaro/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-                <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
+                <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Verification</a></li>
                 </ul>
               </dd>
               <dt className={`${mainstyle.title_sub2}`}><span>Languages</span></dt>
@@ -413,7 +421,7 @@ useEffect(() => {
               `}>
               <li><a href='https://github.com/utfw/clone_samsung' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
               <li><a href='https://utfw.github.io/clone_samsung/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-              <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
+              <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Verification</a></li>
               </ul>
             </dd>
             <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
@@ -463,7 +471,7 @@ useEffect(() => {
               `}>
                 <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                 <li><a href='https://utfw.github.io/clone_CJONE/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-                <li><a href='#'><span><FontAwesomeIcon icon={faClipboardCheck} /></span>github-pages</a></li>
+                <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Verification</a></li>
                 </ul>
               </dd>
               <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
@@ -651,7 +659,7 @@ useEffect(() => {
               <ul className={`[&>li]:mb-5 [&>li:last-child]:mb-0`}>
                 <li>+82 10.4415.9901</li>
                 <li><Link href={'mailto:hwan.c.0330@gmail.com'}>hwan.c.0330@gmail.com</Link></li>
-                <li><Link href={'github : https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
+                <li><Link href={'https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
               </ul>
             </div>
             <div className={`w-11 h-11 mb-[5px] bg-[var(--gray2)]`}></div>

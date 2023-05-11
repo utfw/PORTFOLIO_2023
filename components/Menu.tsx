@@ -11,7 +11,9 @@ function Menu() {
   const index = useSelector((state:RootState)=>state.scrollPosition.Scroll);
   const [on, setOn] = useState(false);
   const [list, setList] = useState<NodeListOf<Element>| null>(null);
-  const Height = useSelector((state:RootState) => state.sectionHeights.Height)
+  const Height = useSelector((state:RootState) => state.sectionHeights.Height);
+  const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
+
   useLayoutEffect(()=>{
     const list = document.querySelectorAll(".menu_pages>li");
     setList(list);
@@ -19,12 +21,12 @@ function Menu() {
 
   useEffect(()=>{
     if(list != null){
-      if (index > 1 && index < list.length+2){
+      if (index > 1 && index < list.length+2 && !docOpen){
         setOn(true);
       if(list !== null) listOn(list,index);
       } else setOn(false);
     }
-  },[index, list])
+  },[index, list, docOpen])
 
   const listOn = (list:NodeListOf<Element>, index:number) =>{
     list.forEach((el, i)=>{

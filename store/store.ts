@@ -23,6 +23,16 @@ const indexSlice = createSlice({
   }
 })
 
+const validationSlice = createSlice({
+  name:'doc',
+  initialState,
+  reducers:{
+    openDoc:(state, action:PayloadAction<boolean>) =>{
+      state.Index = action.payload;
+    }
+  }
+})
+
 const scrollPositionSlice = createSlice({
   name:'scroll',
   initialState,
@@ -46,12 +56,14 @@ const sectionHeightSlice = createSlice({
 const rootReducer = combineReducers({
   index: indexSlice.reducer,
   scrollPosition: scrollPositionSlice.reducer,
-  sectionHeights: sectionHeightSlice.reducer
+  sectionHeights: sectionHeightSlice.reducer,
+  openDoc: validationSlice.reducer
 });
 
 export const {toggleIndex} = indexSlice.actions;
 export const {updateIndex} = scrollPositionSlice.actions;
 export const {getSectionHeight} = sectionHeightSlice.actions;
+export const {openDoc} = validationSlice.actions;
 
 export const store = configureStore({
   reducer:rootReducer
