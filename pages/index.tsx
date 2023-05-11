@@ -123,7 +123,6 @@ useEffect(()=>{
 
 const [videos, setVideos] = useState([]);
 
-
 useEffect(() => {
   const getVideo = () => {
     const promises:Promise<HTMLVideoElement>[] = []; // Promise 객체를 담을 배열 생성
@@ -160,14 +159,13 @@ useEffect(() => {
     </Head>
     {/* Index Component */}
     <Index />
-    {docOpen && (<Validation></Validation>)}
+    {!docOpen && (<Validation></Validation>)}
     {isVideoLoad ? (
      <Loading></Loading>
     ):(
       <main className={`min-h-screen overflow-hidden ${montserrat.className} [&>div>section]:w-full
       ${sectionHeight > 800 && `[&>div>section]:h-screen`} 
-      [&>div>section]:overflow-hidden
-      [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
+      [&>div>section]:overflow-hidden [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
       <div id='content1' className={`relative`}>
         {/* section1 */}
         {index == 0 && <Explosion />}
@@ -329,7 +327,7 @@ useEffect(() => {
           <div className={`flex w-full pr-[144px] justify-between`}>
             <dl className={`text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
-            [&>dd]:mb-[50px]`}>
+            [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
               <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형으로 제작한 기업사이트입니다.<br />
               스크롤 위치에 따라 메뉴 색상이 변경됩니다.</span></dd>
@@ -346,7 +344,7 @@ useEffect(() => {
                 <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
               [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
               [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
               [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
               [&>li>a:hover>span>svg]:text-[var(--bg)]
@@ -394,7 +392,7 @@ useEffect(() => {
           <h2 className={`${mainstyle.title1} mb-11`}>삼성전기</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
           <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] 
-          [&>dd]:mb-[50px]`}>
+          [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
             <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 컨텐츠 접근성 지침과 웹표준을 준수하여<br />삼성전기 기업 웹 사이트를 제작 하였습니다.</span></dd>
             <dt className={`${mainstyle.title_sub2}`}>Description</dt>
@@ -408,7 +406,7 @@ useEffect(() => {
               <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
               [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
               [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
               [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
               [&>li>a:hover>span>svg]:text-[var(--bg)]
@@ -443,7 +441,7 @@ useEffect(() => {
           <div className={`flex w-full pr-[144px] justify-between`}>
             <dl className={`text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
-            [&>dd]:mb-[50px]`}>
+            [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
               <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다.</span></dd>
               <dt className={`${mainstyle.title_sub2}`}>Description</dt>
@@ -457,8 +455,8 @@ useEffect(() => {
                 </ul>
                 <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
-              [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+              [&>li>a]:transition-all [&>li>a]:duration-500 [&>li>a]:ease-in-out
+              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
               [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
               [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
               [&>li>a:hover>span>svg]:text-[var(--bg)]
@@ -505,9 +503,9 @@ useEffect(() => {
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>REACT TALK APP</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-            <dl className={`text-[var(--gray2)] min-w-[600px]
+            <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
-            [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}
+            [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}
             >
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
               <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>React로 제작한 메신저 앱입니다.<br />google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</span></dd>
@@ -525,7 +523,7 @@ useEffect(() => {
                 <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
               [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
               [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
               [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
               [&>li>a:hover>span>svg]:text-[var(--bg)]
@@ -568,9 +566,9 @@ useEffect(() => {
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>REACT NETFLIX APP</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-          <dl className={`text-[var(--gray2)] min-w-[600px]
+          <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
           [&>dt]:text-[var(--gray2)] 
-          [&>dd]:mb-8 [&>dd]:text-[var(--gray1)]`}>
+          [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
             <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>styled-componet를 사용하여 제작한 React Netflix App입니다.<br />The Movie DataBase API를 사용하여 영화 정보를 가져옵니다.</span></dd>
             <dt className={`${mainstyle.title_sub2}`}>Description</dt>
@@ -587,7 +585,7 @@ useEffect(() => {
               <ul className={`flex mt-3 
               [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
               [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)] [&>li>a]:rounded-e-full 
+              [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
               [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
               [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
               [&>li>a:hover>span>svg]:text-[var(--bg)]
@@ -638,13 +636,11 @@ useEffect(() => {
         </section>
         {/* //section8 */}
       </div>
-      <div id='content9'>
-        {/* section9 */}
+      {/* <div id='content9'>
         <section>
           <h2 className={`${mainstyle.title1} ${mainstyle.gray2}`}>Extra Page</h2>
         </section>
-        {/* //section9 */}
-      </div>
+      </div> */}
       <div id='content10'>
       <section className={`relative`}>
         <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 9 && mainstyle.play}`}>
@@ -655,13 +651,12 @@ useEffect(() => {
               <ul className={`[&>li]:mb-5 [&>li:last-child]:mb-0`}>
                 <li>+82 10.4415.9901</li>
                 <li><Link href={'mailto:hwan.c.0330@gmail.com'}>hwan.c.0330@gmail.com</Link></li>
-                <li>github : https://github.com/utfw</li>
+                <li><Link href={'github : https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
               </ul>
             </div>
-            <div className={`w-11 h-11 mb-[5px] bg-[var(--gray1)]`}></div>
+            <div className={`w-11 h-11 mb-[5px] bg-[var(--gray2)]`}></div>
           </div>
         </div>
-       
       </section>
       </div>
       </main>

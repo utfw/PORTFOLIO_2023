@@ -72,7 +72,7 @@ function Explosion() {
       dispatch(getSectionHeight(window.innerHeight));
       render.canvas.height = window.innerHeight;
       render.canvas.width = window.innerWidth;
-      console.log(render.canvas.height)
+      // console.log(render.canvas.height)
       // walls[0].position.x = window.innerWidth/2;
       // walls[1].position.x = window.innerWidth/2;
       // walls[1].position.y = window.innerHeight;
