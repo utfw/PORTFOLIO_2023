@@ -1,10 +1,14 @@
 .validation_wrap{
-  z-index: 10;
-  position: fixed;
-  top: 0;left: 0;
   opacity: 1 !important;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  padding-bottom: 80px;
   color: var(--gray2);
   background: rgba(255, 255, 255, 0.3);
   backdrop-filter: blur(5px);
@@ -17,34 +21,59 @@
   }
   .img_wrap{
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     justify-content: center;
     position: relative;
     width: 100%;
-    border: 1px solid red;
+    padding-left: 25%;
+    box-sizing: border-box;
     .img{
-      overflow: hidden;
-      margin-left: -200px;
-      width: 25%;
-      background: #fff;
-      padding: 8px;
-      box-shadow: 4px 10px 28px rgba(0, 0, 0, 0.21);
+      position: relative;
+      margin-left: -35%;
+      width: 40%;
+      min-width: 300px;
       transition: all .5s linear;
-      h3{
-        z-index: 10;
-        text-transform: uppercase;
+      &:nth-of-type(2){
+        transform: scaleY(0.95);
       }
-      img{
-        transition: all .5s linear;
+      &:nth-of-type(3){
+        transform: scaleY(0.9);
+      }
+      .img_box{
+        overflow: hidden;
+        padding: 0 32px;
+        min-height: 460px;
+        background: #fff;
+        box-shadow: 4px 10px 28px rgba(0, 0, 0, 0.21);
+        h3{
+          z-index: 10;
+          position: absolute;
+          top: 0;
+          padding: 8px;
+          padding-bottom: 0;
+          text-transform: uppercase;
+          transition: opacity 0.5s ease-in;
+        }
+        img{
+          display: block;
+          transition: all .3s linear;
+          padding-top: 56px;
+        }
       }
       &:hover{
-        z-index: 11111;
-        margin: 0px 40px 0px;
-        transform: scale(1.1);
-        img{
-          transform: scale(1.2); 
-          // 각 이미지 종료에 맞게 class로 나누던지해서 height 주면 될듯.
+        margin: 0px 32px 0px;
+        transform: scaleY(1);
+        width: 100%;
+        .img_box{
+          width: 100%;
         }
+        img{
+          width: 100%;
+          margin-left: 0;
+        }
+      }
+      &:nth-of-type(3):hover{
+        h3{opacity: 0;}
       }
     }
   }

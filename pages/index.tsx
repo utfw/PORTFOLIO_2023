@@ -30,7 +30,6 @@ export default function Home() {
   
   const [isVideoLoad, setIsVideoLoad] = useState(true);
   const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
-  //테스트용 임시 true
 
 useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
   const sections = document.querySelectorAll("section");
@@ -50,8 +49,8 @@ useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
 },[isVideoLoad]);
 
 const handleWheel = (event: WheelEvent) => {
-  event.preventDefault();
-  if(isIndexToggle !== true){
+  if(sectionHeight > 800) event.preventDefault();
+  if(!isIndexToggle && !docOpen){
     if(event.deltaY > 0 && index < sectionsTop.length-1){
       // console.log(`아래로 스크롤`)
       dispatch(updateIndex(index+1));
@@ -65,29 +64,37 @@ const handleWheel = (event: WheelEvent) => {
 };
 
 useEffect(() => {
-  if(sectionHeight > 800){
   window.addEventListener('wheel', handleWheel, {passive: false});
-  window.scroll({
-    top:sectionHeight*index,
-    behavior:'smooth'
-    })
-  if(sections){active(sections,index);}
-  
-  return () => window.removeEventListener('wheel', handleWheel);
-  } else {
+  if(sectionHeight > 800 && !isIndexToggle && !docOpen){
+    window.scroll({
+      top:sectionHeight*index,
+      behavior:'smooth'
+      })
+    if(sections){
+      active(sections,index);
+      videoPlay(sections,index);
+    }
+  } else if(sectionHeight <= 800){
     dispatch(updateIndex(0));
-    sections?.forEach((section)=>{
+    sections?.forEach((section,i)=>{
       section.classList.add("active");
     })
   }
-}, [index, isIndexToggle, sections]);
+  return () => window.removeEventListener('wheel', handleWheel);
+}, [index, isIndexToggle, sections, docOpen]);
+
+const videoPlay = (section:NodeListOf<HTMLElement>,i:number) =>{
+  const videos = section[i].querySelectorAll('video');
+  videos?.forEach((video)=>{
+    video.play();
+  })
+}
 
 const active = (el:NodeListOf<HTMLElement>,i:number) =>{
   el.forEach((item:HTMLElement) => {
     item.classList.remove("active");
   });
-  el[i].classList.add("active");
-  // console.log(`${i} active`);
+  el[i]?.classList.add("active");
 }
 
 function resize(){
@@ -96,6 +103,7 @@ function resize(){
     var heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
     dispatch(getSectionHeight(window.innerHeight));
+    console.log(window.innerHeight)
 }
 
 useEffect(()=>{
@@ -105,29 +113,9 @@ useEffect(()=>{
   };
 },[]);
 
-// const [videoCount, setVideoCount] = useState(0);
-
-// useEffect(()=>{
-//   setVideo();
-// },[])
-
-// function setVideo(){
-//   const videos = document.querySelectorAll('video');
-
-  // videos.forEach((video,i)=>{
-  //   video.addEventListener('loadeddata', ()=>{
-  //     setVideoCount(prev=>prev+1);
-  //   })
-  // })
-// }
-// console.log(videoCount);
-
-const [videos, setVideos] = useState([]);
-
 useEffect(() => {
   const getVideo = () => {
     const promises: Promise<HTMLVideoElement>[] = [];
-
     const videos = document.querySelectorAll('video');
 
     videos.forEach((video, i) => {
@@ -139,10 +127,8 @@ useEffect(() => {
           reject(new Error('비디오 로딩 중 오류가 발생했습니다.'));
         });
       });
-
       promises.push(promise);
     });
-
     return promises;
   };
   
@@ -173,18 +159,17 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
     </Head>
     {/* Index Component */}
     <Index />
-
+    {/* {docOpen && (<Validation top={index*sectionHeight}></Validation>)} */}
     {isVideoLoad ? (
      <Loading></Loading>
     ):(
-      <main className={`min-h-screen overflow-hidden ${montserrat.className} [&>div>section]:w-full
+      <main className={`min-h-screen overflow-hidden ${montserrat.className}
       ${sectionHeight > 800 && `[&>div>section]:h-screen`} 
       [&>div>section]:overflow-hidden [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
-      {docOpen && (<Validation top={index*sectionHeight}></Validation>)}
       <div id='content1' className={`relative`}>
         {/* section1 */}
         {index == 0 && <Explosion />}
-        <section className={`flex w-full h-screen justify-center items-center`}>
+        <section className={`flex w-full justify-center items-center`}>
           <div className={`block`}>
             <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`}>
               {/* 효과를 우선 마우스 오버로 함 자동적으로 되게 해야함 */}
@@ -340,7 +325,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
           {/* <Particles></Particles> */}
           <h2 className={`${mainstyle.title1} mb-11`}>FESCARO</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-            <dl className={`text-[var(--gray2)] min-w-[600px]
+            <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
             [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -376,21 +361,21 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={mainstyle.mockup__pc}>
                 <div className='video__wrap'>
-                  <video preload='auto' autoPlay muted loop>
+                  <video preload='auto' muted loop>
                     <source src='videos/fescaro/pc.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__tablet}>
                 <div>
-                  <video preload='auto' autoPlay muted loop>
+                  <video preload='auto' muted loop>
                     <source src='videos/fescaro/tablet.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__mobile}>
                 <div className='video__wrap'>
-                <video preload='auto' autoPlay muted loop>
+                <video preload='auto' muted loop>
                     <source src='videos/fescaro/mobile.mp4' type='video/mp4'/>
                   </video>
                 </div>
@@ -406,7 +391,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>삼성전기</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-          <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] 
+          <dl className={`z-10 text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
             <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 컨텐츠 접근성 지침과 웹표준을 준수하여<br />삼성전기 기업 웹 사이트를 제작 하였습니다.</span></dd>
@@ -438,7 +423,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={mainstyle.mockup__pc}>
                 <div className='video__wrap'>
-                  <video preload='auto' autoPlay muted loop>
+                  <video preload='auto' muted loop>
                     <source src='videos/samsung/pc.mp4' type='video/mp4'/>
                   </video>
                 </div>
@@ -454,7 +439,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>CJ ONE</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-            <dl className={`text-[var(--gray2)] min-w-[600px]
+            <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
             [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -488,21 +473,21 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={mainstyle.mockup__pc}>
                 <div className='video__wrap'>
-                  <video preload='auto' autoPlay muted loop>
+                  <video preload='auto' muted loop>
                     <source src='videos/cjone/pc.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__tablet}>
                 <div>
-                  <video preload='auto' autoPlay muted loop>
+                  <video preload='auto' muted loop>
                     <source src='videos/cjone/tablet.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__mobile}>
                 <div className='video__wrap'>
-                <video preload='auto' autoPlay muted loop>
+                <video preload='auto' muted loop>
                     <source src='videos/cjone/mobile.mp4' type='video/mp4'/>
                   </video>
                 </div>
@@ -518,7 +503,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>REACT TALK APP</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-            <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
+            <dl className={`text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
             [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}
             >
@@ -565,7 +550,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={`${mainstyle.mockup__mobile} ${mainstyle.kakao}`}>
                 <div className='video__wrap'>
-                  <video preload='auto' autoPlay muted loop>
+                  <video preload='auto' muted loop>
                     <source src='videos/kakao/mobile.mp4' type='video/mp4'/>
                   </video>
                 </div>
@@ -581,7 +566,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>REACT NETFLIX APP</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-          <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
+          <dl className={`text-[var(--gray2)] min-w-[600px]
           [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -624,20 +609,29 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             )}
           </dl>
           {/* 목업 */}
-          <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-            <div className={mainstyle.mockup__pc}>
-              <div>
+            <div className={`relative flex justify-end ${mainstyle.mockup}`}>
+              <div className={mainstyle.mockup__pc}>
+                <div className='video__wrap'>
+                  <video preload='auto' muted loop>
+                    <source src='videos/netflix/pc.mp4' type='video/mp4'/>
+                  </video>
+                </div>
               </div>
-            </div>
               <div className={mainstyle.mockup__tablet}>
                 <div>
+                  <video preload='auto' muted loop>
+                    <source src='videos/netflix/tablet.mp4' type='video/mp4'/>
+                  </video>
                 </div>
-            </div>
-            <div className={mainstyle.mockup__mobile}>
-              <div>
+              </div>
+              <div className={mainstyle.mockup__mobile}>
+                <div className='video__wrap'>
+                <video preload='auto' muted loop>
+                    <source src='videos/netflix/mobile.mp4' type='video/mp4'/>
+                  </video>
+                </div>
               </div>
             </div>
-          </div>
           {/* //목업 */}
           </div>
         </section>
@@ -676,7 +670,6 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
       </div>
       </main>
     )}
-
     </>
   )
 }
