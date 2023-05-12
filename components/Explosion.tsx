@@ -55,7 +55,7 @@ function Explosion() {
 
     Engine.run(engine.current);
 
-    const intervalId = setInterval(handleAddBox, Math.floor(Math.random() * (1000 - 500 + 1) + 500));
+    const intervalId = setInterval(handleAddBox, Math.floor(300+Math.random() * 501));
     handleAddBox();
     return () => {
       clearInterval(intervalId);
@@ -88,7 +88,7 @@ function Explosion() {
   },[]);
 
   const handleAddBox = () =>{
-      const boxSize = Math.floor(1 + Math.random() * 8);
+      const boxSize = Math.floor(2 + Math.random() * 8);
       const mass  = (boxSize-30)/50
       const alpha = (Math.floor(Math.random() * 71) + 30)/100;
       const color = [`48, 207, 208`, `69, 220, 195`, `108, 231, 175`, `152, 240, 152`, `199, 246, 130`, `249, 248, 113`,];

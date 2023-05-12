@@ -126,34 +126,41 @@ const [videos, setVideos] = useState([]);
 
 useEffect(() => {
   const getVideo = () => {
-    const promises:Promise<HTMLVideoElement>[] = []; // Promise 객체를 담을 배열 생성
+    const promises: Promise<HTMLVideoElement>[] = [];
 
     const videos = document.querySelectorAll('video');
 
     videos.forEach((video, i) => {
-      const promise:Promise<HTMLVideoElement> = new Promise((resolve, reject) => {
-        video.addEventListener('loadeddata', () => {
-          resolve(video); // Promise 객체를 통해 비디오 요소 반환
+      const promise: Promise<HTMLVideoElement> = new Promise((resolve, reject) => {
+        video.addEventListener('canplaythrough', () => {
+          resolve(video);
         });
         video.addEventListener('error', () => {
-          reject(new Error('비디오 로딩 중 오류가 발생했습니다.')); // Promise 객체를 통해 에러 반환
+          reject(new Error('비디오 로딩 중 오류가 발생했습니다.'));
         });
-      });      
-      promises.push(promise); // Promise 객체를 배열에 추가
-    });
-    return promises; // Promise 객체 배열 반환
-  };
+      });
 
-  Promise.all(getVideo())
-    .then(() => {
+      promises.push(promise);
+    });
+
+    return promises;
+  };
+  
+  const promises = getVideo();
+
+  Promise.all(promises)
+    .then((videos) => {
+      console.log('모든 비디오가 로드되었습니다.', videos);
+      // 비디오가 모두 로드된 후 수행할 작업
       setInterval(()=>setIsVideoLoad(false),5200);
     })
     .catch((err) => {
-      console.log(err);
+      console.error('비디오 로딩 중 에러가 발생했습니다.', err);
+      // 비디오 로딩 중 에러 발생 시 수행할 작업
     });
 }, []);
 
-const toggleDoc = (e:MouseEvent)=>{
+const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
   console.log(1)
   e.preventDefault();
   dispatch(openDoc(true));
@@ -369,21 +376,21 @@ const toggleDoc = (e:MouseEvent)=>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={mainstyle.mockup__pc}>
                 <div className='video__wrap'>
-                  <video autoPlay muted loop>
+                  <video preload='auto' autoPlay muted loop>
                     <source src='videos/fescaro/pc.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__tablet}>
                 <div>
-                  <video autoPlay muted loop>
+                  <video preload='auto' autoPlay muted loop>
                     <source src='videos/fescaro/tablet.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__mobile}>
                 <div className='video__wrap'>
-                <video autoPlay muted loop>
+                <video preload='auto' autoPlay muted loop>
                     <source src='videos/fescaro/mobile.mp4' type='video/mp4'/>
                   </video>
                 </div>
@@ -431,7 +438,7 @@ const toggleDoc = (e:MouseEvent)=>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={mainstyle.mockup__pc}>
                 <div className='video__wrap'>
-                  <video autoPlay muted loop>
+                  <video preload='auto' autoPlay muted loop>
                     <source src='videos/samsung/pc.mp4' type='video/mp4'/>
                   </video>
                 </div>
@@ -481,21 +488,21 @@ const toggleDoc = (e:MouseEvent)=>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={mainstyle.mockup__pc}>
                 <div className='video__wrap'>
-                  <video autoPlay muted loop>
+                  <video preload='auto' autoPlay muted loop>
                     <source src='videos/cjone/pc.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__tablet}>
                 <div>
-                  <video autoPlay muted loop>
+                  <video preload='auto' autoPlay muted loop>
                     <source src='videos/cjone/tablet.mp4' type='video/mp4'/>
                   </video>
                 </div>
               </div>
               <div className={mainstyle.mockup__mobile}>
                 <div className='video__wrap'>
-                <video autoPlay muted loop>
+                <video preload='auto' autoPlay muted loop>
                     <source src='videos/cjone/mobile.mp4' type='video/mp4'/>
                   </video>
                 </div>
@@ -558,7 +565,7 @@ const toggleDoc = (e:MouseEvent)=>{
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
               <div className={`${mainstyle.mockup__mobile} ${mainstyle.kakao}`}>
                 <div className='video__wrap'>
-                  <video autoPlay muted loop>
+                  <video preload='auto' autoPlay muted loop>
                     <source src='videos/kakao/mobile.mp4' type='video/mp4'/>
                   </video>
                 </div>
