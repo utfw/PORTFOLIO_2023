@@ -88,8 +88,8 @@ function Explosion() {
   },[]);
 
   const handleAddBox = () =>{
-      const boxSize = Math.floor(2 + Math.random() * 8);
-      const mass  = (boxSize-30)/50
+      const boxSize = Math.floor(Math.random() * 6) + 7;
+      const mass = (boxSize-20)/50
       const alpha = (Math.floor(Math.random() * 71) + 30)/100;
       const color = [`48, 207, 208`, `69, 220, 195`, `108, 231, 175`, `152, 240, 152`, `199, 246, 130`, `249, 248, 113`,];
       const colorIndex = Math.floor(Math.random() * color.length);
@@ -103,7 +103,7 @@ function Explosion() {
         for(let j=1;boxSize*j<=col;j++){
           const box = Bodies.rectangle(randomX+((boxSize*i)*0.8), randomY+((boxSize*j)*0.8), boxSize, boxSize,
             {
-              mass:10 * mass,
+              mass:8 * mass,
               restitution: 0.8,
               friction: 0.005,
               render:{

@@ -17,6 +17,7 @@ import Validation from '@/components/Validation';
 import Explosion from '@/components/Explosion';
 import Loading from '@/components/Loading';
 import { notoSansKR, montserrat } from './_app';
+import Code from '@/components/Code';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -136,7 +137,7 @@ useEffect(() => {
 
   Promise.all(promises)
     .then((videos) => {
-      console.log('모든 비디오가 로드되었습니다.', videos);
+      console.log('비디오 로드 완료', videos);
       // 비디오가 모두 로드된 후 수행할 작업
       setInterval(()=>setIsVideoLoad(false),5200);
     })
@@ -359,6 +360,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             </dl>
             {/* 목업 */}
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
+              <div className={mainstyle.mockup_wrap}>
               <div className={mainstyle.mockup__pc}>
                 <div className='video__wrap'>
                   <video preload='auto' muted loop>
@@ -380,6 +382,8 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
                   </video>
                 </div>
               </div>
+              </div>
+                <Code />
             </div>
             {/* //목업 */}
           </div>
@@ -421,13 +425,16 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
           </dl>
             {/* 목업 */}
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-              <div className={mainstyle.mockup__pc}>
-                <div className='video__wrap'>
-                  <video preload='auto' muted loop>
-                    <source src='videos/samsung/pc.mp4' type='video/mp4'/>
-                  </video>
+              <div className={mainstyle.mockup_wrap}>
+                <div className={mainstyle.mockup__pc}>
+                  <div className='video__wrap'>
+                    <video preload='auto' muted loop>
+                      <source src='videos/samsung/pc.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
                 </div>
               </div>
+              <Code />
             </div>
             {/* //목업 */}
           </div>
@@ -471,27 +478,30 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             </dl>
             {/* 목업 */}
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-              <div className={mainstyle.mockup__pc}>
-                <div className='video__wrap'>
+              <div className={mainstyle.mockup_wrap}>
+                <div className={mainstyle.mockup__pc}>
+                  <div className='video__wrap'>
+                    <video preload='auto' muted loop>
+                      <source src='videos/cjone/pc.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
+                </div>
+                <div className={mainstyle.mockup__tablet}>
+                  <div>
+                    <video preload='auto' muted loop>
+                      <source src='videos/cjone/tablet.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
+                </div>
+                <div className={mainstyle.mockup__mobile}>
+                  <div className='video__wrap'>
                   <video preload='auto' muted loop>
-                    <source src='videos/cjone/pc.mp4' type='video/mp4'/>
-                  </video>
+                      <source src='videos/cjone/mobile.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
                 </div>
               </div>
-              <div className={mainstyle.mockup__tablet}>
-                <div>
-                  <video preload='auto' muted loop>
-                    <source src='videos/cjone/tablet.mp4' type='video/mp4'/>
-                  </video>
-                </div>
-              </div>
-              <div className={mainstyle.mockup__mobile}>
-                <div className='video__wrap'>
-                <video preload='auto' muted loop>
-                    <source src='videos/cjone/mobile.mp4' type='video/mp4'/>
-                  </video>
-                </div>
-              </div>
+              <Code />
             </div>
             {/* //목업 */}
           </div>
@@ -548,14 +558,17 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             </dl>
             {/* 목업 */}
             <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-              <div className={`${mainstyle.mockup__mobile} ${mainstyle.kakao}`}>
-                <div className='video__wrap'>
-                  <video preload='auto' muted loop>
-                    <source src='videos/kakao/mobile.mp4' type='video/mp4'/>
-                  </video>
+              <div className={mainstyle.mockup_wrap}>
+                <div className={`${mainstyle.mockup__mobile} ${mainstyle.kakao}`}>
+                  <div className='video__wrap'>
+                    <video preload='auto' muted loop>
+                      <source src='videos/kakao/mobile.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
                 </div>
               </div>
-          </div>
+                <Code />
+            </div>
             {/* //목업 */}
           </div>
         </section>
@@ -609,28 +622,31 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
             )}
           </dl>
           {/* 목업 */}
-            <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-              <div className={mainstyle.mockup__pc}>
-                <div className='video__wrap'>
+          <div className={`relative flex justify-end ${mainstyle.mockup}`}>
+              <div className={mainstyle.mockup_wrap}>
+                <div className={mainstyle.mockup__pc}>
+                  <div className='video__wrap'>
+                    <video preload='auto' muted loop>
+                      <source src='videos/netflix/pc.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
+                </div>
+                <div className={mainstyle.mockup__tablet}>
+                  <div>
+                    <video preload='auto' muted loop>
+                      <source src='videos/netflix/tablet.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
+                </div>
+                <div className={mainstyle.mockup__mobile}>
+                  <div className='video__wrap'>
                   <video preload='auto' muted loop>
-                    <source src='videos/netflix/pc.mp4' type='video/mp4'/>
-                  </video>
+                      <source src='videos/netflix/mobile.mp4' type='video/mp4'/>
+                    </video>
+                  </div>
                 </div>
               </div>
-              <div className={mainstyle.mockup__tablet}>
-                <div>
-                  <video preload='auto' muted loop>
-                    <source src='videos/netflix/tablet.mp4' type='video/mp4'/>
-                  </video>
-                </div>
-              </div>
-              <div className={mainstyle.mockup__mobile}>
-                <div className='video__wrap'>
-                <video preload='auto' muted loop>
-                    <source src='videos/netflix/mobile.mp4' type='video/mp4'/>
-                  </video>
-                </div>
-              </div>
+                <Code />
             </div>
           {/* //목업 */}
           </div>
@@ -652,7 +668,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
       </div> */}
       <div id='content10'>
       <section className={`relative`}>
-        <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 9 && mainstyle.play}`}>
+        <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 8 && mainstyle.play}`}>
           <p className={`w-full text-justify ${mainstyle.title_fin} leading-none`}>THANKS</p>
           <p className={`text-[62px] text-justify tracking-[.013em]`}>FOR WATCHING</p>
           <div className='flex justify-between flex-row-reverse items-end mt-[81px]'>
