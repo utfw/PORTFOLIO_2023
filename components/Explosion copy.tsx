@@ -18,7 +18,7 @@ function Explosion() {
   useEffect(() => {
     //mount
     engine.current.world.gravity.x = 0;
-    engine.current.world.gravity.y = 0.03;
+    engine.current.world.gravity.y = 0.05;
 
     // 캔버스 생성
     if (scene.current) {
@@ -55,7 +55,8 @@ function Explosion() {
 
     Engine.run(engine.current);
 
-    const intervalId = setInterval(handleAddBox, Math.floor(200+Math.random() * 501));
+    const intervalId = setInterval(handleAddBox, Math.floor(300+Math.random() * 501));
+    handleAddBox();
     return () => {
       clearInterval(intervalId);
       Render.stop(render);
@@ -80,76 +81,61 @@ function Explosion() {
   },[]);
 
   const handleAddBox = () =>{
-      const boxSize = Math.floor(Math.random() * 20) + 8;
+      const boxSize = Math.floor(Math.random() * 6) + 4;
+      const mass = (boxSize-20)/50
       const alpha = (Math.floor(Math.random() * 71) + 30)/100;
       const color = [`48, 207, 208`, `69, 220, 195`, `108, 231, 175`, `152, 240, 152`, `199, 246, 130`, `249, 248, 113`];
       const colorIndex = Math.floor(Math.random() * color.length);
       const randomX = Math.floor(Math.random() * cw);
       const randomY = (Math.floor(Math.random() * ch)/2);
+      const col = boxSize*10;
+      const row = boxSize*10;
+      const boxs:Matter.Body[] = [];
 
-      const sizeIncreasePerFrame = 1.1; 
-      const totalFrames = 18;
+      const sizeIncreasePerFrame = 1.1; // 1프레임마다 크기가 10%씩 증가하도록 설정
+      const totalFrames = 9;
+    
+      for (let i = 1; boxSize * i <= row; i++) {
+        for (let j = 1; boxSize * j <= col; j++) {
           const box = Bodies.rectangle(
-            randomX,
-            randomY,
+            randomX + boxSize * i * 0.8,
+            randomY + boxSize * j * 0.8,
             boxSize,
             boxSize,
             {
-              isStatic: true,
-              mass: 0.0,
+              mass: -0.01,
               restitution: 0.8,
-              friction: 1,
+              friction: 0.005,
               render: {
                 fillStyle: `rgba(${color[colorIndex]}, ${alpha})`,
               },
             }
           );
-          World.add(engine.current.world, box);
-
+          boxs.push(box);
+        }
+      }
+    
       let currentFrame = 0;
-
       const intervalId = setInterval(() => {
         if(currentFrame < totalFrames ){
+        boxs.forEach((box, index) => {
           const currentScale = box.render.sprite?.scale ?? { x: 1, y: 1 };
-          var newScale = {
+          const newScale = {
             x: currentScale.x * sizeIncreasePerFrame,
             y: currentScale.y * sizeIncreasePerFrame,
           };
-          Body.scale(box, newScale.x, newScale.y);
-          currentFrame++;
-        } else {
+        Body.scale(box, newScale.x, newScale.y);
+        });
+        currentFrame++;
+        } 
+      }, 99);
+    
+      World.add(engine.current.world, boxs);
+      setTimeout(() => {
+        boxs.forEach((box) => {
           World.remove(engine.current.world, box);
-          const boxSize = box.bounds.max.x - box.bounds.min.x;
-          var boxNum = 9;
-          var smallboxWidth = boxSize / boxNum;
-          var smallboxHeight = boxSize / boxNum;
-          const boxs:Matter.Body[] = [];
-          const mass = -0.01-(Math.random() * 0.003);
-          for(var i=0; i<boxNum;i++){
-            var x = box.bounds.min.x + smallboxWidth * i;
-            for(var j=0; j<boxNum;j++){
-              var y = box.bounds.min.y + smallboxHeight * j;
-              var smallerBox = Bodies.rectangle(x, y, smallboxWidth, smallboxHeight,{
-                mass: mass,
-                restitution: 0.8,
-                friction: 0.005,
-                render: {
-                  fillStyle: `rgba(${color[colorIndex]}, ${alpha})`,
-                },
-              });
-              boxs.push(smallerBox);
-            }
-          }
-          World.add(engine.current.world, boxs); 
-
-          clearInterval(intervalId); 
-          setTimeout(() => {
-            boxs.forEach((box) => {
-              World.remove(engine.current.world, box);
-            });
-          }, 3000);
-        }
-      }, 33);
+        });
+      }, 2000);
     };
 
   return (

@@ -156,7 +156,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
   return (
     <>
     <Head>
-      <title>PORTFOLIO | 2023</title>
+      <title>PORTFOLIO | 최환</title>
     </Head>
     {/* Index Component */}
     <Index />
@@ -168,14 +168,15 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
       ${sectionHeight > 800 && `[&>div>section]:h-screen`} 
       [&>div>section]:overflow-hidden [&>div>section>h2]:text-[var(--gray2)]`} id='container'>
       <div id='content1' className={`relative`}>
+        <p className={`absolute top-5 left-5 ${mainstyle.title_sub3} text-[var(--gray1)]`}>2023 PORTFOLIO</p>
         {/* section1 */}
         {index == 0 && <Explosion />}
         <section className={`flex w-full justify-center items-center`}>
           <div className={`block`}>
             <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`}>
               {/* 효과를 우선 마우스 오버로 함 자동적으로 되게 해야함 */}
-              <span>2023&nbsp;</span><span>P</span><span>O</span><span>R</span><span >T</span><span>F</span><span>O</span><span>L</span><span >I</span><span>O</span></h1>
-            <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)]`}>Logical thinking skills and research techniques, with interests as well as AI and UX/UI design</p>
+              <span className={`${mainstyle.name}`}>HWAN</span><span>D</span><span>e</span><span>v</span><span >e</span><span>l</span><span>o</span><span>p</span><span>e</span><span>r</span></h1>
+            <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)]`}>Having Interest about User experience with Logical thinking and Research techniques</p>
           </div>
         </section>
         {/* //section1 */}

@@ -10,10 +10,10 @@ import { notoSansKR } from '@/pages/_app'
 
 function Loading() {
   const loadingText = [
-    "포트폴리오는 해상도 1920*1080에 최적화 되어있습니다.",
-    "해당 포트폴리오에는 Next.js, Redux Toolkit, TypeScript 그리고 Matter.js가 사용되었습니다.",
+    "포트폴리오에는 Next.js, Redux Toolkit, TypeScript 그리고 Matter.js가 사용되었습니다.",
+    "해당 포트폴리오는 해상도 1920*1080에 최적화 되어있습니다.",
     "동영상 불러오기를 기준으로 로딩이 완료됩니다.",
-    "2번째 문구까지 나오게 하기 위해서 로딩은 최소 시간이 설정되어있습니다.",
+    "2번째 문구까지 나오게 하기 위해서 로딩은 최소 시간이 설정 되어있습니다.",
     "지연시간이 과연 적절한가요?",
     "utfw = 움바바두바바 트롤 분노 전사"
   ]

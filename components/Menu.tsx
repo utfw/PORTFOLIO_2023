@@ -2,7 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import mainstyle from '../styles/Main.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleIndex, RootState } from '@/store/store';
+import { toggleIndex, RootState, openDoc } from '@/store/store';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 function Menu() {
@@ -21,12 +21,12 @@ function Menu() {
 
   useEffect(()=>{
     if(list != null){
-      if (index > 1 && index < list.length+2 && !docOpen){
+      if (index > 1 && index < list.length+2){
         setOn(true);
       if(list !== null) listOn(list,index);
       } else setOn(false);
     }
-  },[index, list, docOpen])
+  },[index, list])
 
   const listOn = (list:NodeListOf<Element>, index:number) =>{
     list.forEach((el, i)=>{
@@ -38,8 +38,8 @@ function Menu() {
 
   return (
     <div className={`${mainstyle.menu} z-20 ${on && mainstyle.menu_on}`}>
-      { isIndexOn ? (
-        <div className={`${mainstyle.menu_box}`} onClick={()=>dispatch(toggleIndex(false))}>
+      { isIndexOn || docOpen ? (
+        <div className={`${mainstyle.menu_box}`} onClick={()=>{dispatch(toggleIndex(false)); dispatch(openDoc(false))}}>
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 2L30 30M2 30L30 2" stroke="var(--gray2)" strokeWidth="4"/>
           </svg>
@@ -56,7 +56,7 @@ function Menu() {
       <ul className={`menu_pages flex justify-center items-center flex-col
       [&>li]:w-[6px] [&>li]:h-[16px] [&>li]:mb-2 [&>li.on]:bg-[var(--gray2)] [&>li]:bg-[#BFBFBF]
       [&>li]:transition-all ease-linear duration-300
-      ${isIndexOn ? `opacity-0` : `opacity-1`}`}>
+      ${isIndexOn || docOpen ? `opacity-0` : `opacity-1`}`}>
       <li></li>
       <li></li>
       <li></li>
