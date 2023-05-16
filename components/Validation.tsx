@@ -52,7 +52,6 @@ function Validation({top}:{top:number}) {
         });
 
       if(direction.classList.contains('left')){
-        console.log(direction);
         if(zoom > 0) zoom--; 
         img[zoom+1].style.zIndex = `2`;
       } else {
@@ -81,8 +80,16 @@ function Validation({top}:{top:number}) {
           ))
         }
       </div>
-        <div className={`${validationstyle.arr} left`} onClick={onClickArr}><FontAwesomeIcon icon={faChevronLeft} /></div>
-        <div className={`${validationstyle.arr} right`}onClick={onClickArr}><FontAwesomeIcon icon={faChevronRight} /></div>
+        <div className={`${validationstyle.arr} left`} onClick={onClickArr}>
+        <svg width="50" height="80" viewBox="0 0 50 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 80L0 40L40 0L49.3333 9.33333L18.6667 40L49.3333 70.6667L40 80Z" fill="#393939" />
+        </svg>
+        </div>
+        <div className={`${validationstyle.arr} right`}onClick={onClickArr}>          
+        <svg width="50" height="80" viewBox="0 0 50 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9.33333 80L0 70.6667L30.6667 40L0 9.33333L9.33333 0L49.3333 40L9.33333 80Z" fill="#393939" />
+        </svg>
+          </div>
     </section>
   )
 }

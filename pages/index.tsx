@@ -12,7 +12,7 @@ import Index from '@/components/Index';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, getSectionHeight, openDoc, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
-import { useEffect, useLayoutEffect, useState, useCallback } from 'react';
+import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react';
 import Validation from '@/components/Validation';
 import Explosion from '@/components/Explosion';
 import Loading from '@/components/Loading';
@@ -32,126 +32,158 @@ export default function Home() {
   const [isVideoLoad, setIsVideoLoad] = useState(true);
   const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
 
-useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
-  const sections = document.querySelectorAll("section");
-  setSections(sections);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const spansRef = useRef<NodeListOf<HTMLSpanElement> | null>(null);
 
-  let heights = Array.from(sections).map((section) => section.offsetTop);
-  setSectionsTop(heights);
-  dispatch(getSectionHeight(window.innerHeight));
-  const texts = Array.from(document.querySelectorAll(".animate_text"));
-  // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
-  for(let el of texts){
-    const children = Array.from(el.children) as HTMLElement[];
-    children.forEach((text: HTMLElement, i: number) => {
-      text.style.animationDelay = `${animationDelayed + (50 * i)}ms`;
-    })
-  }
-},[isVideoLoad]);
+  useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
+    const sections = document.querySelectorAll("section");
+    setSections(sections);
 
-const handleWheel = (event: WheelEvent) => {
-  if(sectionHeight > 800) event.preventDefault();
-  if(!isIndexToggle && !docOpen){
-    if(event.deltaY > 0 && index < sectionsTop.length-1){
-      // console.log(`아래로 스크롤`)
-      dispatch(updateIndex(index+1));
-    } else if(event.deltaY < 0 && index > 0){
-      // console.log(`위로 스크롤`)
-      // setI(i-1);
-      dispatch(updateIndex(index-1));
-    }
-  // console.log(`스크롤이동 ${index}`);
-  }
-};
-
-useEffect(() => {
-  window.addEventListener('wheel', handleWheel, {passive: false});
-  if(sectionHeight > 800 && !isIndexToggle && !docOpen){
-    window.scroll({
-      top:sectionHeight*index,
-      behavior:'smooth'
-      })
-    if(sections){
-      active(sections,index);
-      videoPlay(sections,index);
-    }
-  } else if(sectionHeight <= 800){
-    dispatch(updateIndex(0));
-    sections?.forEach((section,i)=>{
-      section.classList.add("active");
-    })
-  }
-  return () => window.removeEventListener('wheel', handleWheel);
-}, [index, isIndexToggle, sections, docOpen]);
-
-const videoPlay = (section:NodeListOf<HTMLElement>,i:number) =>{
-  const videos = section[i].querySelectorAll('video');
-  videos?.forEach((video)=>{
-    video.play();
-  })
-}
-
-const active = (el:NodeListOf<HTMLElement>,i:number) =>{
-  el.forEach((item:HTMLElement) => {
-    item.classList.remove("active");
-  });
-  el[i]?.classList.add("active");
-}
-
-function resize(){
-  const sections = document.querySelectorAll("section");
-  setSections(sections);
-    var heights = Array.from(sections).map((section) => section.offsetTop);
+    let heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
     dispatch(getSectionHeight(window.innerHeight));
-    console.log(window.innerHeight)
-}
+    const texts = Array.from(document.querySelectorAll(".animate_text"));
+    // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
+    for(let el of texts){
+      const children = Array.from(el.children) as HTMLElement[];
+      children.forEach((text: HTMLElement, i: number) => {
+        text.style.animationDelay = `${animationDelayed + (50 * i)}ms`;
+      })
+    }
+  },[isVideoLoad]);
 
-useEffect(()=>{
-  window.addEventListener('resize',resize);
-  return () => {
-    window.removeEventListener('resize', resize);
-  };
-},[]);
-
-useEffect(() => {
-  const getVideo = () => {
-    const promises: Promise<HTMLVideoElement>[] = [];
-    const videos = document.querySelectorAll('video');
-
-    videos.forEach((video, i) => {
-      const promise: Promise<HTMLVideoElement> = new Promise((resolve, reject) => {
-        video.addEventListener('canplaythrough', () => {
-          resolve(video);
-        });
-        video.addEventListener('error', () => {
-          reject(new Error('비디오 로딩 중 오류가 발생했습니다.'));
-        });
-      });
-      promises.push(promise);
-    });
-    return promises;
-  };
+  useEffect(() => {
+    const handleWheel = (event: WheelEvent) => {
+      if (sectionHeight > 800) event.preventDefault();
+      if (!isIndexToggle && !docOpen) {
+        if (event.deltaY > 0 && index < sectionsTop.length - 1) {
+          dispatch(updateIndex(index + 1));
+        } else if (event.deltaY < 0 && index > 0) {
+          dispatch(updateIndex(index - 1));
+        }
+      }
+    };
   
-  const promises = getVideo();
+    window.addEventListener('wheel', handleWheel, { passive: false });
+  
+    if (sectionHeight > 800 && !isIndexToggle && !docOpen) {
+      window.scroll({
+        top: sectionHeight * index,
+        behavior: 'smooth'
+      });
+  
+      if (sections) {
+        active(sections, index);
+        videoPlay(sections, index);
+      }
+    } else if (sectionHeight <= 800) {
+      dispatch(updateIndex(0));
+      sections?.forEach((section, i) => {
+        section.classList.add("active");
+      });
+    }
+  
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+    };
+  }, [index, isIndexToggle, sectionHeight, sections, docOpen]);
+  
 
-  Promise.all(promises)
-    .then((videos) => {
-      console.log('비디오 로드 완료', videos);
-      // 비디오가 모두 로드된 후 수행할 작업
-      setInterval(()=>setIsVideoLoad(false),5200);
-    })
-    .catch((err) => {
-      console.error('비디오 로딩 중 에러가 발생했습니다.', err);
-      // 비디오 로딩 중 에러 발생 시 수행할 작업
+  const videoPlay = useCallback((section: NodeListOf<HTMLElement>, i: number) => {
+    const videos = section[i].querySelectorAll("video");
+    videos?.forEach((video) => {
+      video.play();
     });
-}, []);
+  }, []);
 
-const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
-  console.log(1)
-  e.preventDefault();
-  dispatch(openDoc(true));
-}
+  const active = useCallback((el: NodeListOf<HTMLElement>, i: number) => {
+    el.forEach((item: HTMLElement) => {
+      item.classList.remove("active");
+    });
+    el[i]?.classList.add("active");
+  }, []);
+
+  function resize(){
+    const sections = document.querySelectorAll("section");
+    setSections(sections);
+      var heights = Array.from(sections).map((section) => section.offsetTop);
+      setSectionsTop(heights);
+      dispatch(getSectionHeight(window.innerHeight));
+      console.log(window.innerHeight)
+  }
+
+  useEffect(()=>{
+    window.addEventListener('resize',resize);
+    return () => {
+      window.removeEventListener('resize', resize);
+    };
+  },[]);
+
+  useEffect(() => {
+    const getVideo = () => {
+      const promises: Promise<HTMLVideoElement>[] = [];
+      const videos = document.querySelectorAll('video');
+
+      videos.forEach((video, i) => {
+        const promise: Promise<HTMLVideoElement> = new Promise((resolve, reject) => {
+          video.addEventListener('canplaythrough', () => {
+            resolve(video);
+          });
+          video.addEventListener('error', () => {
+            reject(new Error('비디오 로딩 중 오류가 발생했습니다.'));
+          });
+        });
+        promises.push(promise);
+      });
+      return promises;
+    };
+    
+    const promises = getVideo();
+
+    Promise.all(promises)
+      .then((videos) => {
+        console.log('비디오 로드 완료', videos);
+        // 비디오가 모두 로드된 후 수행할 작업
+        setInterval(()=>setIsVideoLoad(false),5200);
+      })
+      .catch((err) => {
+        console.error('비디오 로딩 중 에러가 발생했습니다.', err);
+        // 비디오 로딩 중 에러 발생 시 수행할 작업
+      });
+  }, []);
+
+  const handleMouseMove = useCallback(
+    (e: MouseEvent) => {
+      let mouseX = e.pageX;
+      let mouseY = e.pageY;
+      let traX = (4 * mouseX) / 240;
+      let traY = (4 * mouseY) / 240;
+  
+      if (spansRef.current) {
+        spansRef.current.forEach((text) => {
+          text.style.backgroundPosition = `${traX}% ${traY}%`;
+        });
+      }
+    },
+    [spansRef.current, index]
+  );
+
+  useEffect(() => {
+    if (titleRef.current) {
+      const spans = titleRef.current.querySelectorAll("span");
+      spansRef.current = spans;
+    }
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [titleRef.current]);
+
+  const toggleDoc:React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+    e.preventDefault();
+    dispatch(openDoc(true));
+  }
 
   return (
     <>
@@ -173,9 +205,10 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
         {index == 0 && <Explosion />}
         <section className={`flex w-full justify-center items-center`}>
           <div className={`block`}>
-            <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`}>
+            <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`} ref={titleRef}>
               {/* 효과를 우선 마우스 오버로 함 자동적으로 되게 해야함 */}
-              <span className={`${mainstyle.name}`}>HWAN</span><span>D</span><span>e</span><span>v</span><span >e</span><span>l</span><span>o</span><span>p</span><span>e</span><span>r</span></h1>
+              {/* <span className={`${mainstyle.name}`}>HWAN</span> */}
+              <span className={`${mainstyle.name}`}>HWAN</span>&nbsp;<span>-</span>&nbsp;<span>D</span><span>e</span><span>v</span><span >e</span><span>l</span><span>o</span><span>p</span><span>e</span><span>r</span></h1>
             <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)]`}>Having Interest about User experience with Logical thinking and Research techniques</p>
           </div>
         </section>
@@ -327,7 +360,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
           {/* <Particles></Particles> */}
           <h2 className={`${mainstyle.title1} mb-11`}>FESCARO</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-            <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
+            <dl className={`text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
             [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -353,7 +386,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
               `}>
                 <li><a href='https://github.com/utfw/clone_fescaro' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                 <li><a href='https://utfw.github.io/clone_fescaro/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-                <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Verification</a></li>
+                <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
                 </ul>
               </dd>
               <dt className={`${mainstyle.title_sub2}`}><span>Languages</span></dt>
@@ -396,7 +429,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>삼성전기</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-          <dl className={`z-10 text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] 
+          <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] 
           [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
             <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
             <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 컨텐츠 접근성 지침과 웹표준을 준수하여<br />삼성전기 기업 웹 사이트를 제작 하였습니다.</span></dd>
@@ -418,7 +451,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
               `}>
               <li><a href='https://github.com/utfw/clone_samsung' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
               <li><a href='https://utfw.github.io/clone_samsung/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-              <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Verification</a></li>
+              <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
               </ul>
             </dd>
             <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
@@ -447,7 +480,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
         <section>
           <h2 className={`${mainstyle.title1} mb-11`}>CJ ONE</h2>
           <div className={`flex w-full pr-[144px] justify-between`}>
-            <dl className={`z-10 text-[var(--gray2)] min-w-[600px]
+            <dl className={`text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
             [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
@@ -471,7 +504,7 @@ const toggleDoc: React.MouseEventHandler<HTMLAnchorElement> = (e) =>{
               `}>
                 <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                 <li><a href='https://utfw.github.io/clone_CJONE/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-                <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Verification</a></li>
+                <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
                 </ul>
               </dd>
               <dt className={`${mainstyle.title_sub2}`}>Languages</dt>

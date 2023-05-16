@@ -34,7 +34,7 @@ function Loading() {
   return (
     <section className={loading.page}>
       <i className={loading.loader}></i>
-      <p className={`${loading.text} ${mainsyle.body2} ${notoSansKR.className}`}>{loadingText[num]}</p>
+      <p className={`${loading.text} ${mainsyle.body2}`}>{loadingText[num]}</p>
     </section>
   )
 }

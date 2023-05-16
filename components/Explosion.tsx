@@ -110,13 +110,15 @@ function Explosion() {
 
       const intervalId = setInterval(() => {
         if(currentFrame < totalFrames ){
-          const currentScale = box.render.sprite?.scale ?? { x: 1, y: 1 };
-          var newScale = {
-            x: currentScale.x * sizeIncreasePerFrame,
-            y: currentScale.y * sizeIncreasePerFrame,
-          };
+          const currentScale = box.render.sprite?.xScale;
+          if(currentScale){
+            var newScale = {
+              x: currentScale * sizeIncreasePerFrame,
+              y: currentScale * sizeIncreasePerFrame,
+            };
           Body.scale(box, newScale.x, newScale.y);
           currentFrame++;
+          }
         } else {
           World.remove(engine.current.world, box);
           const boxSize = box.bounds.max.x - box.bounds.min.x;
