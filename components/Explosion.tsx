@@ -13,11 +13,18 @@ function Explosion() {
   const isToggleIndex = useSelector((state:RootState)=>state.index.Index);
   const isDocOpen = useSelector((state:RootState)=>state.openDoc.Index);
   
-  const cw = document.body.clientWidth;
-  const ch = document.documentElement.scrollHeight;
+  const [cw, setCw] = useState<number>(window.innerWidth);
+  const [ch, setCh] = useState<number>(document.documentElement.scrollHeight);
   let render:Matter.Render;
   let walls;
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
+
+  useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      setCw(window.innerWidth);
+      setCh(document.documentElement.scrollHeight);
+    }
+  }, []);
 
   useEffect(() =>{
     let interval:NodeJS.Timer | undefined;
@@ -28,7 +35,6 @@ function Explosion() {
     } else if(SectionIndex === 1){
       engine.current.world.gravity.y = 0.003;
       interval = setInterval(handleAddBox, Math.floor(800+Math.random() * 501));
-      console.log(interval)
     } else if(SectionIndex >= 7){
       engine.current.world.gravity.y = -0.01;
       interval = setInterval(handleAddBox, Math.floor(800+Math.random() * 501));

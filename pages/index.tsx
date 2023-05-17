@@ -1,6 +1,3 @@
-import Image from 'next/image'
-import { GetStaticProps } from 'next';
-import { Montserrat, Noto_Sans_KR } from 'next/font/google'
 import Head from 'next/head';
 import mainstyle from '../styles/Main.module.scss'
 import Link from 'next/link';
@@ -13,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState, getSectionHeight, openDoc, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
 import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react';
-import Validation from '@/components/Validation';
 import Explosion from '@/components/Explosion';
 import Loading from '@/components/Loading';
 import { notoSansKR, montserrat } from './_app';
@@ -25,18 +21,23 @@ export default function Home() {
   const index = useSelector((state:RootState)=> state.scrollPosition.Scroll);
   const [sections, setSections] = useState<NodeListOf<HTMLElement>>();
   const [sectionsTop, setSectionsTop] = useState<number[]>([]);
-  const [animationWrap, setAnimationWrap] = useState<NodeListOf<HTMLElement>>();
+
   const animationDelayed = 300;
   const sectionHeight = useSelector((state:RootState)=>state.sectionHeights.Height);
   
-  const [isVideoLoad, setIsVideoLoad] = useState(true);
   const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
 
   const titleRef = useRef<HTMLHeadingElement>(null);
   const spansRef = useRef<NodeListOf<HTMLElement> | null>(null);
   const finboxRef = useRef<HTMLDivElement>(null);
 
-  useLayoutEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
+  const images = ['images/font-bg.jpg',`images/i_13.svg`,`images/m_16.svg`,`images/m_24.svg`];
+  const [isImagesLoaded, setIsImagesLoaded] = useState(false);
+  const [isVideoLoad, setIsVideoLoad] = useState(false);
+  const [isLoad, setIsLoad] = useState(false);
+
+
+  useEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
     const sections = document.querySelectorAll("section");
     setSections(sections);
 
@@ -51,20 +52,21 @@ export default function Home() {
         text.style.animationDelay = `${animationDelayed + (50 * i)}ms`;
       })
     }
-  },[isVideoLoad]);
+  },[isLoad]);
+
+  const handleWheel = useCallback((event: WheelEvent) => {
+    if (sectionHeight > 800 && !isIndexToggle && !docOpen) {
+      event.preventDefault();
+      if (event.deltaY > 0 && index < sectionsTop.length - 1) {
+        dispatch(updateIndex(index + 1));
+      } else if (event.deltaY < 0 && index > 0) {
+        dispatch(updateIndex(index - 1));
+      }
+    }
+  }, [index, isIndexToggle, sectionHeight, sectionsTop, docOpen]);
+  
 
   useEffect(() => {
-    const handleWheel = (event: WheelEvent) => {
-      if (sectionHeight > 800) event.preventDefault();
-      if (!isIndexToggle && !docOpen) {
-        if (event.deltaY > 0 && index < sectionsTop.length - 1) {
-          dispatch(updateIndex(index + 1));
-        } else if (event.deltaY < 0 && index > 0) {
-          dispatch(updateIndex(index - 1));
-        }
-      }
-    };
-  
     window.addEventListener('wheel', handleWheel, { passive: false });
   
     if (sectionHeight > 800 && !isIndexToggle && !docOpen) {
@@ -72,7 +74,6 @@ export default function Home() {
         top: sectionHeight * index,
         behavior: 'smooth'
       });
-
       if (sections) {
         active(sections, index);
         videoPlay(sections, index);
@@ -91,6 +92,12 @@ export default function Home() {
   
 
   const videoPlay = useCallback((section: NodeListOf<HTMLElement>, i: number) => {
+    section.forEach((section) =>{
+      const videos = section.querySelectorAll("video");
+      videos?.forEach((video) => {
+        video.pause();
+      });
+    })
     const videos = section[i].querySelectorAll("video");
     videos?.forEach((video) => {
       video.play();
@@ -104,15 +111,14 @@ export default function Home() {
     el[i]?.classList.add("active");
   }, []);
 
-  function resize(){
+  const resize = useCallback(() => {
     const sections = document.querySelectorAll("section");
     setSections(sections);
-      var heights = Array.from(sections).map((section) => section.offsetTop);
-      setSectionsTop(heights);
-      dispatch(getSectionHeight(window.innerHeight));
-      console.log(window.innerHeight)
-  }
-
+    const heights = Array.from(sections).map((section) => section.offsetTop);
+    setSectionsTop(heights);
+    dispatch(getSectionHeight(window.innerHeight));
+  }, []);
+  
   useEffect(()=>{
     window.addEventListener('resize',resize);
     return () => {
@@ -120,6 +126,29 @@ export default function Home() {
     };
   },[]);
 
+
+
+  useEffect(() => {
+    const imagePromises = images.map((src) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.addEventListener('load', () => resolve(img));
+        img.addEventListener('error', () => reject(new Error('이미지 로딩 중 오류가 발생했습니다.')));
+      });
+    });
+
+    Promise.all(imagePromises)
+      .then(() => {
+        setIsImagesLoaded(true);
+        console.log(`이미지 로딩 완료`)
+      })
+      .catch((error) => {
+        console.error('이미지 로딩 중 에러가 발생했습니다.', error);
+      });
+  }, []);
+
+ 
   useEffect(() => {
     const getVideo = () => {
       const promises: Promise<HTMLVideoElement>[] = [];
@@ -145,13 +174,21 @@ export default function Home() {
       .then((videos) => {
         console.log('비디오 로드 완료', videos);
         // 비디오가 모두 로드된 후 수행할 작업
-        setInterval(()=>setIsVideoLoad(false),5200);
+        setIsVideoLoad(true);
       })
       .catch((err) => {
         console.error('비디오 로딩 중 에러가 발생했습니다.', err);
         // 비디오 로딩 중 에러 발생 시 수행할 작업
       });
   }, []);
+
+  useEffect(() => {
+    if (isVideoLoad && isImagesLoaded) {
+      // 비디오와 이미지가 모두 로드된 후에 수행할 작업
+      console.log('비디오와 이미지 로딩 완료');
+      setInterval(()=>setIsLoad(true),5200);
+    }
+  }, [isVideoLoad, isImagesLoaded]);
 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
@@ -183,7 +220,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [titleRef.current, index]);
+  }, [spansRef.current, index]);
 
   const toggleDoc:React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
@@ -198,7 +235,7 @@ export default function Home() {
     {/* Index Component */}
     <Index />
     {/* {docOpen && (<Validation top={index*sectionHeight}></Validation>)} */}
-    {isVideoLoad ? (
+    { !isLoad ? (
      <Loading></Loading>
     ):(
       <>
