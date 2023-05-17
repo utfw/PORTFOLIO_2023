@@ -45,9 +45,13 @@ body {
   background: (var(--bg));
   font-family: (var(--font-family));
   min-width: 780px;
+  height: max-content;
+}
+main{
+  position: relative;
 }
 #container{
-  background: var(--bg-linear-gradient);
+  height: auto;
 }
 section{
   padding: 0 80px;
@@ -56,6 +60,12 @@ section{
 video{
   width: 100%;
   height: 100%;
+}
+
+.bg-input{
+  background: url("../public/images/font-bg.jpg") repeat;
+  background-position: 0% 50%;
+  color: transparent;
 }
 @media screen and (max-width:1440px) {
   html{font-size: 1.1vw;}
@@ -74,10 +84,3 @@ video{
   section{padding: 0 32px;}
 }
 
-
-/* 레이아웃보기용 */
-/* section{
-  opacity: 0.1;
-  border: 1px solid red;
-  transition: opacity .7s linear;
-}  */

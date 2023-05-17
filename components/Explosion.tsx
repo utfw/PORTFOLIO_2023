@@ -9,17 +9,41 @@ function Explosion() {
   const engine = useRef(Engine.create());
   const wall = useRef<Matter.Body[]>([]);
   const Height = useSelector((state:RootState)=>state.sectionHeights.Height);
+  const SectionIndex = useSelector((state:RootState)=>state.scrollPosition.Scroll);
+  const isToggleIndex = useSelector((state:RootState)=>state.index.Index);
+  const isDocOpen = useSelector((state:RootState)=>state.openDoc.Index);
   
   const cw = document.body.clientWidth;
-  const ch = document.body.clientHeight;
+  const ch = document.documentElement.scrollHeight;
   let render:Matter.Render;
   let walls;
+  const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
+
+  useEffect(() =>{
+    let interval:NodeJS.Timer | undefined;
+    if(SectionIndex === 0){
+      engine.current.world.gravity.x = 0;
+      engine.current.world.gravity.y = 0.03;
+      interval = setInterval(handleAddBox, Math.floor(200+Math.random() * 501));
+    } else if(SectionIndex === 1){
+      engine.current.world.gravity.y = 0.003;
+      interval = setInterval(handleAddBox, Math.floor(800+Math.random() * 501));
+      console.log(interval)
+    } else if(SectionIndex >= 7){
+      engine.current.world.gravity.y = -0.01;
+      interval = setInterval(handleAddBox, Math.floor(800+Math.random() * 501));
+    }
+    if(interval) setIntervalId(interval);
+
+    intervalId;
+    return () =>{
+      clearInterval(interval);
+      setIntervalId(null);
+    }
+  },[SectionIndex])
 
   useEffect(() => {
     //mount
-    engine.current.world.gravity.x = 0;
-    engine.current.world.gravity.y = 0.03;
-
     // 캔버스 생성
     if (scene.current) {
       // 캔버스 생성
@@ -29,14 +53,13 @@ function Explosion() {
         options: {
           wireframes: false,
           background: 'transparent',
-          width: window.innerWidth,
-          height: Height,
+          width: cw,
+          height: document.documentElement.scrollHeight
         },
       });
     }
     Render.run(render);
-
-    // 테두리 생성
+        // 테두리 생성
     walls = [
       Bodies.rectangle(cw / 2, -10, cw, 20, {
         isStatic: true,
@@ -55,9 +78,8 @@ function Explosion() {
 
     Engine.run(engine.current);
 
-    const intervalId = setInterval(handleAddBox, Math.floor(200+Math.random() * 501));
     return () => {
-      clearInterval(intervalId);
+     
       Render.stop(render);
       World.clear(engine.current.world, false);
       Engine.clear(engine.current);
@@ -69,13 +91,13 @@ function Explosion() {
   useEffect(()=>{
     window.addEventListener('resize',()=>{
       dispatch(getSectionHeight(window.innerHeight));
-      render.canvas.height = window.innerHeight;
-      render.canvas.width = window.innerWidth;
+      render.canvas.height = document.documentElement.scrollHeight;
+      render.canvas.width = document.body.clientWidth;
     });
 
     return window.removeEventListener('resieze',()=>{
-      render.canvas.height = Height;
-      render.canvas.width = window.innerWidth;
+      render.canvas.height = document.documentElement.scrollHeight;
+      render.canvas.width = document.body.clientWidth;
     })
   },[]);
 
@@ -84,9 +106,9 @@ function Explosion() {
       const alpha = (Math.floor(Math.random() * 71) + 30)/100;
       const color = [`48, 207, 208`, `69, 220, 195`, `108, 231, 175`, `152, 240, 152`, `199, 246, 130`, `249, 248, 113`];
       const colorIndex = Math.floor(Math.random() * color.length);
+      const height = (Height*(SectionIndex))
       const randomX = Math.floor(Math.random() * cw);
-      const randomY = (Math.floor(Math.random() * ch)/2);
-
+      const randomY = (Math.floor((height)+(Math.random() * (Height*0.66))));
       const sizeIncreasePerFrame = 1.1; 
       const totalFrames = 18;
           const box = Bodies.rectangle(
@@ -101,6 +123,7 @@ function Explosion() {
               friction: 1,
               render: {
                 fillStyle: `rgba(${color[colorIndex]}, ${alpha})`,
+                strokeStyle: 'transparent',
               },
             }
           );
@@ -149,15 +172,15 @@ function Explosion() {
             boxs.forEach((box) => {
               World.remove(engine.current.world, box);
             });
-          }, 3000);
+          }, 5000);
         }
       }, 33);
     };
 
   return (
-    <div className={`absolute w-full h-full`} onClick={handleAddBox}>
-    <div ref={scene} className={`w-full h-full`}>
-    </div>
+    <div className={`absolute w-full h-full`} style={{background:`var(--bg-linear-gradient)`}} onClick={handleAddBox}>
+      <div ref={scene} className={`w-full h-full`}>
+      </div>
     </div>
   )
 }

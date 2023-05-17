@@ -35,7 +35,7 @@
   color: #393939;
   word-break: break-all;
   >span{
-    background: url("https://phandroid.s3.amazonaws.com/wp-content/uploads/2014/05/rainbow-nebula.jpg") repeat;
+    background: url("../public/images/font-bg.jpg") repeat;
     background-position: 0% 50%;
     -webkit-background-clip: text;
     color: transparent;
@@ -315,11 +315,7 @@
     -webkit-background-clip: text;
     color: transparent;
   }
-  &>div>div:last-of-type{
-    background: url("../public/images/font-bg.jpg") repeat;
-    background-position: 0% 50%;
-    color: transparent;
-  }
+
 }
 
 

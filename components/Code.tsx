@@ -116,7 +116,6 @@ function Code() {
     setNewName(value);
   },[]);`];
 
-  console.log(string[3].split(""))
   let loopTimer: NodeJS.Timeout;
  
   let fescaro = string[0].split("");

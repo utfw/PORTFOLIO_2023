@@ -1,6 +1,5 @@
 import React from 'react'
 import Image from 'next/image'
-
 import mainstyle from '../styles/Main.module.scss'
 import indexstyle from '../styles/Index.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -10,14 +9,13 @@ import { toggleIndex, RootState, updateIndex } from '@/store/store'
 import { Noto_Sans_KR } from 'next/font/google'
 import sharkStyles from '../styles/Shark.module.scss'
 
-
 function Index() {
   const dispatch = useDispatch();
   const isIndexToggle = useSelector((state: RootState) => state.index.Index);
   const index = useSelector((state:RootState)=>state.scrollPosition.Scroll);
   const height = useSelector((state:RootState)=>state.sectionHeights.Height);
   const content_name = ["FESCARO", "삼성전기", "CJ ONE", "TALK APP", "NETFLIX APP","PURE CSS"]
-
+  const color = [`48, 207, 208`, `69, 220, 195`, `108, 231, 175`, `152, 240, 152`, `199, 246, 130`, `249, 248, 113`];
   const file_name = ["fescaro","samsung","cjone","talk","netflix",""];
   function onClickScroll(number:number){
     console.log(index, number);
@@ -30,7 +28,7 @@ function Index() {
       <div>
         <ul className={`index`}>
           {content_name.map((name,index)=>(
-             <li key={index} className={indexstyle.li} onClick={()=>onClickScroll(index+1)}>
+             <li key={index} className={indexstyle.li} onClick={()=>onClickScroll(index+1)} onMouseEnter={(e)=>{e.currentTarget.style.background = `rgb(${color[index]})`}} onMouseLeave={(e)=>{e.currentTarget.style.background = `#fff`}}>
              <p>{`0${index+1}`}</p>
              <div>            
                <div className={`w-[496px] h-[383px]`}>
