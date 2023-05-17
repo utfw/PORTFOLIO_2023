@@ -14,7 +14,7 @@ function Layout({children}:LayoutProps) {
   return (
     <>
     {Height > 800 && <Menu />}
-    {docOpen && (<Validation top={0} />)}
+    {index > 1 && index < 5 ? <Validation /> : ("")}
     <div id='container' className={mainstyle.container}>
       <div className={isIndexToggle? mainstyle[`index-open`]:""}>
       {children}

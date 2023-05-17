@@ -31,11 +31,10 @@ export default function Home() {
   const spansRef = useRef<NodeListOf<HTMLElement> | null>(null);
   const finboxRef = useRef<HTMLDivElement>(null);
 
-  const images = ['images/font-bg.jpg',`images/i_13.svg`,`images/m_16.svg`,`images/m_24.svg`];
+  const images = ['/portfolio_2023/images/font-bg.jpg',`/portfolio_2023/images/i_13.svg`,`/portfolio_2023/images/m_16.svg`,`/portfolio_2023/images/m_24.svg`];
   const [isImagesLoaded, setIsImagesLoaded] = useState(false);
   const [isVideoLoad, setIsVideoLoad] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
-
 
   useEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
     const sections = document.querySelectorAll("section");
@@ -55,8 +54,8 @@ export default function Home() {
   },[isLoad]);
 
   const handleWheel = useCallback((event: WheelEvent) => {
+    event.preventDefault();
     if (sectionHeight > 800 && !isIndexToggle && !docOpen) {
-      event.preventDefault();
       if (event.deltaY > 0 && index < sectionsTop.length - 1) {
         dispatch(updateIndex(index + 1));
       } else if (event.deltaY < 0 && index > 0) {
@@ -65,7 +64,6 @@ export default function Home() {
     }
   }, [index, isIndexToggle, sectionHeight, sectionsTop, docOpen]);
   
-
   useEffect(() => {
     window.addEventListener('wheel', handleWheel, { passive: false });
   
@@ -126,8 +124,7 @@ export default function Home() {
     };
   },[]);
 
-
-
+  // loading
   useEffect(() => {
     const imagePromises = images.map((src) => {
       return new Promise((resolve, reject) => {
@@ -135,6 +132,10 @@ export default function Home() {
         img.src = src;
         img.addEventListener('load', () => resolve(img));
         img.addEventListener('error', () => reject(new Error('이미지 로딩 중 오류가 발생했습니다.')));
+        const hiddenDiv = document.createElement('div');
+        hiddenDiv.style.display = 'none';
+        hiddenDiv.appendChild(img);
+        document.body.appendChild(hiddenDiv);
       });
     });
 
@@ -184,12 +185,12 @@ export default function Home() {
 
   useEffect(() => {
     if (isVideoLoad && isImagesLoaded) {
-      // 비디오와 이미지가 모두 로드된 후에 수행할 작업
       console.log('비디오와 이미지 로딩 완료');
       setInterval(()=>setIsLoad(true),5200);
     }
   }, [isVideoLoad, isImagesLoaded]);
 
+  // 텍스트 배경 이미지 
   const handleMouseMove = useCallback(
     (e: MouseEvent) => {
       let mouseX = e.pageX;
@@ -220,7 +221,7 @@ export default function Home() {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [spansRef.current, index]);
+  }, [spansRef.current, index, isLoad]);
 
   const toggleDoc:React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();

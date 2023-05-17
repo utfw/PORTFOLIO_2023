@@ -24,7 +24,6 @@ function Loading() {
     const timer = setInterval(() =>{
       if (count >= loadingText.length-1){
         count = 0;
-        console.log(1)
       } else count++;
       setNum(count);
     }, 2400);

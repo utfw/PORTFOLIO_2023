@@ -117,45 +117,16 @@ function Code() {
   },[]);`];
 
   let loopTimer: NodeJS.Timeout;
- 
-  let fescaro = string[0].split("");
-  let samsung = string[1].split("");
-  let cjone = string[2].split("");
-  let kakao = string[3].split("");
-  let netfilx = string[4].split("");
 
+  const strings = string.map((text) => text.split(""));
+  
   const frameLooper = () => {
-    let index = Index - 2;
-      if (textbox.current) {
-        switch (index) {
-          case 0:
-            if (fescaro.length > 0) {
-              textbox.current.innerHTML += fescaro.shift();
-            }
-            break;
-          case 1:
-            if (samsung.length > 0) {
-              textbox.current.innerHTML += samsung.shift();
-            }
-            break;
-          case 2:
-            if (cjone.length > 0) {
-              textbox.current.innerHTML += cjone.shift();
-            }
-            break;
-          case 3:
-            if (kakao.length > 0){
-              textbox.current.innerHTML += kakao.shift();
-            }
-            break;
-          case 4:
-            if (netfilx.length > 0){
-              textbox.current.innerHTML += netfilx.shift();
-            }
-            break;
-          default:
-            break;
-        }
+    const index = Index - 2;
+    if (textbox.current) {
+      const currentString = strings[index];
+      if (currentString.length > 0) {
+        textbox.current.innerHTML += currentString.shift();
+      }
     } else {
       clearTimeout(loopTimer);
     }
@@ -166,14 +137,13 @@ function Code() {
     const element = textbox.current;
     return () => {
       if (element) {
-        fescaro = string[0].split("");
-        samsung = string[1].split("");
-        cjone = string[2].split("");
-        kakao = string[3].split("");
-        netfilx = string[4].split("");
         element.innerHTML = "";
       }
       clearTimeout(loopTimer);
+      strings.forEach((arr) => arr.length = 0);
+      string.forEach((text, index) => {
+        strings[index].push(...text.split(""));
+      });
     };
   }
   

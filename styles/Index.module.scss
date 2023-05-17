@@ -25,6 +25,7 @@
         width: 160px;
         margin-right: 16px;
         transition: all .3s ease-in-out;
+        cursor: pointer;
         &:last-of-type{margin-right: 0;}
         h3{
           position: absolute;
@@ -85,7 +86,6 @@
         &:hover{
           width: 520px;
           margin-right: 20px;
-       
           h3{
             opacity: 0;
             height: auto;
@@ -102,8 +102,7 @@
             transform: translate(25%,-30%);
           }
         }
-      }
-     
+      } 
     }
   }
 

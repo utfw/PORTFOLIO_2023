@@ -63,7 +63,7 @@ video{
 }
 
 .bg-input{
-  background: url("../public/images/font-bg.jpg") repeat;
+  background: url(/portfolio_2023/images/font-bg.jpg) repeat;
   background-position: 0% 50%;
   color: transparent;
 }

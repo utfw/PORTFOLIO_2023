@@ -191,7 +191,7 @@
     width: 737px;
     height: 570px;
       >div{
-        background-image: url("../public/images/m_24.svg");
+        background-image: url(/portfolio_2023/images/m_24.svg);
         >video{
           width: 625px;
           height: 352px;
@@ -208,7 +208,7 @@
       width: 512px;
       height: 310px;
       >div{
-        background-image: url("../public/images/m_16.svg");
+        background-image: url(/portfolio_2023/images/m_16.svg);
         >video{
           width: 426px;
           height: 277px;
@@ -225,7 +225,7 @@
       width: 207px;
       height: 207px;
       >div{
-        background-image: url("../public/images/i_13.svg");
+        background-image: url(/portfolio_2023//images/i_13.svg);
         >video{
           top: 4px;
           left: 96px;
@@ -310,7 +310,7 @@
   animation: up_box 1s ease-in-out 0.2s forwards;
   animation-play-state: paused;
   &>p, & li{
-    background: url("../public/images/font-bg.jpg") repeat;
+    background: url(/portfolio_2023/images/font-bg.jpg) repeat;
     background-position: 0% 50%;
     -webkit-background-clip: text;
     color: transparent;

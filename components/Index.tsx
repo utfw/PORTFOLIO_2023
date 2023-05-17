@@ -33,7 +33,7 @@ function Index() {
              <div>            
                <div className={`w-[496px] h-[383px]`}>
                  <div className={`w-full h-full
-               bg-[url('../images/m_16.svg')] bg-contain bg-no-repeat`}>
+               bg-[url(/portfolio_2023/images/m_16.svg)] bg-contain bg-no-repeat`}>
                     <div className={indexstyle.img_wrap}>
                       {index < content_name.length-1 ? (
                         <img src={`images/${file_name[index]}/${file_name[index]}.png`} alt={file_name[index]} className={index == 3 ? (indexstyle?.kakao) :("")} />
