@@ -1,38 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+ 
 
-## Getting Started
+## 개요
 
-First, run the development server:
+이 README 파일은 Next.js로 제작된 포트폴리오에 대한 내용입니다. 포트폴리오는 반응형 페이지로 구성되어 있으며, 해상도 1920 * 1080에 최적화되어 있습니다. 페이지에는 Matter.js를 사용하여 구현된 물리 효과를 가진 사각형이 생성됩니다. 스크롤 이벤트를 통해 원스크롤 기능이 구현되었으며, 스크롤 위치에 따라 사각형 생성 이벤트가 변화합니다. 또한, 성능을 최적화하기 위해 화면 내에 보이는 윈도우 영역에서만 사각형이 생성되도록 설정되어 있습니다.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+목차는 부모 요소에 perspective 속성을 부여하고 rotateY를 사용하여 회전하는 방식으로 구현되었습니다. perspective 속성으로 인해 position 값을 fixed로 설정할 수 없었기 때문에 스크립트를 사용하여 본문 섹션의 높이 값을 참조하여 위치를 변경하도록 구현되었습니다.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+웹 표준 검사 컴포넌트는 높이에 따라 사진의 주소 값이 변경되어 해당 섹션에 적합한 사진이 표시되도록 구현되었습니다.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 사용요소
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+1. [Next.js](http://nextjs.org)
+2. [Node.js](https://nodejs.org/ko)
+3. [React Redux](https://react-redux.js.org/)
+4. [Redux Toolkit](https://redux-toolkit.js.org/)
+5. [TypeScript](https://www.typescriptlang.org/)
+6. Matter.js
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## 목차
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+1. 타이틀
+2. 자기소개
+3. 기업사이트 클론 [FESCARO](https://github.com/utfw/clone_fescaro)
+4. 기업사이트 클론 [삼성전기](https://github.com/utfw/clone_samsung)
+5. 기업사이트 클론 [CJ ONE](https://github.com/utfw/clone_CJONE)
+6. React App [KakaoTalk](https://github.com/utfw/react_chat_firebase_2023)
+7. React App [Netflix](https://github.com/utfw/react_search_movie_2023)
