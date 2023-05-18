@@ -8,12 +8,12 @@
 
 ## 사용된 기술 스택
 
-1. [Next.js](http://nextjs.org)
-2. [Node.js](https://nodejs.org/ko)
-3. [React Redux](https://react-redux.js.org/)
-4. [Redux Toolkit](https://redux-toolkit.js.org/)
-5. [TypeScript](https://www.typescriptlang.org/)
-6. Matter.js
+- [Next.js](http://nextjs.org)
+- [Node.js](https://nodejs.org/ko)
+- [React Redux](https://react-redux.js.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- Matter.js
 
 ## 목차
 
