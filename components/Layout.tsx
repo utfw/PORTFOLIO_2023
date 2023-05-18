@@ -17,7 +17,7 @@ function Layout({children}:LayoutProps) {
     {index > 1 && index < 5 ? <Validation /> : ("")}
     <div id='container' className={mainstyle.container}>
       <div className={isIndexToggle? mainstyle[`index-open`]:""}>
-      {children}
+        {children}
       </div>
     </div>
     </>

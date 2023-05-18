@@ -13,17 +13,14 @@ function Explosion() {
   const isToggleIndex = useSelector((state:RootState)=>state.index.Index);
   const isDocOpen = useSelector((state:RootState)=>state.openDoc.Index);
   
-  const [cw, setCw] = useState<number>(window.innerWidth);
+  const [cw, setCw] = useState<number>(document.documentElement.clientWidth);
   const [ch, setCh] = useState<number>(document.documentElement.scrollHeight);
   let render:Matter.Render;
   let walls;
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
-
   useLayoutEffect(() => {
-    if (typeof window !== 'undefined') {
-      setCw(window.innerWidth);
+      setCw(document.body.clientWidth);
       setCh(document.documentElement.scrollHeight);
-    }
   }, []);
 
   useEffect(() =>{
@@ -59,7 +56,7 @@ function Explosion() {
         options: {
           wireframes: false,
           background: 'transparent',
-          width: cw,
+          width: document.documentElement.clientWidth,
           height: document.documentElement.scrollHeight
         },
       });

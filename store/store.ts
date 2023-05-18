@@ -5,12 +5,14 @@ interface State {
   Index:boolean,
   Scroll:number,
   Height:number
+  Content:string[]
 }
 
 const initialState:State ={
   Index:false,
   Scroll:0,
-  Height:0
+  Height:0,
+  Content:["fescaro","samsung","cjone","kakao","netflix"]
 }
 
 const indexSlice = createSlice({
@@ -53,17 +55,30 @@ const sectionHeightSlice = createSlice({
   }
 })
 
+const contentSlice = createSlice({
+  name: 'content',
+  initialState,
+  reducers: {
+    updateContent: (state, action: PayloadAction<string[]>) => {
+      state.Content = action.payload;
+    },
+    }
+  }
+);
+
 const rootReducer = combineReducers({
   index: indexSlice.reducer,
   scrollPosition: scrollPositionSlice.reducer,
   sectionHeights: sectionHeightSlice.reducer,
-  openDoc: validationSlice.reducer
+  openDoc: validationSlice.reducer,
+  content: contentSlice.reducer 
 });
 
 export const {toggleIndex} = indexSlice.actions;
 export const {updateIndex} = scrollPositionSlice.actions;
 export const {getSectionHeight} = sectionHeightSlice.actions;
 export const {openDoc} = validationSlice.actions;
+
 
 export const store = configureStore({
   reducer:rootReducer

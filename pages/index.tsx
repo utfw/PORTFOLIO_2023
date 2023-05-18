@@ -9,11 +9,11 @@ import Index from '@/components/Index';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, getSectionHeight, openDoc, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
-import { useEffect, useLayoutEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import Explosion from '@/components/Explosion';
 import Loading from '@/components/Loading';
 import { notoSansKR, montserrat } from './_app';
-import Code from '@/components/Code';
+import Mockup from '@/components/Mockup';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -88,7 +88,6 @@ export default function Home() {
     };
   }, [index, isIndexToggle, sectionHeight, sections, docOpen]);
   
-
   const videoPlay = useCallback((section: NodeListOf<HTMLElement>, i: number) => {
     section.forEach((section) =>{
       const videos = section.querySelectorAll("video");
@@ -149,7 +148,6 @@ export default function Home() {
       });
   }, []);
 
- 
   useEffect(() => {
     const getVideo = () => {
       const promises: Promise<HTMLVideoElement>[] = [];
@@ -418,14 +416,7 @@ export default function Home() {
                   <li className={`${mainstyle.title} animate_text`}><span>4. 반응형 페이지 제작</span></li>
                   <li className={`${mainstyle.title} animate_text`}><span>5. Swiper.js 사용하여 오토배너를 구현</span></li>
                   </ul>
-                  <ul className={`flex mt-3 
-                [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
-                [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-                [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
-                [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-                [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
-                [&>li>a:hover>span>svg]:text-[var(--bg)]
-                `}>
+                  <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/clone_fescaro' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                   <li><a href='https://utfw.github.io/clone_fescaro/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
                   <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
@@ -435,32 +426,7 @@ export default function Home() {
                 <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
               </dl>
               {/* 목업 */}
-              <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-                <div className={mainstyle.mockup_wrap}>
-                <div className={mainstyle.mockup__pc}>
-                  <div className='video__wrap'>
-                    <video preload='auto' muted loop>
-                      <source src='videos/fescaro/pc.mp4' type='video/mp4'/>
-                    </video>
-                  </div>
-                </div>
-                <div className={mainstyle.mockup__tablet}>
-                  <div>
-                    <video preload='auto' muted loop>
-                      <source src='videos/fescaro/tablet.mp4' type='video/mp4'/>
-                    </video>
-                  </div>
-                </div>
-                <div className={mainstyle.mockup__mobile}>
-                  <div className='video__wrap'>
-                  <video preload='auto' muted loop>
-                      <source src='videos/fescaro/mobile.mp4' type='video/mp4'/>
-                    </video>
-                  </div>
-                </div>
-                </div>
-                  <Code />
-              </div>
+              <Mockup Index={0} />
               {/* //목업 */}
             </div>
           </section>
@@ -483,14 +449,7 @@ export default function Home() {
                 <li className={`${mainstyle.title} animate_text`}><span>2. HTML / CSS w3c 검사 통과</span></li>
                 <li className={`${mainstyle.title} animate_text`}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
                 </ul>
-                <ul className={`flex mt-3 
-                [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
-                [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-                [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
-                [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-                [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
-                [&>li>a:hover>span>svg]:text-[var(--bg)]
-                `}>
+                <ul className={mainstyle.description_list}>
                 <li><a href='https://github.com/utfw/clone_samsung' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                 <li><a href='https://utfw.github.io/clone_samsung/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
                 <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
@@ -499,20 +458,9 @@ export default function Home() {
               <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
               <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
             </dl>
-              {/* 목업 */}
-              <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-                <div className={mainstyle.mockup_wrap}>
-                  <div className={mainstyle.mockup__pc}>
-                    <div className='video__wrap'>
-                      <video preload='auto' muted loop>
-                        <source src='videos/samsung/pc.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                </div>
-                <Code />
-              </div>
-              {/* //목업 */}
+            {/* 목업 */}
+            <Mockup Index={1} />
+            {/* //목업 */}
             </div>
           </section>
           {/* //section4 */}
@@ -536,14 +484,7 @@ export default function Home() {
                   <li className={`${mainstyle.title} animate_text `}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>4. 반응형 페이지 제작</span></li>
                   </ul>
-                  <ul className={`flex mt-3 
-                [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
-                [&>li>a]:transition-all [&>li>a]:duration-500 [&>li>a]:ease-in-out
-                [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
-                [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-                [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
-                [&>li>a:hover>span>svg]:text-[var(--bg)]
-                `}>
+                  <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                   <li><a href='https://utfw.github.io/clone_CJONE/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
                   <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
@@ -553,32 +494,7 @@ export default function Home() {
                 <dd className={`${mainstyle.body1} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
               </dl>
               {/* 목업 */}
-              <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-                <div className={mainstyle.mockup_wrap}>
-                  <div className={mainstyle.mockup__pc}>
-                    <div className='video__wrap'>
-                      <video preload='auto' muted loop>
-                        <source src='videos/cjone/pc.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                  <div className={mainstyle.mockup__tablet}>
-                    <div>
-                      <video preload='auto' muted loop>
-                        <source src='videos/cjone/tablet.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                  <div className={mainstyle.mockup__mobile}>
-                    <div className='video__wrap'>
-                    <video preload='auto' muted loop>
-                        <source src='videos/cjone/mobile.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                </div>
-                <Code />
-              </div>
+              <Mockup Index={2} />
               {/* //목업 */}
             </div>
           </section>
@@ -606,14 +522,7 @@ export default function Home() {
                   <li className={`${mainstyle.title} animate_text `}><span>5. 프로필 업데이트 시 기존 파일을 Storage에서 제거</span></li>
                   <li className={`${mainstyle.title} animate_text`}><span>6. Axios 비동기 라이브러리 사용</span></li>
                   </ul>
-                  <ul className={`flex mt-3 
-                [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
-                [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-                [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
-                [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-                [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
-                [&>li>a:hover>span>svg]:text-[var(--bg)]
-                `}>
+                  <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/react_chat_firebase_2023' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                   <li><a href='https://utfw.github.io/react_chat_firebase_2023/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
                   </ul>
@@ -633,18 +542,7 @@ export default function Home() {
               )}
               </dl>
               {/* 목업 */}
-              <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-                <div className={mainstyle.mockup_wrap}>
-                  <div className={`${mainstyle.mockup__mobile} ${mainstyle.kakao}`}>
-                    <div className='video__wrap'>
-                      <video preload='auto' muted loop>
-                        <source src='videos/kakao/mobile.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                </div>
-                  <Code />
-              </div>
+              <Mockup Index={3} />
               {/* //목업 */}
             </div>
           </section>
@@ -671,14 +569,7 @@ export default function Home() {
                 <li className={`${mainstyle.title} animate_text`}><span>5. Axios 비동기 라이브러리 사용</span></li>
                 <li className={`${mainstyle.title} animate_text`}><span>6. styled-components 사용하여 일부 컴포넌트 구현</span></li>
                 </ul>
-                <ul className={`flex mt-3 
-                [&>li>a]:flex [&>li>a]:items-center [&>li>a]:mr-5 [&>li>a]:pr-2 
-                [&>li>a]:transition-all [&>li>a]:duration-300 [&>li>a]:ease-in-out
-                [&>li>a:hover]:bg-[var(--gray2)] [&>li>a:hover]:text-[var(--bg)]
-                [&>li>a>span]:flex [&>li>a>span]:justify-center [&>li>a>span]:items-center [&>li>a>span]:w-10 [&>li>a>span]:h-10
-                [&>li>a>span>svg]:w-8 [&>li>a>span>svg]:h-8 [&>li>a>span>svg]:mr-0.5 [&>li>a>span>svg]:text-[var(--gray2)]
-                [&>li>a:hover>span>svg]:text-[var(--bg)]
-                `}>
+                <ul className={mainstyle.description_list}>
                 <li><a href='https://github.com/utfw/react_search_movie_2023' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                 <li><a href='https://utfw.github.io/react_search_movie_2023/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
                 </ul>
@@ -698,32 +589,7 @@ export default function Home() {
               )}
             </dl>
             {/* 목업 */}
-            <div className={`relative flex justify-end ${mainstyle.mockup}`}>
-                <div className={mainstyle.mockup_wrap}>
-                  <div className={mainstyle.mockup__pc}>
-                    <div className='video__wrap'>
-                      <video preload='auto' muted loop>
-                        <source src='videos/netflix/pc.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                  <div className={mainstyle.mockup__tablet}>
-                    <div>
-                      <video preload='auto' muted loop>
-                        <source src='videos/netflix/tablet.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                  <div className={mainstyle.mockup__mobile}>
-                    <div className='video__wrap'>
-                    <video preload='auto' muted loop>
-                        <source src='videos/netflix/mobile.mp4' type='video/mp4'/>
-                      </video>
-                    </div>
-                  </div>
-                </div>
-                  <Code />
-              </div>
+            <Mockup Index={4} />
             {/* //목업 */}
             </div>
           </section>
@@ -737,11 +603,6 @@ export default function Home() {
           </section>
           {/* //section8 */}
         </div>
-        {/* <div id='content9'>
-          <section>
-            <h2 className={`${mainstyle.title1} ${mainstyle.gray2}`}>Extra Page</h2>
-          </section>
-        </div> */}
         <div id='content10'>
         <section className={`relative`}>
         <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 8 && mainstyle.play}`} ref={finboxRef}>

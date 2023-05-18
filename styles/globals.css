@@ -67,6 +67,13 @@ video{
   background-position: 0% 50%;
   color: transparent;
 }
+.bg-input__text{
+  background: url(/portfolio_2023/images/font-bg.jpg) repeat;
+  background-position: 0% 50%;
+  color: transparent;
+  -webkit-background-clip: text;
+}
+
 @media screen and (max-width:1440px) {
   html{font-size: 1.1vw;}
   section{padding: 0 32px;}
