@@ -24,5 +24,5 @@
 3. 기업사이트 클론 [FESCARO](https://github.com/utfw/clone_fescaro)
 4. 기업사이트 클론 [삼성전기](https://github.com/utfw/clone_samsung)
 5. 기업사이트 클론 [CJ ONE](https://github.com/utfw/clone_CJONE)
-6. React App [KakaoTalk](https://github.com/utfw/react_chat_firebase_2023)
+6. React App [Talk](https://github.com/utfw/react_chat_firebase_2023)
 7. React App [Netflix](https://github.com/utfw/react_search_movie_2023)
