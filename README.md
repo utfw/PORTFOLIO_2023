@@ -1,6 +1,4 @@
- 
-
-## 개요
+# utfw's portfolio_2023
 
 이 README 파일은 Next.js로 제작된 포트폴리오에 대한 내용입니다. 포트폴리오는 반응형 페이지로 구성되어 있으며, 해상도 1920 * 1080에 최적화되어 있습니다. 페이지에는 Matter.js를 사용하여 구현된 물리 효과를 가진 사각형이 생성됩니다. 스크롤 이벤트를 통해 원스크롤 기능이 구현되었으며, 스크롤 위치에 따라 사각형 생성 이벤트가 변화합니다. 또한, 성능을 최적화하기 위해 화면 내에 보이는 윈도우 영역에서만 사각형이 생성되도록 설정되어 있습니다.
 
@@ -8,14 +6,14 @@
 
 웹 표준 검사 컴포넌트는 높이에 따라 사진의 주소 값이 변경되어 해당 섹션에 적합한 사진이 표시되도록 구현되었습니다.
 
-## 사용요소
+## 사용된 기술 스택
 
-1. [Next.js](http://nextjs.org)
-2. [Node.js](https://nodejs.org/ko)
-3. [React Redux](https://react-redux.js.org/)
-4. [Redux Toolkit](https://redux-toolkit.js.org/)
-5. [TypeScript](https://www.typescriptlang.org/)
-6. Matter.js
+- [Next.js](http://nextjs.org)
+- [Node.js](https://nodejs.org/ko)
+- [React Redux](https://react-redux.js.org/)
+- [Redux Toolkit](https://redux-toolkit.js.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- Matter.js
 
 ## 목차
 
@@ -24,5 +22,5 @@
 3. 기업사이트 클론 [FESCARO](https://github.com/utfw/clone_fescaro)
 4. 기업사이트 클론 [삼성전기](https://github.com/utfw/clone_samsung)
 5. 기업사이트 클론 [CJ ONE](https://github.com/utfw/clone_CJONE)
-6. React App [KakaoTalk](https://github.com/utfw/react_chat_firebase_2023)
+6. React App [Talk](https://github.com/utfw/react_chat_firebase_2023)
 7. React App [Netflix](https://github.com/utfw/react_search_movie_2023)
