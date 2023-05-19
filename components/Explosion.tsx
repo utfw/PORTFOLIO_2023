@@ -4,7 +4,7 @@ import { RootState, getSectionHeight } from '@/store/store';
 import Matter, { Bodies, Body, Engine, Render, World } from 'matter-js';
 
 interface ExplosionProps {
-  staticBoxRef: HTMLDivElement;
+  staticBoxRef: React.RefObject<HTMLDivElement>;
 }
 function Explosion({staticBoxRef}:ExplosionProps) {
   const dispatch = useDispatch();
@@ -82,17 +82,19 @@ function Explosion({staticBoxRef}:ExplosionProps) {
   },[]);
 
   useEffect(() =>{ // 리사이즈 관련
-    const divRect = staticBoxRef.current.getBoundingClientRect();
+    const divRect = staticBoxRef.current?.getBoundingClientRect();
+    let finbox:Matter.Body;
+    if(divRect){
     const x = divRect.left + (divRect.width*0.5)
     const y = (WindowHeight-((Height*0.5)-(divRect.width*4)));
-    const finbox = Bodies.rectangle(x, y, divRect.width, divRect.width,{
+    finbox = Bodies.rectangle(x, y, divRect.width, divRect.width,{
       isStatic:true,
       render:{
         fillStyle:'transparent'
       }
     });
-
     World.add(engine.current.world, finbox);
+    }
     
     engine.current.world.gravity.x = 0;
     engine.current.world.gravity.y = 0.003;
@@ -164,6 +166,7 @@ function Explosion({staticBoxRef}:ExplosionProps) {
             var x = box.bounds.min.x + smallboxWidth * i;
             for(var j=0; j<boxNum;j++){
               var y = box.bounds.min.y + smallboxHeight * j;
+              if(Index === 0){mass = -0.01-(Math.random() * 0.003);}
               var smallerBox = Bodies.rectangle(x, y, smallboxWidth, smallboxHeight,{
                 mass: mass,
                 restitution: 0.8,
