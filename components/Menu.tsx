@@ -41,14 +41,14 @@ function Menu() {
       { isIndexOn || docOpen ? (
         <div className={`${mainstyle.menu_box}`} onClick={()=>{dispatch(toggleIndex(false)); dispatch(openDoc(false))}}>
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 2L30 30M2 30L30 2" stroke="var(--gray2)" strokeWidth="4"/>
+            <path d="M2 2L30 30M2 30L30 2" stroke="var( --gray2)" strokeWidth="4"/>
           </svg>
         </div>
       ):(
         <>        
         <div className={`${mainstyle.menu_box}`} onClick={()=>dispatch(toggleIndex(true))}>
           <svg className={mainstyle.menu_icon} viewBox="0 0 42 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 28V23.3333H42V28H0ZM0 16.3333V11.6667H42V16.3333H0ZM0 4.66667V0H42V4.66667H0Z" fill="var(--gray2)"/>
+            <path d="M0 28V23.3333H42V28H0ZM0 16.3333V11.6667H42V16.3333H0ZM0 4.66667V0H42V4.66667H0Z" fill="var( --gray2)"/>
           </svg>
         </div>
         </>

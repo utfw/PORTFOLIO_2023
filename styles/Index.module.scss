@@ -5,6 +5,7 @@
   position: absolute;
   top: 0;
   left: -100%;
+  background: var(--bg-linear-gradient);
   transform-origin: 100% 50%;
   transform: rotateY(-90deg);
   transition: opacity 0.8s ease-in 0.2s;
@@ -109,10 +110,9 @@
   }
 
 }
-.index-on{
+.index_on{
   opacity: 1;
 }
-
 .img{
   position: absolute;
 }

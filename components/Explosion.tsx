@@ -1,136 +1,143 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import Matter, { Bodies, Body, Engine, Render, World } from 'matter-js';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, getSectionHeight } from '@/store/store';
+import Matter, { Bodies, Body, Engine, Render, World } from 'matter-js';
 
-function Explosion() {
+interface ExplosionProps {
+  staticBoxRef: HTMLDivElement;
+}
+function Explosion({staticBoxRef}:ExplosionProps) {
   const dispatch = useDispatch();
   const scene = useRef<HTMLDivElement>(null);
-  const engine = useRef(Engine.create());
-  const wall = useRef<Matter.Body[]>([]);
-  const Height = useSelector((state:RootState)=>state.sectionHeights.Height);
-  const SectionIndex = useSelector((state:RootState)=>state.scrollPosition.Scroll);
-  const isToggleIndex = useSelector((state:RootState)=>state.index.Index);
-  const isDocOpen = useSelector((state:RootState)=>state.openDoc.Index);
+  const engine = useRef(Matter.Engine.create());
   
-  const [cw, setCw] = useState<number>(document.documentElement.clientWidth);
-  const [ch, setCh] = useState<number>(document.documentElement.scrollHeight);
-  let render:Matter.Render;
+  const Height = useSelector((state:RootState)=>state.sectionHeights.Height);
+  const Index = useSelector((state:RootState)=>state.scrollPosition.Scroll);
+  
+  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [WindowHeight, setWindowHeight] = useState<number>(document.body.clientHeight);
+  const renderRef = useRef<Matter.Render | null>(null);
+
   let walls;
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
-  useLayoutEffect(() => {
-      setCw(document.body.clientWidth);
-      setCh(document.documentElement.scrollHeight);
+  let mass = -0.01-(Math.random() * 0.003);
+  let interval:NodeJS.Timer | undefined;
+
+  useLayoutEffect(() => { // 초기 높이값 설정
+    setWindowHeight(document.body.clientHeight);
   }, []);
 
-  useEffect(() =>{
-    let interval:NodeJS.Timer | undefined;
-    if(SectionIndex === 0){
-      engine.current.world.gravity.x = 0;
-      engine.current.world.gravity.y = 0.03;
-      interval = setInterval(handleAddBox, Math.floor(200+Math.random() * 501));
-    } else if(SectionIndex === 1){
-      engine.current.world.gravity.y = 0.003;
-      interval = setInterval(handleAddBox, Math.floor(800+Math.random() * 501));
-    } else if(SectionIndex >= 7){
-      engine.current.world.gravity.y = -0.01;
-      interval = setInterval(handleAddBox, Math.floor(800+Math.random() * 501));
-    }
-    if(interval) setIntervalId(interval);
-
-    intervalId;
-    return () =>{
-      clearInterval(interval);
-      setIntervalId(null);
-    }
-  },[SectionIndex])
-
-  useEffect(() => {
-    //mount
-    // 캔버스 생성
+  useEffect(()=>{ // layoutEffect 후 캔버스 생성
     if (scene.current) {
-      // 캔버스 생성
-      render = Render.create({
+      renderRef.current  = Render.create({
         element: scene.current,
         engine: engine.current,
         options: {
           wireframes: false,
           background: 'transparent',
-          width: document.documentElement.clientWidth,
-          height: document.documentElement.scrollHeight
+          width: windowWidth,
+          height: WindowHeight
         },
       });
     }
-    Render.run(render);
-        // 테두리 생성
+    
+    if(renderRef.current) Render.run(renderRef.current);
+
     walls = [
-      Bodies.rectangle(cw / 2, -10, cw, 20, {
+      Bodies.rectangle(windowWidth / 2, -10, windowWidth, 20, {
         isStatic: true,
         render: {
           fillStyle: 'transparent',
         },
       }),
-      Bodies.rectangle(cw / 2, ch+40, cw, 20, {
+      Bodies.rectangle(windowWidth / 2, WindowHeight-70, windowWidth, 20, {
         isStatic: true,
+        mass: 10,
         render: {
-          fillStyle: 'transparent',
+          fillStyle: 'trasparent',
         },
       }),
     ];
     World.add(engine.current.world, walls);
 
     Engine.run(engine.current);
-
     return () => {
-     
-      Render.stop(render);
+      if(renderRef.current){
+        Render.stop(renderRef.current);
+        renderRef.current.canvas.remove();
+        renderRef.current.textures = {};
+       }
       World.clear(engine.current.world, false);
       Engine.clear(engine.current);
-      render.canvas.remove();
-      render.textures = {};
     };
-  }, []); // /useEffect
+  },[WindowHeight]);
 
-  useEffect(()=>{
-    window.addEventListener('resize',()=>{
-      dispatch(getSectionHeight(window.innerHeight));
-      render.canvas.height = document.documentElement.scrollHeight;
-      render.canvas.width = document.body.clientWidth;
-    });
-
-    return window.removeEventListener('resieze',()=>{
-      render.canvas.height = document.documentElement.scrollHeight;
-      render.canvas.width = document.body.clientWidth;
-    })
+  const handleResize = useCallback(() => {
+    dispatch(getSectionHeight(window.innerHeight));
+    setWindowWidth(document.body.clientWidth);
+    setWindowHeight(document.body.clientHeight);
+    if (renderRef.current) {
+      renderRef.current.canvas.width = document.body.clientWidth;
+      renderRef.current.canvas.height = document.body.clientHeight;
+    }
   },[]);
 
-  const handleAddBox = () =>{
+  useEffect(() =>{ // 리사이즈 관련
+    const divRect = staticBoxRef.current.getBoundingClientRect();
+    const x = divRect.left + (divRect.width*0.5)
+    const y = (WindowHeight-((Height*0.5)-(divRect.width*4)));
+    const finbox = Bodies.rectangle(x, y, divRect.width, divRect.width,{
+      isStatic:true,
+      render:{
+        fillStyle:'transparent'
+      }
+    });
+
+    World.add(engine.current.world, finbox);
+    
+    engine.current.world.gravity.x = 0;
+    engine.current.world.gravity.y = 0.003;
+    
+    window.addEventListener('resize', handleResize);
+
+    return () =>{
+      World.remove(engine.current.world, finbox); 
+      window.removeEventListener('resize', handleResize);
+    }
+  },[Index, windowWidth, WindowHeight, handleResize]);
+
+  useEffect(()=>{ // 스크롤 시 캔버스 변화    
+    const handleAddBox = () =>{
       const boxSize = Math.floor(Math.random() * 20) + 8;
       const alpha = (Math.floor(Math.random() * 71) + 30)/100;
       const color = [`48, 207, 208`, `69, 220, 195`, `108, 231, 175`, `152, 240, 152`, `199, 246, 130`, `249, 248, 113`];
       const colorIndex = Math.floor(Math.random() * color.length);
-      const height = (Height*(SectionIndex))
-      const randomX = Math.floor(Math.random() * cw);
-      const randomY = (Math.floor((height)+(Math.random() * (Height*0.66))));
+      const height = (Height*(Index));
+      let randomY;
+      let randomX = Math.floor(Math.random() * windowWidth);
+      if(Index === 7){
+        const maxRange = height*1.2;
+        const minRange = height*1;
+        randomY = Math.floor(Math.random() * (maxRange - minRange + 1)) + minRange;
+      } else {
+        randomY = Math.floor((height)+(Math.random() * (Height*0.66)));
+      }
+
       const sizeIncreasePerFrame = 1.1; 
       const totalFrames = 18;
-          const box = Bodies.rectangle(
-            randomX,
-            randomY,
-            boxSize,
-            boxSize,
-            {
-              isStatic: true,
-              mass: 0.0,
-              restitution: 0.8,
-              friction: 1,
-              render: {
-                fillStyle: `rgba(${color[colorIndex]}, ${alpha})`,
-                strokeStyle: 'transparent',
-              },
-            }
-          );
-          World.add(engine.current.world, box);
+
+      const box = Bodies.rectangle(
+        randomX, randomY, boxSize, boxSize, {
+          isStatic: true,
+          mass: 0.0,
+          restitution: 0.8,
+          friction: 1,
+          render: {
+            fillStyle: `rgba(${color[colorIndex]}, ${alpha})`,
+            strokeStyle: 'transparent',
+          },
+        }
+      );
+      World.add(engine.current.world, box);
 
       let currentFrame = 0;
 
@@ -152,7 +159,7 @@ function Explosion() {
           var smallboxWidth = boxSize / boxNum;
           var smallboxHeight = boxSize / boxNum;
           const boxs:Matter.Body[] = [];
-          const mass = -0.01-(Math.random() * 0.003);
+
           for(var i=0; i<boxNum;i++){
             var x = box.bounds.min.x + smallboxWidth * i;
             for(var j=0; j<boxNum;j++){
@@ -179,9 +186,32 @@ function Explosion() {
         }
       }, 33);
     };
+    switch (Index) {
+      case 0:
+        engine.current.world.gravity.y = 0.03;
+        interval = setInterval(handleAddBox, Math.floor(800 + Math.random() * 501));
+        break;
+      case 1:
+        interval = setInterval(handleAddBox, Math.floor(1000 + Math.random() * 301));
+        break;
+      case 7:
+        engine.current.world.gravity.y = -0.01;
+        mass = 1;
+        interval = setInterval(handleAddBox, Math.floor(800 + Math.random() * 501));
+        break;
+      case 8:
+        mass = 2;
+        engine.current.world.gravity.y = 0.1;
+        interval = setInterval(handleAddBox, Math.floor(620 + Math.random() * 501));
+        break;
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  },[Index]);
 
   return (
-    <div className={`absolute w-full h-full`} style={{background:`var(--bg-linear-gradient)`}} onClick={handleAddBox}>
+    <div className={`absolute w-full h-full`} style={{background:`var(--bg-linear-gradient)`}}>
       <div ref={scene} className={`w-full h-full`}>
       </div>
     </div>

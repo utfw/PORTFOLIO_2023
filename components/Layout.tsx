@@ -14,9 +14,9 @@ function Layout({children}:LayoutProps) {
   return (
     <>
     {Height > 800 && <Menu />}
-    {index > 1 && index < 5 ? <Validation /> : ("")}
+    {/* {index > 1 && index < 5 ? <Validation /> : ("")} */}
     <div id='container' className={mainstyle.container}>
-      <div className={isIndexToggle? mainstyle[`index-open`]:""}>
+      <div className={`${isIndexToggle? mainstyle.index_open : ""} ${docOpen? mainstyle.doc_open : ""}`} >
         {children}
       </div>
     </div>

@@ -1,20 +1,25 @@
 .container{
   position: relative;
+
   >div{
     backface-visibility: hidden;
     position: relative;
     transform-style: preserve-3d;
-    transform-origin: 100% 100%;
-    transform: translateZ(0px) rotateY(0deg);
+    transform: rotateY(0deg);
     // border: 1px solid red;
-    transition: transform 0.5s linear;
+    transition: all 0.5s linear;
   }
-  .index-open{
-    transform: rotateY(90deg);
+  .index_open{
+    transform-origin: 100% 50%;
+    transform: rotateY(90deg)
+  }
+  .doc_open{
+    transform-origin: 0 50%;
+    transform: rotateY(-90deg);
   }
   .description_list{
     display: flex;
-    margin-top: 0.75rem;
+    margin-top: 1.25rem;
     &>li>a{
       display: flex;
       align-items: center;
@@ -69,6 +74,7 @@
   >span{
     background: url("../public/images/font-bg.jpg") repeat;
     background-position: 0% 50%;
+    background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
   }
@@ -85,6 +91,10 @@
   font-weight: 600;
   line-height: 168px;
   text-align: left;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: var(--gradient1)
 }
 
 .title_fin{
@@ -123,7 +133,7 @@
   font-weight: 400;
   line-height: 1.6;
   letter-spacing: -0.015em;
-  text-align: justify;  
+  text-align: justify;
 }
 .body2{
   font-size: 18px;
@@ -139,7 +149,7 @@
   position: fixed;
   right: 80px;
   top: 16px;
-  transform: translate3d(+250%,0,0);
+  transform: translate3d(250%,0,0);
   transition: transform 0.3s ease-in-out, opacity 0.5s linear 0.2s;
 }
 .menu_on{
@@ -226,7 +236,7 @@
 @media screen and (max-width: 1600px) {
   // layout
   .inner_left{
-    min-width: 48vw !important;
+    min-width: 500px !important;
   }
 }
 

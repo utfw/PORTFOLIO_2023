@@ -167,32 +167,34 @@ function Mockup({Index}:MockupProps) {
   }, []);
   
   return (
-    <div
-    className={`flex justify-end ${mockup.mockup}`}
-    onMouseEnter={(e) => {
-      e.currentTarget.classList.add(mockup.on);
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.classList.remove(mockup.on);
-    }}>
-      <div ref={videoRef} className={mockup.mockup_wrap}>
-        {videoSrc?.map((src, index) => (
-          videoError &&
-          videoError[index] ? null : (
-            <div key={index} className={`${mockup[`mockup__${index === 0 ? 'pc' : index === 1 ? 'tablet' : 'mobile'}`]} ${Index === 3 ? mockup.kakao : ''}`}>
-              <div>
-                <video preload="auto" muted loop onError={() => handleVideoError(index)}>
-                  <source src={src} type="video/mp4" />
-                </video>
+    <div className={`relative w-full h-full`}>
+      <div
+      className={`flex justify-end ${mockup.mockup}`}
+      onMouseEnter={(e) => {
+        e.currentTarget.classList.add(mockup.on);
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.classList.remove(mockup.on);
+      }}>
+        <div ref={videoRef} className={mockup.mockup_wrap}>
+          {videoSrc?.map((src, index) => (
+            videoError &&
+            videoError[index] ? null : (
+              <div key={index} className={`${mockup[`mockup__${index === 0 ? 'pc' : index === 1 ? 'tablet' : 'mobile'}`]} ${Index === 3 ? mockup.kakao : ''}`}>
+                <div>
+                  <video preload="auto" muted loop onError={() => handleVideoError(index)}>
+                    <source src={src} type="video/mp4" />
+                  </video>
+                </div>
               </div>
-            </div>
-          )
-        ))}
-      </div>
-      <div className={mockup.mockup__code}>
-        <pre id="text" ref={textbox} className="w-full h-full overflow-hidden">
-          <code></code>
-        </pre>
+            )
+          ))}
+        </div>
+        <div className={mockup.mockup__code}>
+          <pre id="text" ref={textbox} className="w-full h-full overflow-hidden">
+            <code></code>
+          </pre>
+        </div>
       </div>
     </div>
   )

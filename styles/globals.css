@@ -28,8 +28,11 @@ hr{display: none;}
   --bg-linear-gradient: linear-gradient(to right bottom, #ffffff, #fdfdfd, #fbfbfb, #f9f9f9, #f7f7f7, #f6f6f8, #f5f6fa, #f3f6fb, #eff8ff, #e9faff, #e4fdff, #e1fffa);
   --background-end-rgb: 255, 255, 255;
   --font-family: 'Montserrat', sans-serif, 'Noto Sans KR', sans-serif;
-  --gray1: #626262;
-  --gray2: #393939;
+  --gray1: #443421;
+  --gray2: #243949;
+  --weak: #75624E;
+  --primary:#6CE7AF;
+  --gradient1: linear-gradient(to right, #243949 0%, #517fa4 100%);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,6 +54,7 @@ main{
   position: relative;
 }
 #container{
+  overflow: hidden;
   height: auto;
 }
 section{

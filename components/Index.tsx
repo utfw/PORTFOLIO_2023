@@ -29,11 +29,7 @@ function Index() {
 
   return (
     <div
-      className={`z-[11] w-full h-screen px-20 pb-20 text-[var(--gray2)] ${indexstyle.index} ${
-        isIndexToggle ? indexstyle['index-on'] : ''
-      } `}
-      style={{ top: Index * height + 'px' }}
-    >
+      className={`z-[11] w-full h-screen px-20 pb-20 text-[var(--gray2)] ${indexstyle.index} ${isIndexToggle ? indexstyle.index_on : ''}`} style={{ top: Index * height + 'px' }}>
       <h2 className={`${mainstyle.title1} mb-10`}>INDEX</h2>
       <div>
         <ul className={`index`}>
