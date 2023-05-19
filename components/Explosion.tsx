@@ -69,7 +69,7 @@ function Explosion({staticBoxRef}:ExplosionProps) {
       World.clear(engine.current.world, false);
       Engine.clear(engine.current);
     };
-  },[WindowHeight]);
+  },[WindowHeight, windowWidth]);
 
   const handleResize = useCallback(() => {
     dispatch(getSectionHeight(window.innerHeight));

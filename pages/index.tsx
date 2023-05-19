@@ -58,15 +58,17 @@ export default function Home() {
   },[isLoad]);
 
   const handleWheel = useCallback((event: WheelEvent) => {
-
-    if (sectionHeight > 800 && !isIndexToggle && !docOpen) {
+    if(sectionHeight > 800){
       event.preventDefault();
-      if (event.deltaY > 0 && index < sectionsTop.length - 1) {
-        dispatch(updateIndex(index + 1));
-      } else if (event.deltaY < 0 && index > 0) {
-        dispatch(updateIndex(index - 1));
+      if (!isIndexToggle && !docOpen) {
+        if (event.deltaY > 0 && index < sectionsTop.length - 1) {
+          dispatch(updateIndex(index + 1));
+        } else if (event.deltaY < 0 && index > 0) {
+          dispatch(updateIndex(index - 1));
+        }
       }
     }
+
   }, [index, isIndexToggle, sectionHeight, sectionsTop, docOpen]);
   
   useEffect(() => {
