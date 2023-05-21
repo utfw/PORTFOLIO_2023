@@ -84,7 +84,6 @@ export default function Home() {
         videoPlay(sections, index);
       }
     } else if (sectionHeight <= 850) {
-      dispatch(updateIndex(0));
       sections?.forEach((section, i) => {
         section.classList.add("active");
       });
@@ -228,9 +227,11 @@ export default function Home() {
     };
   }, [spansRef.current, index, isLoad]);
 
-  const toggleDoc:React.MouseEventHandler = (e) => {
+  const toggleDoc = (e:React.MouseEvent,i:number) => {
     e.preventDefault();
     dispatch(openDoc(true));
+    dispatch(updateIndex(i));
+    console.log(index)
   }
   
   return (
@@ -423,7 +424,7 @@ export default function Home() {
                   <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/clone_fescaro' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                   <li><a href='https://utfw.github.io/clone_fescaro/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-                  <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
+                  <li><a href='#' onClick={(e)=>toggleDoc(e,2)}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
                   </ul>
                 </dd>
                 <dt className={`${mainstyle.title_sub2}`}><span>Languages</span></dt>

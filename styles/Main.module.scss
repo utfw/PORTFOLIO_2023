@@ -289,3 +289,11 @@
     }
   }
 }
+
+@media screen and (max-height:850px) {
+  .description_list{
+  li:nth-of-type(3){
+  display: none !important;
+  }
+}
+}

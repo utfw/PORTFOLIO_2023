@@ -167,7 +167,7 @@ function Mockup({Index}:MockupProps) {
   }, []);
   
   return (
-    <div className={`relative h-full`}>
+    <div className={`relative w-full h-full`}>
       <div
       className={`flex justify-end ${mockup.mockup}`}
       onMouseEnter={(e) => {
