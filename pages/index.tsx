@@ -9,7 +9,7 @@ import Index from '@/components/Index';
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, getSectionHeight, openDoc, updateIndex,  } from '@/store/store';
 import Shark from '@/components/Shark';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Explosion from '@/components/Explosion';
 import Loading from '@/components/Loading';
 import { notoSansKR, montserrat } from './_app';
@@ -228,7 +228,7 @@ export default function Home() {
     };
   }, [spansRef.current, index, isLoad]);
 
-  const toggleDoc = (e) => {
+  const toggleDoc:React.MouseEventHandler = (e) => {
     e.preventDefault();
     dispatch(openDoc(true));
   }
