@@ -39,7 +39,6 @@ export default function Home() {
 
   const staticBoxRef = useRef<HTMLDivElement>(null);
 
-
   useEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
     const sections = document.querySelectorAll("section");
     setSections(sections);
@@ -58,7 +57,8 @@ export default function Home() {
   },[isLoad]);
 
   const handleWheel = useCallback((event: WheelEvent) => {
-    if(sectionHeight > 800){
+    if(sectionHeight > 850 && document.body.clientWidth > 768){
+      console.log(document.body.clientWidth)
       event.preventDefault();
       if (!isIndexToggle && !docOpen) {
         if (event.deltaY > 0 && index < sectionsTop.length - 1) {
@@ -74,7 +74,7 @@ export default function Home() {
   useEffect(() => {
     window.addEventListener('wheel', handleWheel, { passive: false });
   
-    if (sectionHeight > 800 && !isIndexToggle && !docOpen) {
+    if (sectionHeight > 850 && !isIndexToggle && !docOpen) {
       window.scroll({
         top: sectionHeight * index,
         behavior: 'smooth'
@@ -83,7 +83,7 @@ export default function Home() {
         active(sections, index);
         videoPlay(sections, index);
       }
-    } else if (sectionHeight <= 800) {
+    } else if (sectionHeight <= 850) {
       dispatch(updateIndex(0));
       sections?.forEach((section, i) => {
         section.classList.add("active");
@@ -228,7 +228,7 @@ export default function Home() {
     };
   }, [spansRef.current, index, isLoad]);
 
-  const toggleDoc:React.MouseEventHandler<HTMLAnchorElement> = (e) => {
+  const toggleDoc = (e) => {
     e.preventDefault();
     dispatch(openDoc(true));
   }
@@ -247,7 +247,7 @@ export default function Home() {
       <>
       {!isIndexToggle && !docOpen ? <Explosion staticBoxRef={staticBoxRef}/> : ""}
         <main className={`w-full overflow-hidden ${montserrat.className}
-        ${sectionHeight > 800 && `[&>div>section]:h-screen`} [&>div>section]:overflow-hidden`} id='container'>
+        ${sectionHeight > 850 && `[&>div>section]:h-screen`} [&>div>section]:overflow-hidden`} id='container'>
         <div id='content1' className={`relative`}>
           <p className={`absolute top-5 left-5 ${mainstyle.title_sub3} text-[var(--gray1)]`}>2023 PORTFOLIO</p>
           {/* section1 */}
@@ -403,7 +403,7 @@ export default function Home() {
         <div id='content3'>
           {/* section3 */}
           <section className={`relative`}>
-            {/* <Particles></Particles> */}
+
             <h2 className={`${mainstyle.title1} mb-11`}>FESCARO</h2>
             <div className={`flex w-full pr-[144px] justify-between`}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
@@ -615,7 +615,7 @@ export default function Home() {
                   <li><Link href={'https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
                 </ul>
               </div>
-              <div ref={staticBoxRef} className={`w-11 h-11 mb-[5px] bg-[var(--gray2)] bg-input`}></div>
+              <div ref={staticBoxRef} className={`w-[40px] h-[40px] mb-[5px] bg-[var(--gray2)] bg-input`}></div>
             </div>
           </div>
         </section>

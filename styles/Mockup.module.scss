@@ -6,20 +6,19 @@
     >div{
       transform: scale(0.8);
       .mockup__pc{
-        transform: translateX(50%);
+        transform: translateX(30%);
       }
       .mockup__tablet{
-        transform: translateX(130%);
+        transform: translateX(106%);
       }
       .mockup__mobile{
-        transform: translateX(750%);
+        transform: translateX(720%);
         &.kakao{
           transform: translateX(30%);
         }
       }
     }
   }
-
   .mockup_wrap{
     position: relative;
     transition: transform 0.5s linear 0.3s;
@@ -147,5 +146,20 @@
   &.on .mockup__code{
     transform: rotateY(0);
     opacity: 1;
+  }
+}
+@media screen and (max-width:1024px) {
+  // layout
+  .mockup{
+    .kakao{
+      right: -120px !important;
+    }
+  }
+}
+
+@media screen and (max-width:768px) {
+  // layout
+  .mockup{
+    display: none;
   }
 }

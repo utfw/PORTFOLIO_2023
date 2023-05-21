@@ -13,7 +13,7 @@ function Layout({children}:LayoutProps) {
   const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
   return (
     <>
-    {Height > 800 && <Menu />}
+    {Height > 800 && document.body.clientWidth > 768 && <Menu />}
     {/* {index > 1 && index < 5 ? <Validation /> : ("")} */}
     <div id='container' className={mainstyle.container}>
       <div className={`${isIndexToggle? mainstyle.index_open : ""} ${docOpen? mainstyle.doc_open : ""}`} >
