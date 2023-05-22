@@ -18,9 +18,11 @@
 ## 목차
 
 1. 타이틀
-2. 자기소개
-3. 기업사이트 클론 [FESCARO](https://github.com/utfw/clone_fescaro)
-4. 기업사이트 클론 [삼성전기](https://github.com/utfw/clone_samsung)
-5. 기업사이트 클론 [CJ ONE](https://github.com/utfw/clone_CJONE)
-6. React App [Talk](https://github.com/utfw/react_chat_firebase_2023)
-7. React App [Netflix](https://github.com/utfw/react_search_movie_2023)
+2. 포트폴리오 정보
+3. 자기소개
+4. 기업사이트 클론 [FESCARO](https://github.com/utfw/clone_fescaro)
+5. 기업사이트 클론 [삼성전기](https://github.com/utfw/clone_samsung)
+6. 기업사이트 클론 [CJ ONE](https://github.com/utfw/clone_CJONE)
+7. React App [Talk](https://github.com/utfw/react_chat_firebase_2023)
+8. React App [Netflix](https://github.com/utfw/react_search_movie_2023)
+9. Pure CSS
