@@ -4,7 +4,8 @@
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	height: 100%;
+	height: 100vh !important;
+	margin-bottom: 0 !important;
 	background: #333;
 	.loader {
 		--size-square: 80px;	

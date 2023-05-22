@@ -101,7 +101,7 @@
         height: 545px;
         position: relative;
         top: auto;
-        right: -12vw;
+        left: -10vw;
         >div
         {
           background-size: cover;
@@ -159,6 +159,21 @@
 @media screen and (max-width:768px) {
   // layout
   .mockup{
-    display: none;
+    justify-content: center;
+  }
+  .mockup_wrap{
+    >div{
+      >div{ // video__wrap
+        >video{
+          // animation-play-state: running !important;
+        }
+      }
+    }
+  }
+
+  .kakao{
+    top: 0;
+    left: 0;
+    right: 0 !important;
   }
 }

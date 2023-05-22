@@ -1,15 +1,15 @@
 import Head from 'next/head';
-import mainstyle from '../styles/Main.module.scss'
+import mainstyle from '../styles/Main.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faGithub, faJsSquare, faReact, faHtml5, faCss3, faSass, faJava, faFigma } from '@fortawesome/free-brands-svg-icons';
 import { faPhone, faRocket, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
-import Index from '@/components/Index';
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, getSectionHeight, openDoc, updateIndex,  } from '@/store/store';
-import Shark from '@/components/Shark';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, getSectionHeight, openDoc, updateIndex } from '@/store/store';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import Index from '@/components/Index';
+import Shark from '@/components/Shark';
 import Explosion from '@/components/Explosion';
 import Loading from '@/components/Loading';
 import { notoSansKR, montserrat } from './_app';
@@ -82,6 +82,12 @@ export default function Home() {
       if (sections) {
         active(sections, index);
         videoPlay(sections, index);
+        // sections.forEach((section,i)=>{
+        //   const videos = section.querySelectorAll("video");
+        //   videos?.forEach((video) => {
+        //     video.play;
+        //   });
+        // })
       }
     } else if (sectionHeight <= 850) {
       sections?.forEach((section, i) => {
@@ -178,12 +184,10 @@ export default function Home() {
     Promise.all(promises)
       .then((videos) => {
         console.log('비디오 로드 완료', videos);
-        // 비디오가 모두 로드된 후 수행할 작업
         setIsVideoLoad(true);
       })
       .catch((err) => {
         console.error('비디오 로딩 중 에러가 발생했습니다.', err);
-        // 비디오 로딩 중 에러 발생 시 수행할 작업
       });
   }, []);
 
@@ -227,7 +231,7 @@ export default function Home() {
     };
   }, [spansRef.current, index, isLoad]);
 
-  const toggleDoc:React.MouseEventHandler = () => {
+  const toggleDoc:React.MouseEventHandler = (e) => {
     e.preventDefault();
     dispatch(openDoc(true));
   }
@@ -262,15 +266,15 @@ export default function Home() {
         <div id='content2'>
           {/* section2 */}
           <section className={`flex flex-col pb-20`} style={{boxSizing:`border-box`}}>
-            <h2 className={`${mainstyle.title1}`}>HELLO</h2>
+            <h2 className={`${mainstyle.title1}`}>```한 최환입니다.</h2>
             <div className={`${mainstyle.section__inner}`} style={{flex:`1`}}>
               <div className={mainstyle.left}>
                 <div>
-                  <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>AI와 UX/UI 분야에 관심이 있으며, 심리학을 전공하여 논리적 사고 능력과 조사 연구 기술을 배웠습니다. 이러한 역량을 활용하여 지속적으로 개발자로 성장하고자 합니다.</span></p>
+                  <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>#AI #UX/UI #심리학 #논리적 사고 #사용자 조사 #실험</span></p>
                   <ul className={`my-10 ${mainstyle.body} [&>li]:mb-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8 [&>li>svg]:h-8 [&>li>svg]:mr-2.5 [&>li>svg]:text-[var(--gray1)]`} style={{color:`var(--gray1)`}}>
                   <li className={`${mainstyle.body2}`} ><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon><span>+82 10.4415.9901</span></li>
                   <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon><Link href={'mailto:hwan.c.0330@gmail.com'} className={`${mainstyle.body2}`}>hwan.c.0330@gmail.com</Link></li>
-                  <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon><span className={`${mainstyle.body2}`}><a href='https://github.com/utfw'>github : https://github.com/utfw</a></span></li>
+                  <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon><span className={`${mainstyle.body2}`}><a href='https://github.com/utfw' target='blink'>github : https://github.com/utfw</a></span></li>
                   </ul>
                 </div>
                 <dl className={`pt-10 h-full`} style={{color:`var(--gray1)`}}>
@@ -403,7 +407,7 @@ export default function Home() {
           {/* section3 */}
           <section className={`relative`}>
             <h2 className={`${mainstyle.title1} mb-11`}>FESCARO</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
                 <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
                 <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형으로 제작한 기업 사이트입니다.<br />
@@ -438,7 +442,7 @@ export default function Home() {
           {/* section4 */}
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>삼성전기</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
             <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left} pr-[8vw]`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
               <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 콘텐츠 접근성 지침과 웹 표준을 준수하여 삼성전기 기업 웹 사이트를 제작하였습니다.</span></dd>
@@ -470,7 +474,7 @@ export default function Home() {
           {/* section5 */}
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>CJ ONE</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
                 <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
                 <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다.</span></dd>
@@ -503,11 +507,11 @@ export default function Home() {
           {/* section6 */}
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>REACT TALK APP</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}
               >
                 <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-                <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>React로 제작한 메신저 앱입니다.<br />google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</span></dd>
+                <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>React로 제작한 메신저 SPA(Single Page App)입니다.<br />google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Description</dt>
                 <dd>
                   <ul className={`${mainstyle.body1} ${notoSansKR.className}
@@ -527,12 +531,12 @@ export default function Home() {
                 {sectionHeight <= 1060 ? (
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript / React / Firebase / Axios</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript / React / Firebase / Axios</span></dd>
                 </>
               ):(
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
                 <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / Firebase / Axios</span></dd>
                 </>
@@ -549,7 +553,7 @@ export default function Home() {
           {/* section7 */}
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>REACT NETFLIX APP</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
             <dl className={`text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
             [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}>
@@ -574,12 +578,12 @@ export default function Home() {
               {sectionHeight <= 1060 ? (
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript / React / TMDB / Firebase / Axios / styled-components</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript / React / TMDB / Firebase / Axios / styled-components</span></dd>
                 </>
               ):(
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
                 <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / TMDB / Firebase / Axios / styled-components</span></dd>
                 </>
@@ -601,8 +605,18 @@ export default function Home() {
           {/* //section8 */}
         </div>
         <div id='content10'>
+          <section>
+            <div className={`${mainstyle.portfolio_page} ${notoSansKR.className} animate_text`}>
+              <p>해당 포트폴리오는 <span>React</span>, <span>Next.js</span>, <span>Node.js</span>, <span>TypeScript</span>, <span>React Redux</span> 기반으로 제작되었습니다.</p>
+              <p>이 포트폴리오는 <span>1920 * 1080</span> 해상도에 최적화된 반응형 페이지로 제작되었습니다.</p>
+              <p>가로 768px 이하 또는 세로 850px 이하의 해상도에서는 일부 효과와 구성 요소가 적용되지 않을 수 있습니다.</p>
+              <p>또한, 해당 포트폴리오에 포함된 모든 내용은 <span>개인 작업물</span>입니다.</p>
+            </div>
+          </section>
+        </div>
+        <div id='content10'>
         <section className={`relative`}>
-        <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 8 && mainstyle.play}`} ref={finboxRef}>
+        <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 9 && mainstyle.play}`} ref={finboxRef}>
             <p className={`w-full text-justify ${mainstyle.title_fin} leading-none`}>THANKS</p>
             <p className={`text-[62px] text-justify tracking-[.013em]`}>FOR WATCHING</p>
             <div className='flex justify-between flex-row-reverse items-end mt-[81px]'>

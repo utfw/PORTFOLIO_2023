@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, getSectionHeight } from '@/store/store';
 import Matter, { Bodies, Body, Engine, Render, World } from 'matter-js';
+import mainstyle from '../styles/Main.module.scss'
 
 interface ExplosionProps {
   staticBoxRef: React.RefObject<HTMLDivElement>;
@@ -202,13 +203,17 @@ function Explosion({staticBoxRef}:ExplosionProps) {
       case 7:
         engine.current.world.gravity.y = -0.01;
         mass = 1;
-        interval = setInterval(handleAddBox, Math.floor(800 + Math.random() * 501));
+        interval = setInterval(handleAddBox, Math.floor(800 + Math.random() * 401));
         break;
       case 8:
         mass = 2;
         engine.current.world.gravity.y = 0.1;
         interval = setInterval(handleAddBox, Math.floor(620 + Math.random() * 501));
         break;
+      case 9:
+        mass = 2;
+        engine.current.world.gravity.y = 0.1;
+        interval = setInterval(handleAddBox, Math.floor(620 + Math.random() * 501));
     }
     return () => {
       clearInterval(interval);
@@ -217,7 +222,7 @@ function Explosion({staticBoxRef}:ExplosionProps) {
 
   return (
     <div className={`absolute w-full h-full`} style={{background:`var(--bg-linear-gradient)`}}>
-      <div ref={scene} className={`w-full h-full`}>
+      <div ref={scene} className={`w-full h-full ${mainstyle.explosion}`}>
       </div>
     </div>
   )
