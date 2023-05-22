@@ -15,6 +15,7 @@ import Loading from '@/components/Loading';
 import { notoSansKR, montserrat } from './_app';
 import Mockup from '@/components/Mockup';
 import Validation from '@/components/Validation';
+import Emoji from '@/components/Emoji';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -37,7 +38,8 @@ export default function Home() {
   const [isVideoLoad, setIsVideoLoad] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
 
-  const staticBoxRef = useRef<HTMLDivElement>(null);
+  const staticBoxRef1 = useRef<HTMLDivElement>(null);
+  const staticBoxRef2 = useRef<HTMLDivElement>(null);
 
   useEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
     const sections = document.querySelectorAll("section");
@@ -56,23 +58,28 @@ export default function Home() {
     }
   },[isLoad]);
 
-  const handleWheel = useCallback((event: WheelEvent) => {
-    if(sectionHeight > 850 && document.body.clientWidth > 768){
-      console.log(document.body.clientWidth)
-      event.preventDefault();
-      if (!isIndexToggle && !docOpen) {
-        if (event.deltaY > 0 && index < sectionsTop.length - 1) {
-          dispatch(updateIndex(index + 1));
-        } else if (event.deltaY < 0 && index > 0) {
-          dispatch(updateIndex(index - 1));
+  const handleWheel = useCallback(
+    debounce((event: WheelEvent) => {
+      if (sectionHeight > 850 && document.body.clientWidth > 768) {
+        event.preventDefault();
+        if (!isIndexToggle && !docOpen) {
+          if (event.deltaY > 0 && index < sectionsTop.length - 1) {
+            dispatch(updateIndex(index + 1));
+          } else if (event.deltaY < 0 && index > 0) {
+            dispatch(updateIndex(index - 1));
+          }
         }
       }
-    }
-
-  }, [index, isIndexToggle, sectionHeight, sectionsTop, docOpen]);
+    }, 100),
+    [sectionHeight, isIndexToggle, docOpen, index, sectionsTop, dispatch]
+  );
   
   useEffect(() => {
-    window.addEventListener('wheel', handleWheel, { passive: false });
+    const handleWindowWheel = (event:MouseEvent) => {
+      event.preventDefault();
+      handleWheel(event);
+    };
+    window.addEventListener('wheel', handleWindowWheel, { passive: false });
   
     if (sectionHeight > 850 && !isIndexToggle && !docOpen) {
       window.scroll({
@@ -82,12 +89,6 @@ export default function Home() {
       if (sections) {
         active(sections, index);
         videoPlay(sections, index);
-        // sections.forEach((section,i)=>{
-        //   const videos = section.querySelectorAll("video");
-        //   videos?.forEach((video) => {
-        //     video.play;
-        //   });
-        // })
       }
     } else if (sectionHeight <= 850) {
       sections?.forEach((section, i) => {
@@ -96,7 +97,7 @@ export default function Home() {
     }
   
     return () => {
-      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('wheel', handleWindowWheel);
     };
   }, [index, isIndexToggle, sectionHeight, sections, docOpen]);
   
@@ -236,6 +237,19 @@ export default function Home() {
     dispatch(openDoc(true));
   }
   
+  function debounce(func: Function, delay: number) {
+    let timerId: NodeJS.Timeout|null;
+    return function (...args: any[]) {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      timerId = setTimeout(() => {
+        func(...args);
+        timerId = null;
+      }, delay);
+    };
+  }
+
   return (
     <>
     <Head>
@@ -248,25 +262,40 @@ export default function Home() {
       <Loading />
     ):(
       <>
-      {!isIndexToggle && !docOpen ? <Explosion staticBoxRef={staticBoxRef}/> : ""}
+      {!isIndexToggle && !docOpen ? <Explosion staticBoxRef1={staticBoxRef1} staticBoxRef2={staticBoxRef2} /> : ""}
         <main className={`w-full overflow-hidden ${montserrat.className}
         ${sectionHeight > 850 && `[&>div>section]:h-screen`} [&>div>section]:overflow-hidden`} id='container'>
+        {/* content1 */}
         <div id='content1' className={`relative`}>
           <p className={`absolute top-5 left-5 ${mainstyle.title_sub3} text-[var(--gray1)]`}>2023 PORTFOLIO</p>
-          {/* section1 */}
           <section className={`flex w-full justify-center items-center`}>
             <div className={`block`}>
               <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`} ref={titleRef}>
-                <span className={`${mainstyle.name}`}>HWAN</span>&nbsp;<span>-</span>&nbsp;<span>D</span><span>e</span><span>v</span><span >e</span><span>l</span><span>o</span><span>p</span><span>e</span><span>r</span></h1>
-              <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)]`}>Having Interest about User experience with Logical thinking and Research techniques</p>
+                <span className={`${mainstyle.name}`}>FRONT</span><span>-</span><span>END</span>&nbsp;<span>D</span><span>e</span><span>v</span><span >e</span><span>l</span><span>o</span><span>p</span><span>e</span><span>r</span></h1>
+              <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)] pl-1.5`}>Having Interest about User experience with Logical thinking and Research techniques</p>
             </div>
           </section>
-          {/* //section1 */}
         </div>
+        {/* //content1 */}
+        {/* content2 */}
         <div id='content2'>
-          {/* section2 */}
+          <section>
+            <div className={`${mainstyle.portfolio_page} ${notoSansKR.className} relative`}>
+              <ul className='animate_text'>
+                <li>해당 포트폴리오는 <span>React</span>, <span>Next.js</span>, <span>Node.js</span>, <span>TypeScript</span>, <span>React Redux</span> 기반으로 제작되었습니다.</li>
+                <li>이 포트폴리오는 <span>1920 * 1080</span> 해상도에 최적화된 반응형 페이지로 제작되었습니다.</li>
+                <li>가로 768px 이하 또는 세로 850px 이하의 해상도에서는 일부 효과와 구성 요소가 적용되지 않을 수 있습니다.</li>
+                <li>포트폴리오에 포함된 모든 내용은 <span>개인 작업물</span>입니다.</li>
+              </ul>
+            <div ref={staticBoxRef1} className={`${mainstyle.box}`}></div>
+            </div>
+          </section>
+        </div>
+        {/* //content2 */}
+        {/* content3 */}
+        <div id='content3'>
           <section className={`flex flex-col pb-20`} style={{boxSizing:`border-box`}}>
-            <h2 className={`${mainstyle.title1}`}>```한 최환입니다.</h2>
+            <h2 className={`${mainstyle.title1} mb-2.5`}>프론트엔드 개발자, 최환입니다.</h2>
             <div className={`${mainstyle.section__inner}`} style={{flex:`1`}}>
               <div className={mainstyle.left}>
                 <div>
@@ -401,10 +430,10 @@ export default function Home() {
               </div>
             </div>
           </section>
-          {/* //section2 */}
         </div>
-        <div id='content3'>
-          {/* section3 */}
+        {/* //content3 */}
+        {/* content4 */}
+        <div id='content4'>
           <section className={`relative`}>
             <h2 className={`${mainstyle.title1} mb-11`}>FESCARO</h2>
             <div className={mainstyle.section_wrap}>
@@ -436,10 +465,10 @@ export default function Home() {
               {/* //목업 */}
             </div>
           </section>
-          {/* //section3 */}
         </div>
-        <div id='content4'>
-          {/* section4 */}
+        {/* //content4 */}
+        {/* content5 */}
+        <div id='content5'>
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>삼성전기</h2>
             <div className={mainstyle.section_wrap}>
@@ -468,9 +497,10 @@ export default function Home() {
             {/* //목업 */}
             </div>
           </section>
-          {/* //section4 */}
         </div>
-        <div id='content5'>
+        {/* //content5 */}
+        {/* content6 */}
+        <div id='content6'>
           {/* section5 */}
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>CJ ONE</h2>
@@ -503,8 +533,9 @@ export default function Home() {
           </section>
           {/* //section5 */}
         </div>
-        <div id='content6'>
-          {/* section6 */}
+        {/* //content6 */}
+        {/* content7 */}
+        <div id='content7'>
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>REACT TALK APP</h2>
             <div className={mainstyle.section_wrap}>
@@ -547,10 +578,10 @@ export default function Home() {
               {/* //목업 */}
             </div>
           </section>
-          {/* //section6 */}
         </div>
-        <div id='content7'>
-          {/* section7 */}
+        {/* //content7 */}
+        {/* content8 */}
+        <div id='content8'>
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>REACT NETFLIX APP</h2>
             <div className={mainstyle.section_wrap}>
@@ -594,44 +625,45 @@ export default function Home() {
             {/* //목업 */}
             </div>
           </section>
-          {/* //section7 */}
         </div>
-        <div id='content8'>
-          {/* section8 */}
+        {/* //content8 */}
+        {/* content9 */}
+        <div id='content9'>
           <section className={`relative`}>
             <h2 className={`${mainstyle.title1}`}>PURE CSS</h2>
               <Shark></Shark>
           </section>
-          {/* //section8 */}
         </div>
+        
+        {/* //content9 */}
+        {/* content10 */}
         <div id='content10'>
-          <section>
-            <div className={`${mainstyle.portfolio_page} ${notoSansKR.className} animate_text`}>
-              <p>해당 포트폴리오는 <span>React</span>, <span>Next.js</span>, <span>Node.js</span>, <span>TypeScript</span>, <span>React Redux</span> 기반으로 제작되었습니다.</p>
-              <p>이 포트폴리오는 <span>1920 * 1080</span> 해상도에 최적화된 반응형 페이지로 제작되었습니다.</p>
-              <p>가로 768px 이하 또는 세로 850px 이하의 해상도에서는 일부 효과와 구성 요소가 적용되지 않을 수 있습니다.</p>
-              <p>또한, 해당 포트폴리오에 포함된 모든 내용은 <span>개인 작업물</span>입니다.</p>
+          <section className={`relative`}>
+            <h2 className={`${mainstyle.title1}`}>PURE CSS</h2>
+              <Emoji></Emoji>
+          </section>
+        </div>
+        {/* //content10 */}
+        {/* content11 */}
+        <div id='content11'>
+          <section className={`relative`}>
+          <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 10 && mainstyle.play}`} ref={finboxRef}>
+              <p className={`w-full text-justify ${mainstyle.title_fin} leading-none`}>THANKS</p>
+              <p className={`text-[62px] text-justify tracking-[.013em]`}>FOR WATCHING</p>
+              <div className='flex justify-between flex-row-reverse items-end mt-[81px]'>
+                <div className={`text-[var(--gray2)] text-right`}>
+                  <ul className={`[&>li]:mb-5 [&>li:last-child]:mb-0`}>
+                    <li>+82 10.4415.9901</li>
+                    <li><Link href={'mailto:hwan.c.0330@gmail.com'}>hwan.c.0330@gmail.com</Link></li>
+                    <li><Link href={'https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
+                  </ul>
+                </div>
+                <div ref={staticBoxRef2} className={`w-[40px] h-[40px] mb-[5px] bg-[var(--gray2)] bg-input`}></div>
+              </div>
             </div>
           </section>
         </div>
-        <div id='content10'>
-        <section className={`relative`}>
-        <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 9 && mainstyle.play}`} ref={finboxRef}>
-            <p className={`w-full text-justify ${mainstyle.title_fin} leading-none`}>THANKS</p>
-            <p className={`text-[62px] text-justify tracking-[.013em]`}>FOR WATCHING</p>
-            <div className='flex justify-between flex-row-reverse items-end mt-[81px]'>
-              <div className={`text-[var(--gray2)] text-right`}>
-                <ul className={`[&>li]:mb-5 [&>li:last-child]:mb-0`}>
-                  <li>+82 10.4415.9901</li>
-                  <li><Link href={'mailto:hwan.c.0330@gmail.com'}>hwan.c.0330@gmail.com</Link></li>
-                  <li><Link href={'https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
-                </ul>
-              </div>
-              <div ref={staticBoxRef} className={`w-[40px] h-[40px] mb-[5px] bg-[var(--gray2)] bg-input`}></div>
-            </div>
-          </div>
-        </section>
-        </div>
+        {/* //content11 */}
         </main>
       </>
     )}

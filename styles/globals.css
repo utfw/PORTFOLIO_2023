@@ -86,14 +86,14 @@ video{
 .active{
   opacity: 1;
 }
-.active .animate_text>span, .active .animate_text>p{
+.active .animate_text>span, .active .animate_text>li{
   animation-play-state: running !important;
 }
 
 @media screen and (max-width:768px) {
   html{font-size: 2vw;}
   section{height: auto !important;padding: 0 32px;margin-bottom: 160px;}
-  .animate_text>span, .animate_text>p{
+  .animate_text>span, .animate_text>li{
   animation-play-state: running !important;
   }
 }

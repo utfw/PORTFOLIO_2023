@@ -93,7 +93,7 @@
 .title1{
   // font-family: Montserrat;
   margin-top: 40px;
-  font-size: 120px;
+  font-size: 90px;
   font-weight: 600;
   line-height: 168px;
   text-align: left;
@@ -221,16 +221,17 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
   width: 100%;
   height: 100%;
-  >p{
-    display: inline-block;
+  max-height: 100vh;
+  >ul>li{
     opacity: 0;
+    display: block;
+    width: 100%;
     font-size: 16px;
     line-height: 2;
     color: var(--gray1);
-    text-align: center;
+    text-align: left;
     transform: translatey(100%);
     animation: up_text 0.5s ease-in-out forwards;
     animation-play-state: paused;
@@ -239,6 +240,13 @@
       background-clip: text;
       -webkit-background-clip: text;
     }
+
+  }
+  .box{
+    width: 130px;
+    height: 130px;
+    margin-left: 80px;
+    background: var(--gradient1);
   }
 }
 
@@ -279,8 +287,11 @@
   }
   
   //font 
+  .h1{
+    letter-spacing: -0.2rem;
+  }
+  
   .title1{
-    font-size: 7.2rem;
     line-height: 150px;
     padding-top: 20px;
   }
@@ -292,6 +303,17 @@
   
   .body1{
     font-size: 1.6rem;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .h1{
+    font-size: 7.2rem;
+  }
+
+  .title1{
+    font-size: 80px;
+    line-height: 1.5;
   }
 }
 
@@ -310,14 +332,8 @@
       margin-top: 2.5rem;
     }
   }
-
-  //font
-  .h1{
-    font-size: 6.8rem;
-  }
-  .title1{
-    line-height: 1;
-    margin-bottom: 40px;
+  .menu{
+    display: none;
   }
   .section_wrap{
     flex-direction: column;
@@ -328,10 +344,18 @@
     display: none !important;
     }
   }
+  //font
+  .h1{
+    font-size: 6.8rem;
+  }
+  .title1{
+    line-height: 1.2;
+    margin-bottom: 40px;
+  }
+
 }
 
 @media screen and (max-height:850px) {
-
   .description_list{
     li:nth-of-type(3){
     display: none !important;

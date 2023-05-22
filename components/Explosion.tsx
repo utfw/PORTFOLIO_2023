@@ -5,10 +5,11 @@ import Matter, { Bodies, Body, Engine, Render, World } from 'matter-js';
 import mainstyle from '../styles/Main.module.scss'
 
 interface ExplosionProps {
-  staticBoxRef: React.RefObject<HTMLDivElement>;
+  staticBoxRef1: React.RefObject<HTMLDivElement>;
+  staticBoxRef2: React.RefObject<HTMLDivElement>;
 }
 
-function Explosion({staticBoxRef}:ExplosionProps) {
+function Explosion({staticBoxRef1, staticBoxRef2}: ExplosionProps) {
   const dispatch = useDispatch();
   const scene = useRef<HTMLDivElement>(null);
   const engine = useRef(Matter.Engine.create());
@@ -87,24 +88,45 @@ function Explosion({staticBoxRef}:ExplosionProps) {
     engine.current.world.gravity.x = 0;
     engine.current.world.gravity.y = 0.003;
 
-    const divRect = staticBoxRef.current?.getBoundingClientRect();
-    let finbox:Matter.Body;
-    if(divRect){
-    const x = divRect.left + (divRect.width*0.5)
-    const y = (WindowHeight-((Height*0.5)-(40*4.5)));
-    finbox = Bodies.rectangle(x, y, divRect.width, divRect.width,{
-      isStatic:true,
-      render:{
-        fillStyle:'transparent'
+    const divRect1 = staticBoxRef1.current?.getBoundingClientRect();
+    const divRect2 = staticBoxRef2.current?.getBoundingClientRect();
+
+    let finbox1:Matter.Body;
+    let finbox2:Matter.Body;
+
+      if(divRect1){
+        const x = divRect1.left + (divRect1.width*0.5)
+        const y = Height*1.5;
+        finbox1 = Bodies.rectangle(x, y, divRect1.width, divRect1.width,{
+          isStatic:true,
+          render:{
+            fillStyle:'transparent'
+          }
+        });
+        World.add(engine.current.world, finbox1);
       }
-    });
-    World.add(engine.current.world, finbox);
-    }
-    
+
+      if(divRect2){
+        const x = divRect2.left + (divRect2.width*0.5)
+        const y = Height*9.5+(divRect2.width*4.5);
+        finbox2 = Bodies.rectangle(x, y, divRect2.width, divRect2.width,{
+          isStatic:true,
+          render:{
+            fillStyle:'transparent'
+          }
+        });
+        World.add(engine.current.world, finbox2);
+      }
+
     window.addEventListener('resize', handleResize);
 
     return () =>{
-      World.remove(engine.current.world, finbox); 
+      if (finbox1) {
+        World.remove(engine.current.world, finbox1);
+      }
+      if (finbox2) {
+        World.remove(engine.current.world, finbox2);
+      }
       window.removeEventListener('resize', handleResize);
     }
   },[Index, windowWidth, WindowHeight, handleResize]);
@@ -200,20 +222,21 @@ function Explosion({staticBoxRef}:ExplosionProps) {
       case 1:
         interval = setInterval(handleAddBox, Math.floor(1000 + Math.random() * 301));
         break;
-      case 7:
+      case 8:
         engine.current.world.gravity.y = -0.01;
         mass = 1;
-        interval = setInterval(handleAddBox, Math.floor(800 + Math.random() * 401));
+        interval = setInterval(handleAddBox, Math.floor(600 + Math.random() * 501));
         break;
-      case 8:
+        case 9:
+        engine.current.world.gravity.y = -0.01;
+        mass = 1;
+        interval = setInterval(handleAddBox, Math.floor(600 + Math.random() * 501));
+        break;
+      case 10:
         mass = 2;
         engine.current.world.gravity.y = 0.1;
-        interval = setInterval(handleAddBox, Math.floor(620 + Math.random() * 501));
+        interval = setInterval(handleAddBox, Math.floor(450 + Math.random() * 501));
         break;
-      case 9:
-        mass = 2;
-        engine.current.world.gravity.y = 0.1;
-        interval = setInterval(handleAddBox, Math.floor(620 + Math.random() * 501));
     }
     return () => {
       clearInterval(interval);

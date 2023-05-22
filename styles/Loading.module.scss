@@ -28,6 +28,7 @@
 	.text{
 		margin-top: 16px;
 		color: #fff;
+		word-break: break-all;
 		animation: blink 1s linear infinite alternate;
 	}
 }

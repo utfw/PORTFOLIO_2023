@@ -49,7 +49,7 @@ function Validation() {
 
   return (
     <div ref={section} className={`${validationstyle.validation_wrap} ${docOpen && validationstyle.on}`} style={{ top: Index * height + 'px' }}>
-      {Index > 1 && Index < project_names.length+2 ? (
+      {Index > 2 && Index < project_names.length+3 ? (
         <>
         <h2 className={`${mainstyle.title1}`}>Validation</h2>
         <div className={validationstyle.img_wrap} ref={img_wrap}>
@@ -57,7 +57,7 @@ function Validation() {
             <div className={`${validationstyle.img} ${index === zoom && validationstyle.on}`} key={index} style={{zIndex:3-index}}>
               <div className={validationstyle.img_box}>
                 <h3 className={`${mainstyle.title_sub2} text-[var(--gray2)}`}>{name}</h3>
-                <Image width={455} height={0} src={`images/${project_names[Index-2]}/${name}-validation.png`} alt={`${name}-validation.png`} onWheel={handleWheel} onMouseLeave={WheelInit}></Image>
+                <Image width={455} height={0} src={`images/${project_names[Index-3]}/${name}-validation.png`} alt={`${name}-validation.png`} onWheel={handleWheel} onMouseLeave={WheelInit}></Image>
               </div>
             </div>
             ))
