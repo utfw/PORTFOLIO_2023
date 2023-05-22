@@ -47,7 +47,7 @@ body {
   color: rgb(var(--foreground-rgb));
   background: (var(--bg));
   font-family: (var(--font-family));
-  min-width: 780px;
+  min-width: 768px;
   height: max-content;
 }
 main{
@@ -59,6 +59,8 @@ main{
 }
 section{
   padding: 0 80px;
+  height: 100vh;
+  min-height: 850px;
 }
 
 video{
@@ -90,8 +92,11 @@ video{
   animation-play-state: running !important;
 }
 
-@media screen and (max-width:780px) {
-  html{font-size: 1.5vw;}
-  section{padding: 0 32px;}
+@media screen and (max-width:768px) {
+  html{font-size: 2vw;}
+  section{padding: 0 32px;height: auto !important;}
+  .animate_text>span{
+  animation-play-state: running !important;
+  }
 }
 

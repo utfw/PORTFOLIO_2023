@@ -6,20 +6,19 @@
     >div{
       transform: scale(0.8);
       .mockup__pc{
-        transform: translateX(50%);
+        transform: translateX(30%);
       }
       .mockup__tablet{
-        transform: translateX(130%);
+        transform: translateX(106%);
       }
       .mockup__mobile{
-        transform: translateX(750%);
+        transform: translateX(720%);
         &.kakao{
-          transform: translateX(30%);
+          transform: translateX(80%);
         }
       }
     }
   }
-
   .mockup_wrap{
     position: relative;
     transition: transform 0.5s linear 0.3s;
@@ -102,7 +101,7 @@
         height: 545px;
         position: relative;
         top: auto;
-        right: 8vw;
+        right: -12vw;
         >div
         {
           background-size: cover;
@@ -119,13 +118,12 @@
   }
   .mockup__code{
     opacity: 0;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 440px;
     height: 350px;
     padding: 1.25rem 2rem;
-    margin-right: 200px;
     background: #333;
     box-sizing: border-box;
     transform: rotateY(-90deg) translateZ(-1000px);
@@ -147,5 +145,20 @@
   &.on .mockup__code{
     transform: rotateY(0);
     opacity: 1;
+  }
+}
+@media screen and (max-width:1024px) {
+  // layout
+  .mockup{
+    .kakao{
+      right: -120px !important;
+    }
+  }
+}
+
+@media screen and (max-width:768px) {
+  // layout
+  .mockup{
+    display: none;
   }
 }

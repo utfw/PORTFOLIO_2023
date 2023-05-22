@@ -6,6 +6,7 @@ import Matter, { Bodies, Body, Engine, Render, World } from 'matter-js';
 interface ExplosionProps {
   staticBoxRef: React.RefObject<HTMLDivElement>;
 }
+
 function Explosion({staticBoxRef}:ExplosionProps) {
   const dispatch = useDispatch();
   const scene = useRef<HTMLDivElement>(null);
@@ -82,11 +83,14 @@ function Explosion({staticBoxRef}:ExplosionProps) {
   },[]);
 
   useEffect(() =>{ // 리사이즈 관련
+    engine.current.world.gravity.x = 0;
+    engine.current.world.gravity.y = 0.003;
+
     const divRect = staticBoxRef.current?.getBoundingClientRect();
     let finbox:Matter.Body;
     if(divRect){
     const x = divRect.left + (divRect.width*0.5)
-    const y = (WindowHeight-((Height*0.5)-(divRect.width*4)));
+    const y = (WindowHeight-((Height*0.5)-(40*4.5)));
     finbox = Bodies.rectangle(x, y, divRect.width, divRect.width,{
       isStatic:true,
       render:{
@@ -95,9 +99,6 @@ function Explosion({staticBoxRef}:ExplosionProps) {
     });
     World.add(engine.current.world, finbox);
     }
-    
-    engine.current.world.gravity.x = 0;
-    engine.current.world.gravity.y = 0.003;
     
     window.addEventListener('resize', handleResize);
 
@@ -116,6 +117,10 @@ function Explosion({staticBoxRef}:ExplosionProps) {
       const height = (Height*(Index));
       let randomY;
       let randomX = Math.floor(Math.random() * windowWidth);
+
+      const sizeIncreasePerFrame = 1.1; 
+      const totalFrames = 18;
+
       if(Index === 7){
         const maxRange = height*1.2;
         const minRange = height*1;
@@ -123,9 +128,6 @@ function Explosion({staticBoxRef}:ExplosionProps) {
       } else {
         randomY = Math.floor((height)+(Math.random() * (Height*0.66)));
       }
-
-      const sizeIncreasePerFrame = 1.1; 
-      const totalFrames = 18;
 
       const box = Bodies.rectangle(
         randomX, randomY, boxSize, boxSize, {

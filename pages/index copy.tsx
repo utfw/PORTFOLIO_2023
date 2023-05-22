@@ -227,7 +227,7 @@ export default function Home() {
     };
   }, [spansRef.current, index, isLoad]);
 
-  const toggleDoc:React.MouseEventHandler = () => {
+  const toggleDoc = (e:React.MouseEvent,i:number) => {
     e.preventDefault();
     dispatch(openDoc(true));
   }
@@ -421,7 +421,7 @@ export default function Home() {
                   <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/clone_fescaro' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                   <li><a href='https://utfw.github.io/clone_fescaro/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-                  <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
+                  <li><a href='#' onClick={(e)=>toggleDoc(e,2)}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
                   </ul>
                 </dd>
                 <dt className={`${mainstyle.title_sub2}`}><span>Languages</span></dt>
@@ -512,7 +512,7 @@ export default function Home() {
                 <dd>
                   <ul className={`${mainstyle.body1} ${notoSansKR.className}
                   `}>
-                  <li className={`${mainstyle.title} animate_text `}><span>1. Firebase 인증서비스로 사용자 관리</span></li>
+                  <li className={`${mainstyle.title} animate_text `}><span>1. Firebase 인증 서비스로 사용자 관리</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>2. Firebase Database로 채팅 내역 송수신</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>3. 사용자 정보를 문서로 Database에 저장</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>4. Storage로 이미지 파일 업로드</span></li>
