@@ -115,6 +115,7 @@ function Mockup({Index}:MockupProps) {
   const strings = string.map((text) => text.split(""));
   
   const videoRef = useRef<HTMLDivElement>(null);
+  
   useEffect(() => {
     if (videoRef.current) {
       const videos = videoRef.current.querySelectorAll('video'); 
@@ -130,7 +131,7 @@ function Mockup({Index}:MockupProps) {
         `videos/${names[Index]}/tablet.mp4`,
         `videos/${names[Index]}/mobile.mp4`,
       ])
-  }, []);
+  }, [Index]);
 
   const handleVideoError = (index: number) => {
     setVideoError((prevError: boolean[]) => {
@@ -176,7 +177,7 @@ function Mockup({Index}:MockupProps) {
       onMouseLeave={(e) => {
         e.currentTarget.classList.remove(mockup.on);
       }}>
-        <div ref={videoRef} className={mockup.mockup_wrap}>
+        <div ref={videoRef} className={`${mockup.mockup_wrap} mock_up`}>
           {videoSrc?.map((src, index) => (
             videoError &&
             videoError[index] ? null : (
@@ -185,6 +186,7 @@ function Mockup({Index}:MockupProps) {
                   <video preload="auto" muted loop onError={() => handleVideoError(index)}>
                     <source src={src} type="video/mp4" />
                   </video>
+                  <img></img>
                 </div>
               </div>
             )

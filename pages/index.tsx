@@ -6,7 +6,7 @@ import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faGithub, faJsSquare, faReact, faHtml5, faCss3, faSass, faJava, faFigma } from '@fortawesome/free-brands-svg-icons';
 import { faPhone, faRocket, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, getSectionHeight, openDoc, updateIndex } from '@/store/store';
+import { RootState, getSectionHeight, openDoc, setWidth, updateIndex } from '@/store/store';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import Index from '@/components/Index';
 import Shark from '@/components/Shark';
@@ -19,15 +19,19 @@ import Emoji from '@/components/Emoji';
 
 export default function Home() {
   const dispatch = useDispatch();
+  
+  const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
   const isIndexToggle = useSelector((state:RootState) => state.index.Index);
+
+  const Width = useSelector((state:RootState) => state.windowWidth.Height);
+  const sectionHeight = useSelector((state:RootState)=>state.sectionHeights.Height);
   const index = useSelector((state:RootState)=> state.scrollPosition.Scroll);
+  
   const [sections, setSections] = useState<NodeListOf<HTMLElement>>();
   const [sectionsTop, setSectionsTop] = useState<number[]>([]);
 
   const animationDelayed = 300;
-  const sectionHeight = useSelector((state:RootState)=>state.sectionHeights.Height);
   
-  const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
 
   const titleRef = useRef<HTMLHeadingElement>(null);
   const spansRef = useRef<NodeListOf<HTMLElement> | null>(null);
@@ -47,7 +51,9 @@ export default function Home() {
 
     let heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
+
     dispatch(getSectionHeight(window.innerHeight));
+    dispatch(setWidth(window.innerWidth));
     const texts = Array.from(document.querySelectorAll(".animate_text"));
     // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
     for(let el of texts){
@@ -60,7 +66,6 @@ export default function Home() {
 
   const handleWheel = useCallback(
     debounce((event: WheelEvent) => {
-      if (sectionHeight > 850 && document.body.clientWidth > 768) {
         event.preventDefault();
         if (!isIndexToggle && !docOpen) {
           if (event.deltaY > 0 && index < sectionsTop.length - 1) {
@@ -69,19 +74,21 @@ export default function Home() {
             dispatch(updateIndex(index - 1));
           }
         }
-      }
     }, 100),
-    [sectionHeight, isIndexToggle, docOpen, index, sectionsTop, dispatch]
+    [sectionHeight, isIndexToggle, docOpen, index, sectionsTop, Width]
   );
   
   useEffect(() => {
     const handleWindowWheel = (event:MouseEvent) => {
-      event.preventDefault();
-      handleWheel(event);
+      if (sectionHeight > 850 && Width > 768) {
+        event.preventDefault();
+        handleWheel(event);
+      }
     };
+    
     window.addEventListener('wheel', handleWindowWheel, { passive: false });
   
-    if (sectionHeight > 850 && !isIndexToggle && !docOpen) {
+    if (Width > 768 && !isIndexToggle && !docOpen) {
       window.scroll({
         top: sectionHeight * index,
         behavior: 'smooth'
@@ -94,18 +101,28 @@ export default function Home() {
       sections?.forEach((section, i) => {
         section.classList.add("active");
       });
-
+    } else{
+      sections?.forEach((section) =>{
+        const videos = section.querySelectorAll(`video`);
+        section.classList.add(`active`);
+        videos?.forEach((video, index) =>{
+          video.currentTime = 0;
+          if (index === 0) video.play();
+          else video.pause();
+        });
+      })
     }
   
     return () => {
       window.removeEventListener('wheel', handleWindowWheel);
     };
-  }, [index, isIndexToggle, sectionHeight, sections, docOpen]);
+  }, [index, isIndexToggle, sectionHeight, sections, docOpen, Width]);
   
   const videoPlay = useCallback((section: NodeListOf<HTMLElement>, i: number) => {
     section.forEach((section) =>{
       const videos = section.querySelectorAll("video");
       videos?.forEach((video) => {
+        video.currentTime = 0;
         video.pause();
       });
     })
@@ -128,6 +145,8 @@ export default function Home() {
     const heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
     dispatch(getSectionHeight(window.innerHeight));
+    // dispatch(updateIndex(0));
+    dispatch(setWidth(window.innerWidth));
   }, []);
   
   useEffect(()=>{
