@@ -108,7 +108,7 @@ function Explosion({staticBoxRef1, staticBoxRef2}: ExplosionProps) {
 
       if(divRect2){
         const x = divRect2.left + (divRect2.width*0.5)
-        const y = Height*9.5+(divRect2.width*4.5);
+        const y = Height*10.5+(divRect2.width*4.5);
         finbox2 = Bodies.rectangle(x, y, divRect2.width, divRect2.width,{
           isStatic:true,
           render:{
