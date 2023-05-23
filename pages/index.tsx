@@ -94,6 +94,7 @@ export default function Home() {
       sections?.forEach((section, i) => {
         section.classList.add("active");
       });
+
     }
   
     return () => {
@@ -299,7 +300,7 @@ export default function Home() {
             <div className={`${mainstyle.section__inner}`} style={{flex:`1`}}>
               <div className={mainstyle.left}>
                 <div>
-                  <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>#AI #UX/UI #심리학 #논리적 사고 #사용자 조사 #실험</span></p>
+                  <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>#AI #UX/UI #심리학 #논리적 사고 #사용자 조사</span></p>
                   <ul className={`my-10 ${mainstyle.body} [&>li]:mb-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8 [&>li>svg]:h-8 [&>li>svg]:mr-2.5 [&>li>svg]:text-[var(--gray1)]`} style={{color:`var(--gray1)`}}>
                   <li className={`${mainstyle.body2}`} ><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon><span>+82 10.4415.9901</span></li>
                   <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon><Link href={'mailto:hwan.c.0330@gmail.com'} className={`${mainstyle.body2}`}>hwan.c.0330@gmail.com</Link></li>
@@ -308,7 +309,7 @@ export default function Home() {
                 </div>
                 <dl className={`pt-10 h-full`} style={{color:`var(--gray1)`}}>
                 <dt className={`${mainstyle.title_sub2} pb-6`} style={{color:`var(--gray2)`}}>PROGRAMMING LANGUAGES</dt>
-                <dd className={`flex ${mainstyle.body}`}>
+                <dd className={`flex`}>
                   <ul className={`flex mr-10 [&>li]:mb-10 [&>li]:mr-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8 [&>li>svg]:h-8 [&>li>svg]:mr-2 [&>li>svg]:text-[var(--gray1)]`}>
                   <li><FontAwesomeIcon icon={faJsSquare} /><span>JavaScript</span></li>
                   <li><FontAwesomeIcon icon={faReact} /><span>React</span></li>
@@ -375,7 +376,7 @@ export default function Home() {
                 </dl>
               </div>
               <div className={`w-[2px] mx-10 mt-4`} style={{ background:`var(--gray2)`, flex:`1`, maxWidth:`2px`}}></div>
-              <div className='right flex flex-col justify-between [&>dl]:mb-5'>
+              <div className={`${mainstyle.right} flex flex-col justify-between [&>dl]:mb-5`}>
                 <dl className={`[&>dt]:text-[var(--gray2)]`}>
                 <dt className={`${mainstyle.title_sub2}`}>EDUCATION</dt>
                 <dd>
@@ -472,7 +473,7 @@ export default function Home() {
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>삼성전기</h2>
             <div className={mainstyle.section_wrap}>
-            <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left} pr-[8vw]`}>
+            <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left} pr-[2vw]`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
               <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 콘텐츠 접근성 지침과 웹 표준을 준수하여 삼성전기 기업 웹 사이트를 제작하였습니다.</span></dd>
               <dt className={`${mainstyle.title_sub2}`}>Description</dt>
@@ -507,7 +508,7 @@ export default function Home() {
             <div className={mainstyle.section_wrap}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
                 <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-                <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다.</span></dd>
+                <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>기존 사이트에 미디어쿼리를 사용하여 반응형 웹으로 제작하였습니다.</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Description</dt>
                 <dd>
                   <ul className={`${mainstyle.body1} ${notoSansKR.className}
@@ -515,7 +516,8 @@ export default function Home() {
                   <li className={`${mainstyle.title} animate_text`}><span>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>2. HTML / CSS w3c 검사 통과</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
-                  <li className={`${mainstyle.title} animate_text `}><span>4. 반응형 페이지 제작</span></li>
+                  <li className={`${mainstyle.title} animate_text `}><span>4. 반응형 페이지 제작 메뉴</span></li>
+                  <li className={`${mainstyle.title} animate_text `}><span>5. sprite animation 적용</span></li>
                   </ul>
                   <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>

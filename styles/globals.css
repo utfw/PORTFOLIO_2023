@@ -90,6 +90,10 @@ video{
   animation-play-state: running !important;
 }
 
+@media screen and (max-width: 1024px) {
+  html{font-size: 1.6vw;}
+}
+
 @media screen and (max-width:768px) {
   html{font-size: 2vw;}
   section{height: auto !important;padding: 0 32px;margin-bottom: 160px;}

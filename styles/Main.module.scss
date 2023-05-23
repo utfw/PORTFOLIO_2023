@@ -140,6 +140,7 @@
   line-height: 1.6;
   letter-spacing: -0.015em;
   text-align: justify;
+  word-break: break-all;
 }
 .body2{
   font-size: 18px;
@@ -193,7 +194,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 880px;
+  // width: 880px;
 }
 
 /* font transition */
@@ -307,13 +308,57 @@
 }
 
 @media screen and (max-width: 1024px) {
+  // layout
+  .portfolio_page{
+    .box{
+      width: 80px;
+      height: 80px;
+      margin-left: 40px;
+    }
+  }
+  
+  .left{
+    width: 46%;
+    dt:last-of-type{
+      margin-top: 40px;
+    }
+    dd>ul{
+      flex-wrap: wrap;
+      margin-right: 0;
+      &>li{
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .right{
+    height: 100%;
+    justify-content: start;
+    dl:last-child{
+      dd>ul{
+        display: flex;
+        li>span:first-of-type{
+          padding-right: 10px;
+        }
+        li>span:last-of-type{
+          display: none;
+        }
+      }  
+    }
+  }
+
+  // font
   .h1{
     font-size: 7.2rem;
   }
-
+  .title_sub{
+    font-size: 2rem;
+  }
   .title1{
     font-size: 80px;
     line-height: 1.5;
+  }
+  .body1{
+    font-size: 1.375rem;
   }
 }
 
@@ -322,6 +367,18 @@
   .explosion{
     display: none;
   }
+  .portfolio_page{
+    position: relative;
+    align-items: end;
+    ul{
+      text-align: justify;
+      word-break: break-all;
+    }
+    .box{
+     display: none;
+    }
+  }
+
   .section__inner{
     display: flex;
     flex-direction: column;
@@ -331,6 +388,20 @@
     >div:nth-of-type(2){
       margin-top: 2.5rem;
     }
+    .right{
+      dl:last-child{
+        dd>ul{
+          display: flex;
+          flex-direction: column;
+          li>span:first-of-type{
+            padding-right: 0;
+          }
+          li>span:last-of-type{
+            display: block;
+          }
+        }  
+      }
+    }
   }
   .menu{
     display: none;
@@ -338,6 +409,17 @@
   .section_wrap{
     flex-direction: column;
     padding-right: 0 !important;
+    dl:first-of-type{
+      dt{
+        padding-top: 40px;
+        &:first-of-type{
+          padding-top: 0;
+        }
+      }
+      dd:last-of-type{
+        margin-bottom: 0;
+      }
+    }
   }
   .description_list{  
     li:nth-of-type(3){

@@ -10,7 +10,7 @@ export const montserrat = Montserrat({
   subsets: ['latin'],
   weight:["100","300","400","500","700","900"], 
 });
-export const notoSansKR = Noto_Sans_KR({ // 다운이 정상적으로 안됨.
+export const notoSansKR = Noto_Sans_KR({ 
   weight:["100","300","400","500","700","900"],
   preload:false, 
 })

@@ -151,7 +151,7 @@
   // layout
   .mockup{
     .kakao{
-      right: -120px !important;
+      left: 2vw !important;
     }
   }
 }
@@ -160,20 +160,11 @@
   // layout
   .mockup{
     justify-content: center;
-  }
-  .mockup_wrap{
-    >div{
-      >div{ // video__wrap
-        >video{
-          // animation-play-state: running !important;
-        }
-      }
+    .kakao{
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
     }
   }
 
-  .kakao{
-    top: 0;
-    left: 0;
-    right: 0 !important;
-  }
 }

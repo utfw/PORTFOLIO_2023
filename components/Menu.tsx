@@ -1,9 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import mainstyle from '../styles/Main.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleIndex, RootState, openDoc } from '@/store/store';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 function Menu() {
   const dispatch = useDispatch();

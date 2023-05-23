@@ -4,6 +4,8 @@ import mainstyle from '../styles/Main.module.scss';
 import validationstyle from '../styles/Validation.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState} from '@/store/store';
+import { Roboto } from 'next/font/google';
+import { montserrat } from '@/pages/_app';
 
 function Validation() {
   const project_names = ["fescaro","samsung","cjone"]
