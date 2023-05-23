@@ -1,6 +1,5 @@
 .container{
   position: relative;
-
   >div{
     backface-visibility: hidden;
     position: relative;
@@ -17,6 +16,14 @@
     transform-origin: 0 50%;
     transform: rotateY(-90deg);
   }
+  .section_wrap{
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+
+  }
+
   .description_list{
     display: flex;
     margin-top: 1.25rem;
@@ -44,7 +51,6 @@
           height: 2rem;
           margin-right: 0.125rem;
           color: var(--gray2);
-
         }
       }
     }
@@ -87,7 +93,7 @@
 .title1{
   // font-family: Montserrat;
   margin-top: 40px;
-  font-size: 120px;
+  font-size: 90px;
   font-weight: 600;
   line-height: 168px;
   text-align: left;
@@ -134,6 +140,7 @@
   line-height: 1.6;
   letter-spacing: -0.015em;
   text-align: justify;
+  word-break: break-all;
 }
 .body2{
   font-size: 18px;
@@ -207,6 +214,42 @@
   100%{transform: translateY(0);opacity: 1;}
 }
 
+.explosion{
+
+}
+
+.portfolio_page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  >ul>li{
+    opacity: 0;
+    display: block;
+    width: 100%;
+    font-size: 16px;
+    line-height: 2;
+    color: var(--gray1);
+    text-align: left;
+    transform: translatey(100%);
+    animation: up_text 0.5s ease-in-out forwards;
+    animation-play-state: paused;
+    span{
+      background: var(--gradient1);
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+  }
+  .box{
+    width: 130px;
+    height: 130px;
+    margin-left: 80px;
+    background: var(--gradient1);
+  }
+}
 
 .finbox{
   transform-origin: center center;
@@ -245,8 +288,11 @@
   }
   
   //font 
+  .h1{
+    letter-spacing: -0.2rem;
+  }
+  
   .title1{
-    font-size: 7.2rem;
     line-height: 150px;
     padding-top: 20px;
   }
@@ -261,8 +307,78 @@
   }
 }
 
+@media screen and (max-width: 1024px) {
+  // layout
+  .portfolio_page{
+    .box{
+      width: 80px;
+      height: 80px;
+      margin-left: 40px;
+    }
+  }
+  
+  .left{
+    width: 46%;
+    dt:last-of-type{
+      margin-top: 40px;
+    }
+    dd>ul{
+      flex-wrap: wrap;
+      margin-right: 0;
+      &>li{
+        margin-bottom: 10px;
+      }
+    }
+  }
+  .right{
+    height: 100%;
+    justify-content: start;
+    dl:last-child{
+      dd>ul{
+        display: flex;
+        li>span:first-of-type{
+          padding-right: 10px;
+        }
+        li>span:last-of-type{
+          display: none;
+        }
+      }  
+    }
+  }
+
+  // font
+  .h1{
+    font-size: 7.2rem;
+  }
+  .title_sub{
+    font-size: 2rem;
+  }
+  .title1{
+    font-size: 80px;
+    line-height: 1.5;
+  }
+  .body1{
+    font-size: 1.375rem;
+  }
+}
+
 @media screen and (max-width:768px) {
   // layout
+  .explosion{
+    display: none;
+  }
+  .portfolio_page{
+    position: relative;
+    align-items: end;
+    ul{
+      text-align: justify;
+      word-break: break-all;
+    }
+    .box{
+     display: none;
+    }
+  }
+
   .section__inner{
     display: flex;
     flex-direction: column;
@@ -272,28 +388,59 @@
     >div:nth-of-type(2){
       margin-top: 2.5rem;
     }
+    .right{
+      dl:last-child{
+        dd>ul{
+          display: flex;
+          flex-direction: column;
+          li>span:first-of-type{
+            padding-right: 0;
+          }
+          li>span:last-of-type{
+            display: block;
+          }
+        }  
+      }
+    }
   }
-
+  .menu{
+    display: none;
+  }
+  .section_wrap{
+    flex-direction: column;
+    padding-right: 0 !important;
+    dl:first-of-type{
+      dt{
+        padding-top: 40px;
+        &:first-of-type{
+          padding-top: 0;
+        }
+      }
+      dd:last-of-type{
+        margin-bottom: 0;
+      }
+    }
+  }
+  .description_list{  
+    li:nth-of-type(3){
+    display: none !important;
+    }
+  }
   //font
   .h1{
     font-size: 6.8rem;
   }
   .title1{
-    line-height: 1;
+    line-height: 1.2;
     margin-bottom: 40px;
   }
-  .description_list{
-    
-    li:nth-of-type(3){
-    display: none !important;
-    }
-  }
+
 }
 
 @media screen and (max-height:850px) {
   .description_list{
-  li:nth-of-type(3){
-  display: none !important;
+    li:nth-of-type(3){
+    display: none !important;
+    }
   }
-}
 }

@@ -3,7 +3,6 @@ import Menu from './Menu';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import mainstyle from '../styles/Main.module.scss'
-import Validation from './Validation';
 type LayoutProps = {children:React.ReactNode};
 
 function Layout({children}:LayoutProps) {
@@ -13,7 +12,7 @@ function Layout({children}:LayoutProps) {
   const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
   return (
     <>
-    {Height > 800 && document.body.clientWidth > 768 && <Menu />}
+    {Height > 850 && <Menu />}
     <div id='container' className={mainstyle.container}>
       <div className={`${isIndexToggle? mainstyle.index_open : ""} ${docOpen? mainstyle.doc_open : ""}`} >
         {children}

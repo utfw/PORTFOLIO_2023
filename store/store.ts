@@ -15,6 +15,16 @@ const initialState:State ={
   Content:["fescaro","samsung","cjone","kakao","netflix"]
 }
 
+const widthSlice = createSlice({
+  name:'width',
+  initialState,
+  reducers:{
+    setWidth:(state, action:PayloadAction<number>)=>{
+      state.Height = action.payload;
+    }
+  }
+})
+
 const indexSlice = createSlice({
   name:'index',
   initialState,
@@ -71,14 +81,15 @@ const rootReducer = combineReducers({
   scrollPosition: scrollPositionSlice.reducer,
   sectionHeights: sectionHeightSlice.reducer,
   openDoc: validationSlice.reducer,
-  content: contentSlice.reducer 
+  content: contentSlice.reducer,
+  windowWidth: widthSlice.reducer
 });
 
 export const {toggleIndex} = indexSlice.actions;
 export const {updateIndex} = scrollPositionSlice.actions;
 export const {getSectionHeight} = sectionHeightSlice.actions;
 export const {openDoc} = validationSlice.actions;
-
+export const {setWidth} = widthSlice.actions;
 
 export const store = configureStore({
   reducer:rootReducer

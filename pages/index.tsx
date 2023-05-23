@@ -1,32 +1,37 @@
 import Head from 'next/head';
-import mainstyle from '../styles/Main.module.scss'
+import mainstyle from '../styles/Main.module.scss';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { faGithub, faJsSquare, faReact, faHtml5, faCss3, faSass, faJava, faFigma } from '@fortawesome/free-brands-svg-icons';
 import { faPhone, faRocket, faClipboardCheck } from '@fortawesome/free-solid-svg-icons';
-import Index from '@/components/Index';
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, getSectionHeight, openDoc, updateIndex,  } from '@/store/store';
-import Shark from '@/components/Shark';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, getSectionHeight, openDoc, setWidth, updateIndex } from '@/store/store';
 import React, { useEffect, useState, useCallback, useRef } from 'react';
+import Index from '@/components/Index';
+import Shark from '@/components/Shark';
 import Explosion from '@/components/Explosion';
 import Loading from '@/components/Loading';
 import { notoSansKR, montserrat } from './_app';
 import Mockup from '@/components/Mockup';
 import Validation from '@/components/Validation';
+import Emoji from '@/components/Emoji';
 
 export default function Home() {
   const dispatch = useDispatch();
+  
+  const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
   const isIndexToggle = useSelector((state:RootState) => state.index.Index);
+
+  const Width = useSelector((state:RootState) => state.windowWidth.Height);
+  const sectionHeight = useSelector((state:RootState)=>state.sectionHeights.Height);
   const index = useSelector((state:RootState)=> state.scrollPosition.Scroll);
+  
   const [sections, setSections] = useState<NodeListOf<HTMLElement>>();
   const [sectionsTop, setSectionsTop] = useState<number[]>([]);
 
   const animationDelayed = 300;
-  const sectionHeight = useSelector((state:RootState)=>state.sectionHeights.Height);
   
-  const docOpen = useSelector((state:RootState)=> state.openDoc.Index);
 
   const titleRef = useRef<HTMLHeadingElement>(null);
   const spansRef = useRef<NodeListOf<HTMLElement> | null>(null);
@@ -37,7 +42,8 @@ export default function Home() {
   const [isVideoLoad, setIsVideoLoad] = useState(false);
   const [isLoad, setIsLoad] = useState(false);
 
-  const staticBoxRef = useRef<HTMLDivElement>(null);
+  const staticBoxRef1 = useRef<HTMLDivElement>(null);
+  const staticBoxRef2 = useRef<HTMLDivElement>(null);
 
   useEffect(()=>{ //초기화 + 정보읽기 => 로딩이 필요함
     const sections = document.querySelectorAll("section");
@@ -45,7 +51,9 @@ export default function Home() {
 
     let heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
+
     dispatch(getSectionHeight(window.innerHeight));
+    dispatch(setWidth(window.innerWidth));
     const texts = Array.from(document.querySelectorAll(".animate_text"));
     // 부모요소에 ${mainstyle.title} animate_text클래스를 넣으면 자식 span에 적용
     for(let el of texts){
@@ -56,25 +64,31 @@ export default function Home() {
     }
   },[isLoad]);
 
-  const handleWheel = useCallback((event: WheelEvent) => {
-    if(sectionHeight > 850 && document.body.clientWidth > 768){
-      console.log(document.body.clientWidth)
-      event.preventDefault();
-      if (!isIndexToggle && !docOpen) {
-        if (event.deltaY > 0 && index < sectionsTop.length - 1) {
-          dispatch(updateIndex(index + 1));
-        } else if (event.deltaY < 0 && index > 0) {
-          dispatch(updateIndex(index - 1));
+  const handleWheel = useCallback(
+    debounce((event: WheelEvent) => {
+        event.preventDefault();
+        if (!isIndexToggle && !docOpen) {
+          if (event.deltaY > 0 && index < sectionsTop.length - 1) {
+            dispatch(updateIndex(index + 1));
+          } else if (event.deltaY < 0 && index > 0) {
+            dispatch(updateIndex(index - 1));
+          }
         }
-      }
-    }
-
-  }, [index, isIndexToggle, sectionHeight, sectionsTop, docOpen]);
+    }, 100),
+    [sectionHeight, isIndexToggle, docOpen, index, sectionsTop, Width]
+  );
   
   useEffect(() => {
-    window.addEventListener('wheel', handleWheel, { passive: false });
+    const handleWindowWheel = (event:MouseEvent) => {
+      if (sectionHeight > 850 && Width > 768) {
+        event.preventDefault();
+        handleWheel(event);
+      }
+    };
+    
+    window.addEventListener('wheel', handleWindowWheel, { passive: false });
   
-    if (sectionHeight > 850 && !isIndexToggle && !docOpen) {
+    if (sectionHeight > 850 && Width > 768 && !isIndexToggle && !docOpen) {
       window.scroll({
         top: sectionHeight * index,
         behavior: 'smooth'
@@ -83,21 +97,28 @@ export default function Home() {
         active(sections, index);
         videoPlay(sections, index);
       }
-    } else if (sectionHeight <= 850) {
-      sections?.forEach((section, i) => {
-        section.classList.add("active");
-      });
+    } else{
+      sections?.forEach((section) =>{
+        const videos = section.querySelectorAll(`video`);
+        section.classList.add(`active`);
+        videos?.forEach((video, index) =>{
+          video.currentTime = 0;
+          if (index === 0) video.play();
+          else video.pause();
+        });
+      })
     }
   
     return () => {
-      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('wheel', handleWindowWheel);
     };
-  }, [index, isIndexToggle, sectionHeight, sections, docOpen]);
+  }, [index, isIndexToggle, sectionHeight, sections, docOpen, Width]);
   
   const videoPlay = useCallback((section: NodeListOf<HTMLElement>, i: number) => {
     section.forEach((section) =>{
       const videos = section.querySelectorAll("video");
       videos?.forEach((video) => {
+        video.currentTime = 0;
         video.pause();
       });
     })
@@ -120,6 +141,8 @@ export default function Home() {
     const heights = Array.from(sections).map((section) => section.offsetTop);
     setSectionsTop(heights);
     dispatch(getSectionHeight(window.innerHeight));
+    // dispatch(updateIndex(0));
+    dispatch(setWidth(window.innerWidth));
   }, []);
   
   useEffect(()=>{
@@ -178,12 +201,10 @@ export default function Home() {
     Promise.all(promises)
       .then((videos) => {
         console.log('비디오 로드 완료', videos);
-        // 비디오가 모두 로드된 후 수행할 작업
         setIsVideoLoad(true);
       })
       .catch((err) => {
         console.error('비디오 로딩 중 에러가 발생했습니다.', err);
-        // 비디오 로딩 중 에러 발생 시 수행할 작업
       });
   }, []);
 
@@ -227,13 +248,24 @@ export default function Home() {
     };
   }, [spansRef.current, index, isLoad]);
 
-  const toggleDoc = (e:React.MouseEvent,i:number) => {
+  const toggleDoc:React.MouseEventHandler = (e) => {
     e.preventDefault();
     dispatch(openDoc(true));
-    dispatch(updateIndex(i));
-    console.log(index)
   }
   
+  function debounce(func: Function, delay: number) {
+    let timerId: NodeJS.Timeout|null;
+    return function (...args: any[]) {
+      if (timerId) {
+        clearTimeout(timerId);
+      }
+      timerId = setTimeout(() => {
+        func(...args);
+        timerId = null;
+      }, delay);
+    };
+  }
+
   return (
     <>
     <Head>
@@ -246,38 +278,53 @@ export default function Home() {
       <Loading />
     ):(
       <>
-      {!isIndexToggle && !docOpen ? <Explosion staticBoxRef={staticBoxRef}/> : ""}
+      {!isIndexToggle && !docOpen ? <Explosion staticBoxRef1={staticBoxRef1} staticBoxRef2={staticBoxRef2} /> : ""}
         <main className={`w-full overflow-hidden ${montserrat.className}
         ${sectionHeight > 850 && `[&>div>section]:h-screen`} [&>div>section]:overflow-hidden`} id='container'>
+        {/* content1 */}
         <div id='content1' className={`relative`}>
           <p className={`absolute top-5 left-5 ${mainstyle.title_sub3} text-[var(--gray1)]`}>2023 PORTFOLIO</p>
-          {/* section1 */}
           <section className={`flex w-full justify-center items-center`}>
             <div className={`block`}>
               <h1 className={`${montserrat.className} ${mainstyle.h1} ${mainstyle.title} animate_text`} ref={titleRef}>
-                <span className={`${mainstyle.name}`}>HWAN</span>&nbsp;<span>-</span>&nbsp;<span>D</span><span>e</span><span>v</span><span >e</span><span>l</span><span>o</span><span>p</span><span>e</span><span>r</span></h1>
-              <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)]`}>Having Interest about User experience with Logical thinking and Research techniques</p>
+                <span className={`${mainstyle.name}`}>FRONT</span><span>-</span><span>END</span>&nbsp;<span>D</span><span>e</span><span>v</span><span >e</span><span>l</span><span>o</span><span>p</span><span>e</span><span>r</span></h1>
+              <p className={`${montserrat.className} ${mainstyle.title_sub} tracking-[-.054em] text-[var(--gray1)] pl-1.5`}>Having Interest about User experience with Logical thinking and Research techniques</p>
             </div>
           </section>
-          {/* //section1 */}
         </div>
+        {/* //content1 */}
+        {/* content2 */}
         <div id='content2'>
-          {/* section2 */}
+          <section>
+            <div className={`${mainstyle.portfolio_page} ${notoSansKR.className} relative`}>
+              <ul className='animate_text'>
+                <li>해당 포트폴리오는 <span>React</span>, <span>Next.js</span>, <span>Node.js</span>, <span>TypeScript</span>, <span>React Redux</span> 기반으로 제작되었습니다.</li>
+                <li>이 포트폴리오는 <span>1920 * 1080</span> 해상도에 최적화된 반응형 페이지로 제작되었습니다.</li>
+                <li>가로 768px 이하 또는 세로 850px 이하의 해상도에서는 일부 효과와 구성 요소가 적용되지 않을 수 있습니다.</li>
+                <li>포트폴리오에 포함된 모든 내용은 <span>개인 작업물</span>입니다.</li>
+              </ul>
+            <div ref={staticBoxRef1} className={`${mainstyle.box}`}></div>
+            </div>
+          </section>
+        </div>
+        {/* //content2 */}
+        {/* content3 */}
+        <div id='content3'>
           <section className={`flex flex-col pb-20`} style={{boxSizing:`border-box`}}>
-            <h2 className={`${mainstyle.title1}`}>HELLO</h2>
+            <h2 className={`${mainstyle.title1} mb-2.5`}>프론트엔드 개발자, 최환입니다.</h2>
             <div className={`${mainstyle.section__inner}`} style={{flex:`1`}}>
               <div className={mainstyle.left}>
                 <div>
-                  <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>심리학 전공으로 학습한 논리적 사고 능력과 조사 연구 기술을 바탕으로, 인지와 생물 심리학, 그리고 AI와 UX/UI 디자인 분야에 관심이 있으며 지속적인 자기개발을 추구하는 사람입니다.</span></p>
+                  <p className={`${mainstyle.title_sub} ${notoSansKR.className} ${mainstyle.title} animate_text`} style={{color:`var(--gray1)`}}><span>#AI #UX/UI #심리학 #논리적 사고 #사용자 조사</span></p>
                   <ul className={`my-10 ${mainstyle.body} [&>li]:mb-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8 [&>li>svg]:h-8 [&>li>svg]:mr-2.5 [&>li>svg]:text-[var(--gray1)]`} style={{color:`var(--gray1)`}}>
                   <li className={`${mainstyle.body2}`} ><FontAwesomeIcon icon={faPhone}></FontAwesomeIcon><span>+82 10.4415.9901</span></li>
                   <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faEnvelope}></FontAwesomeIcon><Link href={'mailto:hwan.c.0330@gmail.com'} className={`${mainstyle.body2}`}>hwan.c.0330@gmail.com</Link></li>
-                  <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon><span className={`${mainstyle.body2}`}><a href='https://github.com/utfw'>github : https://github.com/utfw</a></span></li>
+                  <li className={`${mainstyle.body2}`}><FontAwesomeIcon icon={faGithub}></FontAwesomeIcon><span className={`${mainstyle.body2}`}><a href='https://github.com/utfw' target='blink'>github : https://github.com/utfw</a></span></li>
                   </ul>
                 </div>
                 <dl className={`pt-10 h-full`} style={{color:`var(--gray1)`}}>
                 <dt className={`${mainstyle.title_sub2} pb-6`} style={{color:`var(--gray2)`}}>PROGRAMMING LANGUAGES</dt>
-                <dd className={`flex ${mainstyle.body}`}>
+                <dd className={`flex`}>
                   <ul className={`flex mr-10 [&>li]:mb-10 [&>li]:mr-5 [&>li]:flex [&>li]:items-center [&>li>svg]:w-8 [&>li>svg]:h-8 [&>li>svg]:mr-2 [&>li>svg]:text-[var(--gray1)]`}>
                   <li><FontAwesomeIcon icon={faJsSquare} /><span>JavaScript</span></li>
                   <li><FontAwesomeIcon icon={faReact} /><span>React</span></li>
@@ -344,7 +391,7 @@ export default function Home() {
                 </dl>
               </div>
               <div className={`w-[2px] mx-10 mt-4`} style={{ background:`var(--gray2)`, flex:`1`, maxWidth:`2px`}}></div>
-              <div className='right flex flex-col justify-between [&>dl]:mb-5'>
+              <div className={`${mainstyle.right} flex flex-col justify-between [&>dl]:mb-5`}>
                 <dl className={`[&>dt]:text-[var(--gray2)]`}>
                 <dt className={`${mainstyle.title_sub2}`}>EDUCATION</dt>
                 <dd>
@@ -399,17 +446,16 @@ export default function Home() {
               </div>
             </div>
           </section>
-          {/* //section2 */}
         </div>
-        <div id='content3'>
-          {/* section3 */}
+        {/* //content3 */}
+        {/* content4 */}
+        <div id='content4'>
           <section className={`relative`}>
-
             <h2 className={`${mainstyle.title1} mb-11`}>FESCARO</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
                 <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-                <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형으로 제작한 기업사이트입니다.<br />
+                <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형으로 제작한 기업 사이트입니다.<br />
                 스크롤 위치에 따라 메뉴 색상이 변경됩니다.</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Description</dt>
                 <dd>
@@ -419,12 +465,12 @@ export default function Home() {
                   <li className={`${mainstyle.title} animate_text`}><span>2. HTML / CSS w3c 검사 통과</span></li>
                   <li className={`${mainstyle.title} animate_text`}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
                   <li className={`${mainstyle.title} animate_text`}><span>4. 반응형 페이지 제작</span></li>
-                  <li className={`${mainstyle.title} animate_text`}><span>5. Swiper.js 사용하여 오토배너를 구현</span></li>
+                  <li className={`${mainstyle.title} animate_text`}><span>5. Swiper.js 사용하여 오토 배너를 구현</span></li>
                   </ul>
                   <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/clone_fescaro' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
                   <li><a href='https://utfw.github.io/clone_fescaro/' target='blank'><span><FontAwesomeIcon icon={faRocket} /></span>github-pages</a></li>
-                  <li><a href='#' onClick={(e)=>toggleDoc(e,2)}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
+                  <li><a href='#' onClick={toggleDoc}><span><FontAwesomeIcon icon={faClipboardCheck} /></span>Validaition</a></li>
                   </ul>
                 </dd>
                 <dt className={`${mainstyle.title_sub2}`}><span>Languages</span></dt>
@@ -435,16 +481,16 @@ export default function Home() {
               {/* //목업 */}
             </div>
           </section>
-          {/* //section3 */}
         </div>
-        <div id='content4'>
-          {/* section4 */}
+        {/* //content4 */}
+        {/* content5 */}
+        <div id='content5'>
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>삼성전기</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
-            <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
+            <div className={mainstyle.section_wrap}>
+            <dl className={`text-[var(--gray2)] min-w-[600px] h-full [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left} pr-[2vw]`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-              <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 컨텐츠 접근성 지침과 웹표준을 준수하여<br />삼성전기 기업 웹 사이트를 제작 하였습니다.</span></dd>
+              <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>웹 콘텐츠 접근성 지침과 웹 표준을 준수하여 삼성전기 기업 웹 사이트를 제작하였습니다.</span></dd>
               <dt className={`${mainstyle.title_sub2}`}>Description</dt>
               <dd>
                 <ul className={`${mainstyle.body1} ${notoSansKR.className}
@@ -467,16 +513,17 @@ export default function Home() {
             {/* //목업 */}
             </div>
           </section>
-          {/* //section4 */}
         </div>
-        <div id='content5'>
+        {/* //content5 */}
+        {/* content6 */}
+        <div id='content6'>
           {/* section5 */}
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>CJ ONE</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-[50px] ${mainstyle.inner_left}`}>
                 <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-                <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>미디어쿼리를 사용하여 반응형 웹으로 제작하였으며<br />메뉴에 sprite animation을 적용하였습니다.</span></dd>
+                <dd className={`${mainstyle.body1} ${notoSansKR.className} text-[var(--gray1)] ${mainstyle.title} animate_text`}><span>기존 사이트에 미디어쿼리를 사용하여 반응형 웹으로 제작하였습니다.</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Description</dt>
                 <dd>
                   <ul className={`${mainstyle.body1} ${notoSansKR.className}
@@ -484,7 +531,8 @@ export default function Home() {
                   <li className={`${mainstyle.title} animate_text`}><span>1. 웹 콘텐츠의 접근성 지침과 웹 표준 준수</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>2. HTML / CSS w3c 검사 통과</span></li>
                   <li className={`${mainstyle.title} animate_text `}><span>3. CSS와 JavaScript로 인터랙션 적용</span></li>
-                  <li className={`${mainstyle.title} animate_text `}><span>4. 반응형 페이지 제작</span></li>
+                  <li className={`${mainstyle.title} animate_text `}><span>4. 반응형 페이지 제작 메뉴</span></li>
+                  <li className={`${mainstyle.title} animate_text `}><span>5. sprite animation 적용</span></li>
                   </ul>
                   <ul className={mainstyle.description_list}>
                   <li><a href='https://github.com/utfw/clone_CJONE' target='blank'><span><FontAwesomeIcon icon={faGithub} /></span>github</a></li>
@@ -502,15 +550,16 @@ export default function Home() {
           </section>
           {/* //section5 */}
         </div>
-        <div id='content6'>
-          {/* section6 */}
+        {/* //content6 */}
+        {/* content7 */}
+        <div id='content7'>
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>REACT TALK APP</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
               <dl className={`text-[var(--gray2)] min-w-[600px] [&>dt]:text-[var(--gray2)] [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}
               >
                 <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-                <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>React로 제작한 메신저 앱입니다.<br />google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</span></dd>
+                <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>React로 제작한 메신저 SPA(Single Page App)입니다.<br />google의 Firebase를 사용하여 데이터를 전송하고 관리할 수 있습니다.</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Description</dt>
                 <dd>
                   <ul className={`${mainstyle.body1} ${notoSansKR.className}
@@ -530,12 +579,12 @@ export default function Home() {
                 {sectionHeight <= 1060 ? (
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript / React / Firebase / Axios</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript / React / Firebase / Axios</span></dd>
                 </>
               ):(
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
                 <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / Firebase / Axios</span></dd>
                 </>
@@ -546,25 +595,25 @@ export default function Home() {
               {/* //목업 */}
             </div>
           </section>
-          {/* //section6 */}
         </div>
-        <div id='content7'>
-          {/* section7 */}
+        {/* //content7 */}
+        {/* content8 */}
+        <div id='content8'>
           <section>
             <h2 className={`${mainstyle.title1} mb-11`}>REACT NETFLIX APP</h2>
-            <div className={`flex w-full pr-[144px] justify-between`}>
+            <div className={mainstyle.section_wrap}>
             <dl className={`text-[var(--gray2)] min-w-[600px]
             [&>dt]:text-[var(--gray2)] 
             [&>dd]:mb-8 [&>dd]:text-[var(--gray1)] ${mainstyle.inner_left}`}>
               <dt className={`${mainstyle.title_sub2}`}>Overview</dt>
-              <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>styled-componet를 사용하여 제작한 React Netflix App입니다.<br />The Movie DataBase API를 사용하여 영화 정보를 가져옵니다.</span></dd>
+              <dd className={`${mainstyle.body1} ${notoSansKR.className} ${mainstyle.title} animate_text`}><span>styled-componet를 사용하여 제작한 React Netflix App입니다.<br />The Movie DataBase API를 사용하여 영화 정보를 가져올 수 있습니다.</span></dd>
               <dt className={`${mainstyle.title_sub2}`}>Description</dt>
               <dd>
               <ul className={`${mainstyle.body1} ${notoSansKR.className}
                 `}>
                 <li className={`${mainstyle.title} animate_text`}><span>1. Firebase 인증서비스로 사용자 관리</span></li>
                 <li className={`${mainstyle.title} animate_text`}><span>2. 사용자 정보를 문서로 Database에 저장하여 관리</span></li>
-                <li className={`${mainstyle.title} animate_text`}><span>3. Storage로  프로필 이미지 파일 업로드</span></li>
+                <li className={`${mainstyle.title} animate_text`}><span>3. Storage로 프로필 이미지 파일 업로드</span></li>
                 <li className={`${mainstyle.title} animate_text`}><span>4. 문서 정보를 토대로 프로필 정보 갱신</span></li>
                 <li className={`${mainstyle.title} animate_text`}><span>5. Axios 비동기 라이브러리 사용</span></li>
                 <li className={`${mainstyle.title} animate_text`}><span>6. styled-components 사용하여 일부 컴포넌트 구현</span></li>
@@ -577,12 +626,12 @@ export default function Home() {
               {sectionHeight <= 1060 ? (
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript / React / TMDB / Firebase / Axios / styled-components</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript / React / TMDB / Firebase / Axios / styled-components</span></dd>
                 </>
               ):(
                 <>
                 <dt className={`${mainstyle.title_sub2}`}>Languages</dt>
-                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / CSS / JavaScript</span></dd>
+                <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>HTML / SASS / CSS / JavaScript</span></dd>
                 <dt className={`${mainstyle.title_sub2}`}>Used</dt>
                 <dd className={`${mainstyle.body1} ${mainstyle.title} animate_text`}><span>React / TMDB / Firebase / Axios / styled-components</span></dd>
                 </>
@@ -593,34 +642,45 @@ export default function Home() {
             {/* //목업 */}
             </div>
           </section>
-          {/* //section7 */}
         </div>
-        <div id='content8'>
-          {/* section8 */}
+        {/* //content8 */}
+        {/* content9 */}
+        <div id='content9'>
           <section className={`relative`}>
             <h2 className={`${mainstyle.title1}`}>PURE CSS</h2>
               <Shark></Shark>
           </section>
-          {/* //section8 */}
         </div>
+        
+        {/* //content9 */}
+        {/* content10 */}
         <div id='content10'>
-        <section className={`relative`}>
-        <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 8 && mainstyle.play}`} ref={finboxRef}>
-            <p className={`w-full text-justify ${mainstyle.title_fin} leading-none`}>THANKS</p>
-            <p className={`text-[62px] text-justify tracking-[.013em]`}>FOR WATCHING</p>
-            <div className='flex justify-between flex-row-reverse items-end mt-[81px]'>
-              <div className={`text-[var(--gray2)] text-right`}>
-                <ul className={`[&>li]:mb-5 [&>li:last-child]:mb-0`}>
-                  <li>+82 10.4415.9901</li>
-                  <li><Link href={'mailto:hwan.c.0330@gmail.com'}>hwan.c.0330@gmail.com</Link></li>
-                  <li><Link href={'https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
-                </ul>
-              </div>
-              <div ref={staticBoxRef} className={`w-[40px] h-[40px] mb-[5px] bg-[var(--gray2)] bg-input`}></div>
-            </div>
-          </div>
-        </section>
+          <section className={`relative`}>
+            <h2 className={`${mainstyle.title1}`}>PURE CSS</h2>
+              <Emoji></Emoji>
+          </section>
         </div>
+        {/* //content10 */}
+        {/* content11 */}
+        <div id='content11'>
+          <section className={`relative`}>
+          <div className={`absolute top-1/2 left-1/2 w-[518px] text-[var(--gray2)] ${mainstyle.finbox} ${index === 10 && mainstyle.play}`} ref={finboxRef}>
+              <p className={`w-full text-justify ${mainstyle.title_fin} leading-none`}>THANKS</p>
+              <p className={`text-[62px] text-justify tracking-[.013em]`}>FOR WATCHING</p>
+              <div className='flex justify-between flex-row-reverse items-end mt-[81px]'>
+                <div className={`text-[var(--gray2)] text-right`}>
+                  <ul className={`[&>li]:mb-5 [&>li:last-child]:mb-0`}>
+                    <li>+82 10.4415.9901</li>
+                    <li><Link href={'mailto:hwan.c.0330@gmail.com'}>hwan.c.0330@gmail.com</Link></li>
+                    <li><Link href={'https://github.com/utfw'}>github : https://github.com/utfw</Link></li>
+                  </ul>
+                </div>
+                <div ref={staticBoxRef2} className={`w-[40px] h-[40px] mb-[5px] bg-[var(--gray2)] bg-input`}></div>
+              </div>
+            </div>
+          </section>
+        </div>
+        {/* //content11 */}
         </main>
       </>
     )}

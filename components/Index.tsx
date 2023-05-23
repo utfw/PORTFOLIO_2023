@@ -24,7 +24,7 @@ function Index() {
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLLIElement, MouseEvent>, index: number) => {
-    e.currentTarget.style.background = index !== Index - 2 ? `rgba(255,255,255,.3)` : `rgba(${color[index]},.3)`;
+    e.currentTarget.style.background = index !== Index - 3 ? `rgba(255,255,255,.3)` : `rgba(${color[index]},.3)`;
   };
 
   return (
@@ -36,16 +36,16 @@ function Index() {
           {content_name.map((name, index) => (
             <li
               key={index}
-              className={`${indexstyle.li} ${index === Index - 2 && indexstyle.on}`}
-              style={index === Index - 2 ? { background: `rgba(${color[index]},.3)` } : undefined}
-              onClick={() => onClickScroll(index + 1)}
+              className={`${indexstyle.li} ${index === Index - 3 && indexstyle.on}`}
+              style={index === Index - 3 ? { background: `rgba(${color[index]},.3)` } : undefined}
+              onClick={() => onClickScroll(index + 2)}
               onMouseEnter={(e) => handleMouseEnter(e, index)}
               onMouseLeave={(e) => handleMouseLeave(e, index)}
             >
               <p>{`0${index + 1}`}</p>
               <div>
                 <div className={`w-[496px] h-[383px]`}>
-                  <div className={`w-full h-full bg-[url(/portfolio_2023/images/m_16.svg)] bg-contain bg-no-repeat`}>
+                  <div className={`w-full h-full bg-no-repeat ${index === 3 ?(``):(`bg-[url(/portfolio_2023/images/m_16.svg)] bg-contain`)}`}>
                     <div className={indexstyle.img_wrap}>
                       {index < content_name.length - 1 ? (
                         <img

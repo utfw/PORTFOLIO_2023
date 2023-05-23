@@ -101,7 +101,7 @@
         height: 545px;
         position: relative;
         top: auto;
-        right: -12vw;
+        left: -10vw;
         >div
         {
           background-size: cover;
@@ -151,7 +151,7 @@
   // layout
   .mockup{
     .kakao{
-      right: -120px !important;
+      left: 2vw !important;
     }
   }
 }
@@ -159,6 +159,12 @@
 @media screen and (max-width:768px) {
   // layout
   .mockup{
-    display: none;
+    justify-content: center;
+    .kakao{
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+    }
   }
+
 }

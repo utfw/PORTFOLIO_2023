@@ -4,7 +4,8 @@
 	justify-content: center;
 	align-items: center;
 	width: 100%;
-	height: 100%;
+	height: 100vh !important;
+	margin-bottom: 0 !important;
 	background: #333;
 	.loader {
 		--size-square: 80px;	
@@ -27,6 +28,7 @@
 	.text{
 		margin-top: 16px;
 		color: #fff;
+		word-break: break-all;
 		animation: blink 1s linear infinite alternate;
 	}
 }

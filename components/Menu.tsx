@@ -1,9 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import mainstyle from '../styles/Main.module.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleIndex, RootState, openDoc } from '@/store/store';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
 
 function Menu() {
   const dispatch = useDispatch();
@@ -21,7 +19,7 @@ function Menu() {
 
   useEffect(()=>{
     if(list != null){
-      if (index > 1 && index < list.length+2){
+      if (index > 2 && index < list.length+3){
         setOn(true);
       if(list !== null) listOn(list,index);
       } else setOn(false);
@@ -32,7 +30,7 @@ function Menu() {
     list.forEach((el, i)=>{
       el.classList .remove("on");
     })
-    list[index-2].classList.add('on');
+    list[index-3].classList.add('on');
     // console.log(list[index-2])
   }
 
@@ -57,6 +55,7 @@ function Menu() {
       [&>li]:w-[6px] [&>li]:h-[16px] [&>li]:mb-2 [&>li.on]:bg-[var(--gray2)] [&>li]:bg-[#BFBFBF]
       [&>li]:transition-all ease-linear duration-300
       ${isIndexOn || docOpen ? `opacity-0` : `opacity-1`}`}>
+      <li></li>
       <li></li>
       <li></li>
       <li></li>
