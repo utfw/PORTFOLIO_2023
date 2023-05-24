@@ -278,7 +278,7 @@ export default function Home() {
       <Loading />
     ):(
       <>
-      {!isIndexToggle && !docOpen ? <Explosion staticBoxRef1={staticBoxRef1} staticBoxRef2={staticBoxRef2} /> : ""}
+      {Width > 768 && sectionHeight > 850 && !isIndexToggle && !docOpen ? <Explosion staticBoxRef1={staticBoxRef1} staticBoxRef2={staticBoxRef2} /> : ""}
         <main className={`w-full overflow-hidden ${montserrat.className}
         ${sectionHeight > 850 && `[&>div>section]:h-screen`} [&>div>section]:overflow-hidden`} id='container'>
         {/* content1 */}
