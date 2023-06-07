@@ -102,3 +102,6 @@ video{
   }
 }
 
+@media screen and (max-height:850px) {
+  section{height: auto;}
+}
